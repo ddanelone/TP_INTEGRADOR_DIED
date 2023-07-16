@@ -29,6 +29,7 @@ public class SystemView extends javax.swing.JFrame {
         
         //Controlador de Sucursales
         SucursalesControlador sucursal_cuenta = new SucursalesControlador(sucursal, sucursalDao, this);
+        sucursal_cuenta.listarTodasLasSucursales();
     }
 
     /**
@@ -446,7 +447,7 @@ public class SystemView extends javax.swing.JFrame {
         txt_sucursales_apertura.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
         cmb_estado_sucursal.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        cmb_estado_sucursal.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Operativa", "No operativa" }));
+        cmb_estado_sucursal.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Operativa", "No Operativa" }));
         cmb_estado_sucursal.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cmb_estado_sucursalActionPerformed(evt);
@@ -579,7 +580,7 @@ public class SystemView extends javax.swing.JFrame {
         jPanel4.add(jPanel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(35, 20, 920, 270));
 
         sucursales_search.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jPanel4.add(sucursales_search, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 310, 220, 30));
+        jPanel4.add(sucursales_search, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 310, 220, 30));
 
         tabla_sucursales.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         tabla_sucursales.setModel(new javax.swing.table.DefaultTableModel(
@@ -612,8 +613,8 @@ public class SystemView extends javax.swing.JFrame {
         jPanel4.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 360, 920, 130));
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel9.setText("Buscar");
-        jPanel4.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 310, 50, 30));
+        jLabel9.setText("Buscar por Id");
+        jPanel4.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 310, 100, 30));
 
         jTabbedPane1.addTab("Sucursales", jPanel4);
 
@@ -1602,7 +1603,7 @@ public class SystemView extends javax.swing.JFrame {
     public javax.swing.JComboBox<Object> cmb_caminos_estado;
     public javax.swing.JComboBox<Object> cmb_caminos_sucursal_destino;
     public javax.swing.JComboBox<Object> cmb_caminos_sucursal_origen;
-    public javax.swing.JComboBox<Object> cmb_estado_sucursal;
+    public javax.swing.JComboBox<String> cmb_estado_sucursal;
     public javax.swing.JComboBox<Object> cmb_ordenes_estado;
     public javax.swing.JComboBox<Object> cmb_ordenes_producto;
     public javax.swing.JComboBox<Object> cmb_ordenes_sucursal_destino;

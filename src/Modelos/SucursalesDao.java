@@ -92,6 +92,7 @@ public class SucursalesDao {
             pst.setBoolean(5, sucursal.isOperativa());
             pst.setInt(6, sucursal.getId());
             pst.execute();
+            //JOptionPane.showMessageDialog(null, "Actualizada. Id = " + sucursal.getId());
             return true;
         } catch(SQLException e) {
             JOptionPane.showMessageDialog(null, "Error al modificar los datos de la sucursal " + e);
