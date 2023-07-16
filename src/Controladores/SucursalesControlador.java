@@ -35,6 +35,9 @@ public class SucursalesControlador implements ActionListener, MouseListener, Key
         //Botón de elminar Sucursal y de cancelar
         this.vista.btn_sucursales_eliminar.addActionListener(this);
         this.vista.btn_sucursales_cancelar.addActionListener(this);
+        //Ponemos en escucha el Label
+        this.vista.jLabelSucursales.addMouseListener(this);
+        
         
     }
 
@@ -174,6 +177,8 @@ public class SucursalesControlador implements ActionListener, MouseListener, Key
             //Desahbilitar
             vista.txt_sucursales_id.setEditable(false);
             vista.btn_sucursales_crear.setEnabled(false);
+        } else if(e.getSource()== vista.jLabelSucursales) {
+            vista.jTabbedPane1.setSelectedIndex(0);
         }
     }
 
