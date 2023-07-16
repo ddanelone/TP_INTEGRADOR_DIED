@@ -162,15 +162,7 @@ public class SucursalesControlador implements ActionListener, MouseListener, Key
             vista.txt_sucursales_id.setText(vista.tabla_sucursales.getValueAt(fila, 0).toString());
             vista.txt_sucursales_codigo.setText(vista.tabla_sucursales.getValueAt(fila, 1).toString());
             vista.txt_sucursales_nombre.setText(vista.tabla_sucursales.getValueAt(fila, 2).toString());
-            //Tengo que elegir qué muestra el comboBox
-            boolean operativa = (boolean) vista.tabla_sucursales.getValueAt(fila, 3);
-            if (operativa) {
-                vista.cmb_estado_sucursal.setSelectedItem("Operativa");
-            } else {
-                vista.cmb_estado_sucursal.setSelectedItem("No Operativa");
-            }
-            //Este método no me sirve, porque la base de datos tiene un boolean y la tabla tiene texto
-            //vista.cmb_estado_sucursal.setSelectedItem(vista.tabla_sucursales.getValueAt(fila,3).toString());
+            vista.cmb_estado_sucursal.setSelectedItem(vista.tabla_sucursales.getValueAt(fila,3).toString());
             vista.txt_sucursales_apertura.setText(vista.tabla_sucursales.getValueAt(fila, 4).toString());
             vista.txt_sucursales_cierre.setText(vista.tabla_sucursales.getValueAt(fila, 5).toString());
 
