@@ -221,15 +221,11 @@ public class SystemView extends javax.swing.JFrame {
         cmb_administracion_sucursal = new javax.swing.JComboBox<>();
         btn_admnistracion_habilitar_suc = new javax.swing.JButton();
         btn_admnistracion_deshabilitar_suc = new javax.swing.JButton();
-        jLabel43 = new javax.swing.JLabel();
-        txt_administracion_estado_suc = new javax.swing.JTextField();
         jPanel18 = new javax.swing.JPanel();
         jLabel42 = new javax.swing.JLabel();
         cmb_administracion_camino = new javax.swing.JComboBox<>();
         btn_admnistracion_habilitar_cam = new javax.swing.JButton();
         btn_admnistracion_deshabilitar_cam = new javax.swing.JButton();
-        jLabel44 = new javax.swing.JLabel();
-        txt_administracion_estado_cam = new javax.swing.JTextField();
         jPanel19 = new javax.swing.JPanel();
         jPanel20 = new javax.swing.JPanel();
         btn_informes_flujo_maximo = new javax.swing.JButton();
@@ -1380,25 +1376,15 @@ public class SystemView extends javax.swing.JFrame {
         btn_admnistracion_deshabilitar_suc.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btn_admnistracion_deshabilitar_suc.setText("Deshabilitar");
 
-        jLabel43.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel43.setText("Estado Actual:");
-
-        txt_administracion_estado_suc.setEditable(false);
-        txt_administracion_estado_suc.setEnabled(false);
-
         javax.swing.GroupLayout jPanel17Layout = new javax.swing.GroupLayout(jPanel17);
         jPanel17.setLayout(jPanel17Layout);
         jPanel17Layout.setHorizontalGroup(
             jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel17Layout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel43, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel41))
-                .addGap(10, 10, 10)
-                .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txt_administracion_estado_suc, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cmb_administracion_sucursal, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap()
+                .addComponent(jLabel41)
+                .addGap(53, 53, 53)
+                .addComponent(cmb_administracion_sucursal, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btn_admnistracion_deshabilitar_suc, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1408,21 +1394,19 @@ public class SystemView extends javax.swing.JFrame {
         jPanel17Layout.setVerticalGroup(
             jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel17Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addContainerGap(20, Short.MAX_VALUE)
+                .addComponent(btn_admnistracion_habilitar_suc, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel17Layout.createSequentialGroup()
+                        .addGap(30, 30, 30)
+                        .addComponent(btn_admnistracion_deshabilitar_suc, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel17Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel41)
                             .addComponent(cmb_administracion_sucursal, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(32, 32, 32)
-                        .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel43)
-                            .addComponent(txt_administracion_estado_suc, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel17Layout.createSequentialGroup()
-                        .addComponent(btn_admnistracion_habilitar_suc, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(30, 30, 30)
-                        .addComponent(btn_admnistracion_deshabilitar_suc, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 32, Short.MAX_VALUE))
+                        .addGap(47, 47, 47))))
         );
 
         jPanel18.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Caminos", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
@@ -1438,27 +1422,15 @@ public class SystemView extends javax.swing.JFrame {
         btn_admnistracion_deshabilitar_cam.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btn_admnistracion_deshabilitar_cam.setText("Deshabilitar");
 
-        jLabel44.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel44.setText("Estado Actual:");
-
-        txt_administracion_estado_cam.setEditable(false);
-        txt_administracion_estado_cam.setEnabled(false);
-
         javax.swing.GroupLayout jPanel18Layout = new javax.swing.GroupLayout(jPanel18);
         jPanel18.setLayout(jPanel18Layout);
         jPanel18Layout.setHorizontalGroup(
             jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel18Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel18Layout.createSequentialGroup()
-                        .addComponent(jLabel42)
-                        .addGap(69, 69, 69)
-                        .addComponent(cmb_administracion_camino, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel18Layout.createSequentialGroup()
-                        .addComponent(jLabel44, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(txt_administracion_estado_cam, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addComponent(jLabel42)
+                .addGap(69, 69, 69)
+                .addComponent(cmb_administracion_camino, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 66, Short.MAX_VALUE)
                 .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btn_admnistracion_habilitar_cam, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1468,19 +1440,16 @@ public class SystemView extends javax.swing.JFrame {
         jPanel18Layout.setVerticalGroup(
             jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel18Layout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel42)
-                    .addComponent(cmb_administracion_camino, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel44)
-                    .addComponent(txt_administracion_estado_cam, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(25, 25, 25))
-            .addGroup(jPanel18Layout.createSequentialGroup()
                 .addComponent(btn_admnistracion_habilitar_cam, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30)
-                .addComponent(btn_admnistracion_deshabilitar_cam, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel18Layout.createSequentialGroup()
+                        .addGap(30, 30, 30)
+                        .addComponent(btn_admnistracion_deshabilitar_cam, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel18Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel42)
+                            .addComponent(cmb_administracion_camino, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(0, 42, Short.MAX_VALUE))
         );
 
@@ -1502,7 +1471,7 @@ public class SystemView extends javax.swing.JFrame {
                 .addComponent(jPanel17, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jPanel18, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(58, Short.MAX_VALUE))
+                .addContainerGap(55, Short.MAX_VALUE))
         );
 
         jPanel8.add(jPanel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(25, 20, 930, 410));
@@ -1740,8 +1709,6 @@ public class SystemView extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel41;
     private javax.swing.JLabel jLabel42;
-    private javax.swing.JLabel jLabel43;
-    private javax.swing.JLabel jLabel44;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -1799,8 +1766,6 @@ public class SystemView extends javax.swing.JFrame {
     public javax.swing.JTable tabla_ordenes_productos;
     public javax.swing.JTable tabla_stock;
     public javax.swing.JTable tabla_sucursales;
-    public javax.swing.JTextField txt_administracion_estado_cam;
-    public javax.swing.JTextField txt_administracion_estado_suc;
     public javax.swing.JTextArea txt_areat_informes;
     public javax.swing.JTextField txt_caminos_capacidad_max;
     public javax.swing.JTextField txt_caminos_id;

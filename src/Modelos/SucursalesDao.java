@@ -102,7 +102,7 @@ public class SucursalesDao {
     
     //Método para modificar el estado Operativo de una sucursal;
     public boolean modificarSucursalEstadoQuery(Sucursales sucursal) {
-        String query = "UPDATE sucursales SET coperativa =? WHERE id = ?";
+        String query = "UPDATE sucursales SET operativa =? WHERE id = ?";
         
         try{
             conn = cn.getConnection();

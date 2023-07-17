@@ -46,6 +46,7 @@ public class CaminosControlador implements ActionListener, MouseListener, KeyLis
         //Ponemos en escucha el Label
         this.vista.jLabelCaminos.addMouseListener(this);
         
+        
 //Recuperar las sucursales para mostrar en el comboBox
         //Paso 1: Obtener la lista de sucursales desde la base de datos
         List<Sucursales> listaSucursales = sucursalDao.listaSucursalesQuery("");
@@ -158,8 +159,7 @@ public class CaminosControlador implements ActionListener, MouseListener, KeyLis
         } else if (e.getSource() == vista.btn_caminos_cancelar) {
             limpiarCampos();
             vista.btn_caminos_crear.setEnabled(true);
-        }
-
+        } 
     }
 
     //Listar todos las productos
