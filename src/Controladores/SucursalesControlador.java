@@ -117,7 +117,7 @@ public class SucursalesControlador implements ActionListener, MouseListener, Key
             
             //Si el usuario no seleccionó nada, el método devuelve -1
             if(fila == -1) {
-                JOptionPane.showMessageDialog(null, "Debes seleccionar una sucursal para elimianr");
+                JOptionPane.showMessageDialog(null, "Debes seleccionar una sucursal para eliminar");
             } else {
                 int id = Integer.parseInt(vista.tabla_sucursales.getValueAt(fila, 0).toString());
                 int confirmacion = JOptionPane.showConfirmDialog(null, "¿Seguro de elminar la sucursal?");

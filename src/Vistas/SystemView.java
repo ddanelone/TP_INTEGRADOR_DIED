@@ -1,8 +1,11 @@
 package Vistas;
 
+import Controladores.CaminosControlador;
 import Controladores.ElectrodomesticosControlador;
 import Controladores.SettingsController;
 import Controladores.SucursalesControlador;
+import Modelos.Caminos;
+import Modelos.CaminosDao;
 import Modelos.Electrodomesticos;
 import Modelos.ElectrodomesticosDao;
 import Modelos.Sucursales;
@@ -22,6 +25,10 @@ public class SystemView extends javax.swing.JFrame {
     Electrodomesticos electro = new Electrodomesticos();
     ElectrodomesticosDao electroDao = new ElectrodomesticosDao();
     
+    //Caminos
+    Caminos camino = new Caminos();
+    CaminosDao caminoDao = new CaminosDao();
+    
     public SystemView() {
         initComponents();
         setSize(1208,680);
@@ -40,6 +47,9 @@ public class SystemView extends javax.swing.JFrame {
         //Controlador de electrodomesticos
         ElectrodomesticosControlador electrodomestico_cuenta = new ElectrodomesticosControlador(electro, electroDao, this);
         electrodomestico_cuenta.listarTodosLosElectrodomesticos();
+        //Controlador de Caminos
+        CaminosControlador camino_cuenta = new CaminosControlador(camino, caminoDao, this);
+        camino_cuenta.listarTodosLosCaminos();
     }
 
     /**
@@ -147,7 +157,7 @@ public class SystemView extends javax.swing.JFrame {
         txt_caminos_id = new javax.swing.JTextField();
         txt_caminos_tiempo_transito = new javax.swing.JTextField();
         txt_caminos_capacidad_max = new javax.swing.JTextField();
-        txt_caminos_otra_info = new javax.swing.JTextField();
+        txt_caminos_observaciones = new javax.swing.JTextField();
         cmb_caminos_sucursal_origen = new javax.swing.JComboBox<>();
         cmb_caminos_sucursal_destino = new javax.swing.JComboBox<>();
         btn_caminos_crear = new javax.swing.JButton();
@@ -227,7 +237,7 @@ public class SystemView extends javax.swing.JFrame {
 
         jLabelSucursales.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabelSucursales.setForeground(new java.awt.Color(255, 255, 255));
-        jLabelSucursales.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/business-report.png"))); // NOI18N
+        jLabelSucursales.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Sucursales.png"))); // NOI18N
         jLabelSucursales.setText("   Sucursales");
 
         javax.swing.GroupLayout jPanelSucursalesLayout = new javax.swing.GroupLayout(jPanelSucursales);
@@ -243,7 +253,7 @@ public class SystemView extends javax.swing.JFrame {
             jPanelSucursalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelSucursalesLayout.createSequentialGroup()
                 .addComponent(jLabelSucursales)
-                .addGap(0, 3, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         jPanel1.add(jPanelSucursales, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 200, 35));
@@ -408,7 +418,7 @@ public class SystemView extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("DISTRIBUIDORA DE ELECTRODOMÉSTICOS");
-        jPanel3.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 10, 550, 80));
+        jPanel3.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 20, 550, 80));
 
         btn_salir.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btn_salir.setText("Salir");
@@ -985,7 +995,9 @@ public class SystemView extends javax.swing.JFrame {
         jLabel25.setText("Destino:");
         jPanel11.add(jLabel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 102, -1, -1));
 
+        txt_caminos_id.setEditable(false);
         txt_caminos_id.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        txt_caminos_id.setEnabled(false);
         jPanel11.add(txt_caminos_id, new org.netbeans.lib.awtextra.AbsoluteConstraints(145, 23, 165, 30));
 
         txt_caminos_tiempo_transito.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -994,8 +1006,8 @@ public class SystemView extends javax.swing.JFrame {
         txt_caminos_capacidad_max.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jPanel11.add(txt_caminos_capacidad_max, new org.netbeans.lib.awtextra.AbsoluteConstraints(145, 112, 165, 30));
 
-        txt_caminos_otra_info.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jPanel11.add(txt_caminos_otra_info, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 210, 488, 30));
+        txt_caminos_observaciones.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jPanel11.add(txt_caminos_observaciones, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 210, 488, 30));
 
         cmb_caminos_sucursal_origen.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jPanel11.add(cmb_caminos_sucursal_origen, new org.netbeans.lib.awtextra.AbsoluteConstraints(429, 64, 165, 30));
@@ -1043,7 +1055,7 @@ public class SystemView extends javax.swing.JFrame {
         jPanel11.add(jLabel28, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 220, -1, -1));
 
         cmb_caminos_estado.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        cmb_caminos_estado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "OPERATIVO", "NO OPERATIVO" }));
+        cmb_caminos_estado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Operativo", "No Operativo" }));
         jPanel11.add(cmb_caminos_estado, new org.netbeans.lib.awtextra.AbsoluteConstraints(145, 160, 165, 30));
 
         jPanel6.add(jPanel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(35, 20, 920, 270));
@@ -1061,11 +1073,11 @@ public class SystemView extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Id", "Suc. Orig.", "Suc. Dest.", "Tiempo", "Capacidad", "Estado"
+                "Id", "Suc. Orig.", "Suc. Dest.", "Tiempo", "Capacidad", "Estado", "Observaciones"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -1081,6 +1093,7 @@ public class SystemView extends javax.swing.JFrame {
             tabla_caminos.getColumnModel().getColumn(3).setResizable(false);
             tabla_caminos.getColumnModel().getColumn(4).setResizable(false);
             tabla_caminos.getColumnModel().getColumn(5).setResizable(false);
+            tabla_caminos.getColumnModel().getColumn(6).setResizable(false);
         }
 
         jPanel6.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 360, 920, 120));
@@ -1209,7 +1222,7 @@ public class SystemView extends javax.swing.JFrame {
         jLabel39.setText("Estado:");
 
         cmb_ordenes_estado.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        cmb_ordenes_estado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "PENDIENTE", "EN PROCESO", "FINALIZADA" }));
+        cmb_ordenes_estado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pendiente", "En Proceso", "Finalizada" }));
 
         javax.swing.GroupLayout jPanel14Layout = new javax.swing.GroupLayout(jPanel14);
         jPanel14.setLayout(jPanel14Layout);
@@ -1612,11 +1625,11 @@ public class SystemView extends javax.swing.JFrame {
     public javax.swing.JButton btn_sucursales_eliminar;
     public javax.swing.JButton btn_sucursales_modificar;
     public javax.swing.JTextField caminos_search;
-    public javax.swing.JComboBox<Object> cmb_caminos_estado;
-    public javax.swing.JComboBox<Object> cmb_caminos_sucursal_destino;
-    public javax.swing.JComboBox<Object> cmb_caminos_sucursal_origen;
+    public javax.swing.JComboBox<String> cmb_caminos_estado;
+    public javax.swing.JComboBox<String> cmb_caminos_sucursal_destino;
+    public javax.swing.JComboBox<String> cmb_caminos_sucursal_origen;
     public javax.swing.JComboBox<String> cmb_estado_sucursal;
-    public javax.swing.JComboBox<Object> cmb_ordenes_estado;
+    public javax.swing.JComboBox<String> cmb_ordenes_estado;
     public javax.swing.JComboBox<Object> cmb_ordenes_producto;
     public javax.swing.JComboBox<Object> cmb_ordenes_sucursal_destino;
     public javax.swing.JComboBox<Object> cmb_ordenes_sucursal_origen;
@@ -1724,7 +1737,7 @@ public class SystemView extends javax.swing.JFrame {
     public javax.swing.JTextArea txt_areat_informes;
     public javax.swing.JTextField txt_caminos_capacidad_max;
     public javax.swing.JTextField txt_caminos_id;
-    public javax.swing.JTextField txt_caminos_otra_info;
+    public javax.swing.JTextField txt_caminos_observaciones;
     public javax.swing.JTextField txt_caminos_tiempo_transito;
     public javax.swing.JTextField txt_electrodomesticos_codigo;
     public javax.swing.JTextField txt_electrodomesticos_descripcion;
