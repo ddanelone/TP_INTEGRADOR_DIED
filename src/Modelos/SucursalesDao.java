@@ -100,6 +100,23 @@ public class SucursalesDao {
         }         
     }
     
+    //Método para modificar el estado Operativo de una sucursal;
+    public boolean modificarSucursalEstadoQuery(Sucursales sucursal) {
+        String query = "UPDATE sucursales SET coperativa =? WHERE id = ?";
+        
+        try{
+            conn = cn.getConnection();
+            pst = conn.prepareStatement(query);
+            pst.setBoolean(1, sucursal.isOperativa());
+            pst.setInt(2, sucursal.getId());
+            pst.execute();
+            return true;
+        } catch(SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al modificar el Eatado Operativo de la sucursal " + e);
+            return false;        
+        }         
+    }
+    
     //Método para eliminar sucursal
     public boolean borrarSucursalQuery(int id) {
         String query = "DELETE FROM sucursales WHERE id = " + id;

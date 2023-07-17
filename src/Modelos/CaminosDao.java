@@ -100,6 +100,24 @@ public class CaminosDao {
             return false;        
         }         
     }
+   
+    
+    //Método para modificar un camino;
+    public boolean modificarCaminoEstadoEstadoQuery(Caminos camino) {
+        String query = "UPDATE caminos SET operativo =? WHERE id = ?";
+        
+        try{
+            conn = cn.getConnection();
+            pst = conn.prepareStatement(query);
+            pst.setBoolean(1, camino.isOperativo());
+            pst.setInt(2, camino.getId());
+            pst.execute();
+            return true;
+        } catch(SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al modificar estado Operativo del camino " + e);
+            return false;        
+        }         
+    }
     
     //Método para eliminar camino
     public boolean borrarCaminoQuery(int id) {
