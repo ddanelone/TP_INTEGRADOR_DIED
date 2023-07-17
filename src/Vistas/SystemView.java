@@ -1,7 +1,10 @@
 package Vistas;
 
+import Controladores.ElectrodomesticosControlador;
 import Controladores.SettingsController;
 import Controladores.SucursalesControlador;
+import Modelos.Electrodomesticos;
+import Modelos.ElectrodomesticosDao;
 import Modelos.Sucursales;
 import Modelos.SucursalesDao;
 
@@ -14,6 +17,10 @@ public class SystemView extends javax.swing.JFrame {
     //Sucursales
     Sucursales sucursal = new Sucursales();
     SucursalesDao sucursalDao = new SucursalesDao();
+    
+    //Electrodomesticos
+    Electrodomesticos electro = new Electrodomesticos();
+    ElectrodomesticosDao electroDao = new ElectrodomesticosDao();
     
     public SystemView() {
         initComponents();
@@ -30,6 +37,9 @@ public class SystemView extends javax.swing.JFrame {
         //Controlador de Sucursales
         SucursalesControlador sucursal_cuenta = new SucursalesControlador(sucursal, sucursalDao, this);
         sucursal_cuenta.listarTodasLasSucursales();
+        //Controlador de electrodomesticos
+        ElectrodomesticosControlador electrodomestico_cuenta = new ElectrodomesticosControlador(electro, electroDao, this);
+        electrodomestico_cuenta.listarTodosLosElectrodomesticos();
     }
 
     /**
@@ -664,7 +674,9 @@ public class SystemView extends javax.swing.JFrame {
         jLabel17.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel17.setText("Id:");
 
+        txt_electrodomesticos_id.setEditable(false);
         txt_electrodomesticos_id.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        txt_electrodomesticos_id.setEnabled(false);
 
         btn_electrodomesticos_crear.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btn_electrodomesticos_crear.setText("Crear");
