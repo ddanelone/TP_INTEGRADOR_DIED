@@ -69,8 +69,8 @@ public class StockDao {
     
     //Método para modificar una existencia sucursal;
     public boolean modificarStockQuery(Stock stock) {
-        String query = "UPDATE stock SET stock = ?"
-                + "WHERE id_sucursal = ? AND id_producto = ?";
+        String query = "UPDATE stock SET stock = ? WHERE id_sucursal = ? AND id_producto = ?";
+                
         
         try{
             conn = cn.getConnection();

@@ -3,11 +3,14 @@ package Vistas;
 import Controladores.CaminosControlador;
 import Controladores.ElectrodomesticosControlador;
 import Controladores.SettingsController;
+import Controladores.StockControlador;
 import Controladores.SucursalesControlador;
 import Modelos.Caminos;
 import Modelos.CaminosDao;
 import Modelos.Electrodomesticos;
 import Modelos.ElectrodomesticosDao;
+import Modelos.Stock;
+import Modelos.StockDao;
 import Modelos.Sucursales;
 import Modelos.SucursalesDao;
 
@@ -28,6 +31,10 @@ public class SystemView extends javax.swing.JFrame {
     //Caminos
     Caminos camino = new Caminos();
     CaminosDao caminoDao = new CaminosDao();
+    
+    //Stock
+    Stock stock = new Stock();
+    StockDao stockDao = new StockDao();
     
     public SystemView() {
         initComponents();
@@ -50,6 +57,9 @@ public class SystemView extends javax.swing.JFrame {
         //Controlador de Caminos
         CaminosControlador camino_cuenta = new CaminosControlador(camino, caminoDao, this);
         camino_cuenta.listarTodosLosCaminos();
+        //Controlador de Stock
+        StockControlador stock_cuenta = new StockControlador(stock, stockDao, this);
+        stock_cuenta.listarTodosLosStock();
     }
 
     /**
@@ -141,7 +151,7 @@ public class SystemView extends javax.swing.JFrame {
         btn_stock_confirmar = new javax.swing.JButton();
         btn_stock_cancelar = new javax.swing.JButton();
         jLabel32 = new javax.swing.JLabel();
-        txt_stock_codigo_producto = new javax.swing.JTextField();
+        txt_stock_id_producto = new javax.swing.JTextField();
         jLabel31 = new javax.swing.JLabel();
         stock_search = new javax.swing.JTextField();
         jScrollPane5 = new javax.swing.JScrollPane();
@@ -835,12 +845,13 @@ public class SystemView extends javax.swing.JFrame {
         jLabel19.setText("Sucursal:");
 
         jLabel29.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel29.setText("Codigo de Producto:");
+        jLabel29.setText("        Id de Producto:");
 
         jLabel30.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel30.setText("Stock:");
 
         cmb_stock_sucursal.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        cmb_stock_sucursal.setEnabled(false);
 
         txt_stock_stock.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
@@ -849,7 +860,7 @@ public class SystemView extends javax.swing.JFrame {
         txt_stock_nombre_producto.setEnabled(false);
 
         btn_stock_confirmar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btn_stock_confirmar.setText("Confrimar");
+        btn_stock_confirmar.setText("Confirmar");
 
         btn_stock_cancelar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btn_stock_cancelar.setText("Cancelar");
@@ -857,7 +868,7 @@ public class SystemView extends javax.swing.JFrame {
         jLabel32.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel32.setText("Nombre de Producto:");
 
-        txt_stock_codigo_producto.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        txt_stock_id_producto.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
         javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
         jPanel13.setLayout(jPanel13Layout);
@@ -875,7 +886,7 @@ public class SystemView extends javax.swing.JFrame {
                                 .addComponent(jLabel29, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(7, 7, 7)))
                         .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txt_stock_codigo_producto, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txt_stock_id_producto, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(cmb_stock_sucursal, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel13Layout.createSequentialGroup()
                         .addComponent(jLabel32, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -904,7 +915,7 @@ public class SystemView extends javax.swing.JFrame {
                 .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel13Layout.createSequentialGroup()
                         .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txt_stock_codigo_producto, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txt_stock_id_producto, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel29, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(11, 11, 11)
                         .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -1633,7 +1644,7 @@ public class SystemView extends javax.swing.JFrame {
     public javax.swing.JComboBox<Object> cmb_ordenes_producto;
     public javax.swing.JComboBox<Object> cmb_ordenes_sucursal_destino;
     public javax.swing.JComboBox<Object> cmb_ordenes_sucursal_origen;
-    public javax.swing.JComboBox<Object> cmb_stock_sucursal;
+    public javax.swing.JComboBox<String> cmb_stock_sucursal;
     public javax.swing.JTextField electrodomesticos_search;
     public javax.swing.JButton jButton1;
     public javax.swing.JButton jButton2;
@@ -1748,8 +1759,8 @@ public class SystemView extends javax.swing.JFrame {
     public javax.swing.JTextField txt_ordenes_cantidad_producto;
     public javax.swing.JTextField txt_ordenes_fecha;
     public javax.swing.JTextField txt_ordenes_tiempo;
-    public javax.swing.JTextField txt_stock_codigo_producto;
-    private javax.swing.JTextField txt_stock_nombre_producto;
+    public javax.swing.JTextField txt_stock_id_producto;
+    public javax.swing.JTextField txt_stock_nombre_producto;
     public javax.swing.JTextField txt_stock_stock;
     public javax.swing.JTextField txt_sucursales_apertura;
     public javax.swing.JTextField txt_sucursales_cierre;
