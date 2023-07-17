@@ -20,7 +20,7 @@ public class StockDao {
     public static int id_producto_stock=0;
     public static int stock_stock=0;
     
-    //Método para registrar stock en una sucursal;
+   /* //Método para registrar stock en una sucursal;
     public boolean registrarStockQuery(Stock stock) {
         String query = "INSERT INTO stock(id_sucursal, id_producto, stock) VALUES(?,?,?)";
         
@@ -36,7 +36,7 @@ public class StockDao {
             JOptionPane.showMessageDialog(null, "Error al registrar existencia de producto en la sucursal " + e);
             return false;        
         }         
-    }
+    } */
     
     //Método para listar existencia de productos en sucursal
     public List listaStockQuery(String valor) {

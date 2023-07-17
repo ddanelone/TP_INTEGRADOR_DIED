@@ -4,6 +4,7 @@ import Controladores.AdministrarControlador;
 import Controladores.CaminosControlador;
 import Controladores.ElectrodomesticosControlador;
 import Controladores.InformesControlador;
+import Controladores.OrdenesControlador;
 import Controladores.SettingsController;
 import Controladores.StockControlador;
 import Controladores.SucursalesControlador;
@@ -64,11 +65,12 @@ public class SystemView extends javax.swing.JFrame {
         //Controlador de Stock
         StockControlador stock_cuenta = new StockControlador(stock, stockDao, this);
         stock_cuenta.listarTodosLosStock();
+        //Controlador de órdenes
+        OrdenesControlador ordenes_cuenta = new OrdenesControlador(this);
         //Controlador de Administracion
-        AdministrarControlador administrar_cuenta = new AdministrarControlador(camino,  sucursal,  caminoDao, sucursalDao, this);
-        
+        AdministrarControlador administrar_cuenta = new AdministrarControlador(this);     
         //Controlador de informes
-        InformesControlador informe_cuenta = new InformesControlador(camino, caminoDao, this);
+        InformesControlador informe_cuenta = new InformesControlador(this);
     }
 
     /**
@@ -207,11 +209,15 @@ public class SystemView extends javax.swing.JFrame {
         tabla_ordenes_productos = new javax.swing.JTable();
         jLabel38 = new javax.swing.JLabel();
         txt_ordenes_cantidad_producto = new javax.swing.JTextField();
+        btn_ordenes_producto_agregar = new javax.swing.JButton();
         btn_ordenes_confirmar = new javax.swing.JButton();
         btn_ordenes_modificar = new javax.swing.JButton();
-        btn_ordenes_cancelar = new javax.swing.JButton();
+        btn_ordenes_eliminar = new javax.swing.JButton();
         jLabel39 = new javax.swing.JLabel();
         cmb_ordenes_estado = new javax.swing.JComboBox<>();
+        btn_ordenes_cancelar1 = new javax.swing.JButton();
+        jLabel40 = new javax.swing.JLabel();
+        cmb_ordenes_caminos_posibles = new javax.swing.JComboBox<>();
         jScrollPane7 = new javax.swing.JScrollPane();
         tabla_ordenes = new javax.swing.JTable();
         jPanel8 = new javax.swing.JPanel();
@@ -1140,6 +1146,7 @@ public class SystemView extends javax.swing.JFrame {
         cmb_ordenes_sucursal_destino.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
         cmb_ordenes_sucursal_origen.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        cmb_ordenes_sucursal_origen.setEnabled(false);
 
         txt_ordenes_fecha.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
@@ -1192,41 +1199,52 @@ public class SystemView extends javax.swing.JFrame {
             }
         });
 
+        btn_ordenes_producto_agregar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btn_ordenes_producto_agregar.setText("Agregar");
+
         javax.swing.GroupLayout jPanel15Layout = new javax.swing.GroupLayout(jPanel15);
         jPanel15.setLayout(jPanel15Layout);
         jPanel15Layout.setHorizontalGroup(
             jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel15Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                .addContainerGap())
-            .addGroup(jPanel15Layout.createSequentialGroup()
                 .addGap(22, 22, 22)
                 .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel37, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel38, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(29, 29, 29)
                 .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(cmb_ordenes_producto, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txt_ordenes_cantidad_producto, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(54, Short.MAX_VALUE))
+                    .addGroup(jPanel15Layout.createSequentialGroup()
+                        .addGap(14, 14, 14)
+                        .addComponent(txt_ordenes_cantidad_producto, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                        .addComponent(btn_ordenes_producto_agregar)
+                        .addGap(18, 18, 18))
+                    .addGroup(jPanel15Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(cmb_ordenes_producto, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+            .addGroup(jPanel15Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jPanel15Layout.setVerticalGroup(
             jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel15Layout.createSequentialGroup()
-                .addGap(19, 19, 19)
+                .addContainerGap()
                 .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel37, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cmb_ordenes_producto, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel38, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel38, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txt_ordenes_cantidad_producto, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel15Layout.createSequentialGroup()
                         .addGap(1, 1, 1)
-                        .addComponent(txt_ordenes_cantidad_producto, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 26, Short.MAX_VALUE)
+                        .addComponent(btn_ordenes_producto_agregar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(45, 45, 45))
+                .addContainerGap(13, Short.MAX_VALUE))
         );
 
         btn_ordenes_confirmar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -1235,14 +1253,27 @@ public class SystemView extends javax.swing.JFrame {
         btn_ordenes_modificar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btn_ordenes_modificar.setText("Modificar");
 
-        btn_ordenes_cancelar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btn_ordenes_cancelar.setText("Cancelar");
+        btn_ordenes_eliminar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btn_ordenes_eliminar.setText("ELiminar");
+        btn_ordenes_eliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_ordenes_eliminarActionPerformed(evt);
+            }
+        });
 
         jLabel39.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel39.setText("Estado:");
 
         cmb_ordenes_estado.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         cmb_ordenes_estado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pendiente", "En Proceso", "Finalizada" }));
+
+        btn_ordenes_cancelar1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btn_ordenes_cancelar1.setText("Cancelar");
+
+        jLabel40.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel40.setText("Caminos:");
+
+        cmb_ordenes_caminos_posibles.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
         javax.swing.GroupLayout jPanel14Layout = new javax.swing.GroupLayout(jPanel14);
         jPanel14.setLayout(jPanel14Layout);
@@ -1271,20 +1302,28 @@ public class SystemView extends javax.swing.JFrame {
                         .addComponent(jLabel39)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(cmb_ordenes_estado, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
-                .addComponent(jPanel15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(37, 37, 37)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
                 .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btn_ordenes_confirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btn_ordenes_modificar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btn_ordenes_cancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel14Layout.createSequentialGroup()
+                        .addComponent(jPanel15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btn_ordenes_confirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btn_ordenes_modificar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btn_ordenes_eliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btn_ordenes_cancelar1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel14Layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(jLabel40)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(cmb_ordenes_caminos_posibles, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(55, Short.MAX_VALUE))
         );
         jPanel14Layout.setVerticalGroup(
             jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel15, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel14Layout.createSequentialGroup()
                 .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel14Layout.createSequentialGroup()
                         .addGap(26, 26, 26)
                         .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -1301,19 +1340,24 @@ public class SystemView extends javax.swing.JFrame {
                         .addGap(21, 21, 21)
                         .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel36)
-                            .addComponent(txt_ordenes_tiempo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(txt_ordenes_tiempo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel39)
+                            .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(cmb_ordenes_estado, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel40)
+                                .addComponent(cmb_ordenes_caminos_posibles, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jPanel14Layout.createSequentialGroup()
-                        .addGap(14, 14, 14)
+                        .addGap(30, 30, 30)
                         .addComponent(btn_ordenes_confirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(27, 27, 27)
                         .addComponent(btn_ordenes_modificar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(35, 35, 35)
-                        .addComponent(btn_ordenes_cancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel39)
-                    .addComponent(cmb_ordenes_estado, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(31, 31, 31)
+                        .addComponent(btn_ordenes_eliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(29, 29, 29)
+                        .addComponent(btn_ordenes_cancelar1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(17, Short.MAX_VALUE))
         );
 
         jPanel7.add(jPanel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(35, 20, 920, 300));
@@ -1600,6 +1644,10 @@ public class SystemView extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_cmb_administracion_sucursalActionPerformed
 
+    private void btn_ordenes_eliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ordenes_eliminarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_ordenes_eliminarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1650,9 +1698,11 @@ public class SystemView extends javax.swing.JFrame {
     public javax.swing.JButton btn_electrodomesticos_modificar;
     public javax.swing.JButton btn_informes_flujo_maximo;
     public javax.swing.JButton btn_informes_page_rank;
-    public javax.swing.JButton btn_ordenes_cancelar;
+    public javax.swing.JButton btn_ordenes_cancelar1;
     public javax.swing.JButton btn_ordenes_confirmar;
+    public javax.swing.JButton btn_ordenes_eliminar;
     public javax.swing.JButton btn_ordenes_modificar;
+    public javax.swing.JButton btn_ordenes_producto_agregar;
     private javax.swing.JButton btn_salir;
     public javax.swing.JButton btn_stock_cancelar;
     public javax.swing.JButton btn_stock_confirmar;
@@ -1667,6 +1717,7 @@ public class SystemView extends javax.swing.JFrame {
     public javax.swing.JComboBox<String> cmb_caminos_sucursal_destino;
     public javax.swing.JComboBox<String> cmb_caminos_sucursal_origen;
     public javax.swing.JComboBox<String> cmb_estado_sucursal;
+    public javax.swing.JComboBox<String> cmb_ordenes_caminos_posibles;
     public javax.swing.JComboBox<String> cmb_ordenes_estado;
     public javax.swing.JComboBox<Object> cmb_ordenes_producto;
     public javax.swing.JComboBox<Object> cmb_ordenes_sucursal_destino;
@@ -1707,6 +1758,7 @@ public class SystemView extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel38;
     private javax.swing.JLabel jLabel39;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel40;
     private javax.swing.JLabel jLabel41;
     private javax.swing.JLabel jLabel42;
     private javax.swing.JLabel jLabel5;

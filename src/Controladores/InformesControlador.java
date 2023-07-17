@@ -2,26 +2,23 @@ package Controladores;
 
 import Modelos.Caminos;
 import Modelos.CaminosDao;
-import Modelos.Grafo;
 import Vistas.SystemView;
 import java.awt.event.ActionEvent;
+import java.util.List;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import javax.swing.JOptionPane;
 
 public class InformesControlador implements ActionListener, MouseListener {
-
-    private Caminos camino;
-    private CaminosDao caminoDao;
     private SystemView vista;
+    
+    //Instanciamos el modelo de Caminos;
+    Caminos camino = new Caminos();
+    CaminosDao caminoDao = new CaminosDao();
 
-    public InformesControlador(Caminos camino, CaminosDao caminoDao, SystemView vista) {
-        this.camino = camino;
-        this.caminoDao = caminoDao;
+
+    public InformesControlador(SystemView vista) {
         this.vista = vista;
         //Botón de flujo máximo
         this.vista.btn_informes_flujo_maximo.addActionListener(this);
@@ -35,11 +32,10 @@ public class InformesControlador implements ActionListener, MouseListener {
     public void actionPerformed(ActionEvent e) {
         //Creo una lista con todos los caminos. Ahí tengo sucursal origen, destno, y capacidad de cada uno
         List<Caminos> lista_caminos = caminoDao.listaCaminosQuery("");
-        if (e.getSource() == vista.btn_informes_flujo_maximo) {
-            
-            JOptionPane.showMessageDialog(null, "Flujo máximo: " + calcularFlujoMaximo(lista_caminos));
+        if (e.getSource() == vista.btn_informes_flujo_maximo) {            
+            JOptionPane.showMessageDialog(null, "Flujo máximo ---> Algoritmo no terminado ");
         } else if (e.getSource() == vista.btn_informes_page_rank) {
-            JOptionPane.showMessageDialog(null, "Algoritmo aún no terminado.");
+            JOptionPane.showMessageDialog(null, "Page Rank ---> Algoritmo aún no terminado.");
         }
 
     }
@@ -66,31 +62,4 @@ public class InformesControlador implements ActionListener, MouseListener {
     @Override
     public void mouseExited(MouseEvent e) {
     }
-
-    public int calcularFlujoMaximo(List<Caminos> caminos) {
-    // Crear el grafo con el número de nodos adecuado
-    int numeroNodos = obtenerNumeroNodos(caminos);
-    Grafo grafo = new Grafo(numeroNodos);
-
-    // Agregar las aristas con sus capacidades
-    for (Caminos camino : caminos) {
-        grafo.agregarArista(camino.getOrigenId(), camino.getDestinoId(), camino.getCapacidad());
-    }
-
-    // Calcular el flujo máximo
-    int flujoMaximo = grafo.calcularFlujoMaximo(11, 12); // Reemplaza 0 y 1 por los identificadores adecuados de los nodos de origen y destino
-
-    return flujoMaximo;
-}
-
-private int obtenerNumeroNodos(List<Caminos> caminos) {
-    Set<Integer> nodos = new HashSet<>();
-    for (Caminos camino : caminos) {
-        nodos.add(camino.getOrigenId());
-        nodos.add(camino.getDestinoId());
-    }
-    return nodos.size();
-}
-
-
 }

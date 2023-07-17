@@ -16,18 +16,17 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 
 public class AdministrarControlador implements ActionListener, MouseListener {
-
-    private Caminos camino;
-    private Sucursales sucursal;
-    private SucursalesDao sucursalDao;
-    private CaminosDao caminoDao;
+    
     private SystemView vista;
+    //Instanciamos el modelo de Camnos y Sucursales.
+    Caminos camino = new Caminos();
+    CaminosDao caminoDao = new CaminosDao();
+    Sucursales sucursal = new Sucursales();
+    SucursalesDao sucursalDao = new SucursalesDao();
+    
+    
 
-    public AdministrarControlador(Caminos camino, Sucursales sucursal, CaminosDao caminoDao, SucursalesDao sucursalDao, SystemView vista) {
-        this.camino = camino;
-        this.sucursal = sucursal;
-        this.caminoDao = caminoDao;
-        this.sucursalDao = sucursalDao;
+    public AdministrarControlador(SystemView vista) {
         this.vista = vista;
         // Botones habilitar/deshabilitar Sucursal
         this.vista.btn_admnistracion_habilitar_suc.addActionListener(this);

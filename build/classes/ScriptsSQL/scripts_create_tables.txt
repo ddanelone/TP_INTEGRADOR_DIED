@@ -41,12 +41,15 @@ CREATE TABLE ordenes_provision (
   id INT PRIMARY KEY AUTO_INCREMENT,
   sucursal_origen_id INT,
   sucursal_destino_id INT,
+  id_camino INT,
   fecha_orden DATE,
   tiempo_maximo INT,
   estado VARCHAR(20),
   FOREIGN KEY (sucursal_origen_id) REFERENCES sucursales(id),
-  FOREIGN KEY (sucursal_destino_id) REFERENCES sucursales(id)
+  FOREIGN KEY (sucursal_destino_id) REFERENCES sucursales(id),
+  FOREIGN KEY (id_camino) REFERENCES caminos(id)
 );
+
 
 CREATE TABLE ordenes_productos (
   orden_id INT,
