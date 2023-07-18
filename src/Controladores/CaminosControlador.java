@@ -162,7 +162,7 @@ public class CaminosControlador implements ActionListener, MouseListener, KeyLis
         } 
     }
 
-    //Listar todos las productos
+    //Listar todos las Caminos
     public void listarTodosLosCaminos() {
         List<Caminos> lista = caminoDao.listaCaminosQuery(vista.caminos_search.getText());
         modelo = (DefaultTableModel) vista.tabla_caminos.getModel();

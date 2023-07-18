@@ -36,7 +36,7 @@ public class ProductoCantidadDao {
         }         
     }
     
-    public List listaPoductoCantidadQuery(String valor) {
+    public List listaProductoCantidadQuery(String valor) {
         List<ProductoCantidad> lista_produC = new ArrayList();
         String query = "SELECT * FROM ordenes_producto ORDER BY id ASC";
         String query_search_produC = "SELECT * FROM ordenes_producto WHERE id LIKE '%" + valor + "%'";
