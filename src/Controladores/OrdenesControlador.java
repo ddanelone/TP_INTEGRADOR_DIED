@@ -89,6 +89,8 @@ public class OrdenesControlador implements ActionListener, MouseListener, KeyLis
         this.vista.btn_ordenes_producto_agregar.addActionListener(this);
         //Botón de cancelar
         this.vista.btn_ordenes_cancelar.addActionListener(this);
+        //Botón de eliminar
+        this.vista.btn_ordenes_eliminar.addActionListener(this);
         
     }
 
@@ -155,11 +157,29 @@ public class OrdenesControlador implements ActionListener, MouseListener, KeyLis
         } else if(e.getSource() == vista.btn_ordenes_cancelar) {
             //Habilitamos todos los botones y limpiamos las tablas y campos
             vista.cmb_ordenes_sucursal_destino.setEnabled(true);
+            vista.btn_ordenes_confirmar.setEnabled(true);
+            vista.btn_ordenes_modificar.setEnabled(false);
+            vista.btn_ordenes_eliminar.setEnabled(false);
             fechaActual = LocalDate.now();
             this.vista.txt_ordenes_fecha.setText(fechaActual.toString());   
             limpiarTablaTemporal();
             limpiarTablaArticulos();
             limpiarCampos();
+        } else if(e.getSource()== this.vista.btn_ordenes_eliminar) {
+            int fila = vista.tabla_ordenes.getSelectedRow();
+            int id = Integer.parseInt(vista.tabla_ordenes.getValueAt(fila, 0).toString());
+            int confirmacion = JOptionPane.showConfirmDialog(null, "¿Seguro de elminar esta Orden de Provisión?");
+            if (confirmacion == 0 && ordenDao.borrarOrdenQuery(id) != false) {
+                limpiarCampos();
+                limpiarTablaOrdenes();
+                limpiarTablaArticulos();
+                vista.btn_ordenes_confirmar.setEnabled(true);
+                JOptionPane.showMessageDialog(null, "Orden de Provisión eliminado exitosamente");
+                listarTodasLasOrdenes();
+                vista.btn_ordenes_modificar.setEnabled(false);
+                vista.btn_ordenes_eliminar.setEnabled(false);
+            }
+
         }
     }
 
@@ -352,6 +372,7 @@ public class OrdenesControlador implements ActionListener, MouseListener, KeyLis
             vista.txt_ordenes_fecha.setText(obtenerFechaOrden(id_orden));
             vista.txt_ordenes_tiempo.setText(vista.tabla_ordenes.getValueAt(fila, 3).toString());
             listarTodosLosElectros(id_orden);
+            vista.btn_ordenes_confirmar.setEnabled(false);
             vista.btn_ordenes_modificar.setEnabled(true);
             vista.btn_ordenes_eliminar.setEnabled(true);
         }

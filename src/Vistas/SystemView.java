@@ -1272,7 +1272,7 @@ public class SystemView extends javax.swing.JFrame {
         );
 
         btn_ordenes_confirmar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btn_ordenes_confirmar.setText("Confirmar");
+        btn_ordenes_confirmar.setText("Crear");
 
         btn_ordenes_modificar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btn_ordenes_modificar.setText("Modificar");
