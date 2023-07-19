@@ -11,11 +11,21 @@ public class Ordenes {
     private int tiempoMaximo;
     private String estado;
     private List<ProductoCantidad> listaProductos;    
+    private int caminoId;
+    private double pesoTotal;
+
+    public double getPesoTotal() {
+        return pesoTotal;
+    }
+
+    public void setPesoTotal(double pesoTotal) {
+        this.pesoTotal = pesoTotal;
+    }
 
     public Ordenes() {
     }
 
-    public Ordenes(int id, int sucursalOrigenId, int sucursalDestinoId, LocalDate fechaOrden, int tiempoMaximo, String estado, List<ProductoCantidad> listaProductos) {
+    public Ordenes(int id, int sucursalOrigenId, int sucursalDestinoId, LocalDate fechaOrden, int tiempoMaximo, String estado, List<ProductoCantidad> listaProductos, int caminoId, double peso) {
         this.id = id;
         this.sucursalOrigenId = sucursalOrigenId;
         this.sucursalDestinoId = sucursalDestinoId;
@@ -23,6 +33,16 @@ public class Ordenes {
         this.tiempoMaximo = tiempoMaximo;
         this.estado = estado;
         this.listaProductos = listaProductos;
+        this.caminoId = caminoId;
+        this.pesoTotal = peso;
+    }
+
+    public int getCaminoId() {
+        return caminoId;
+    }
+
+    public void setCaminoId(int caminoId) {
+        this.caminoId = caminoId;
     }
 
     public int getId() {

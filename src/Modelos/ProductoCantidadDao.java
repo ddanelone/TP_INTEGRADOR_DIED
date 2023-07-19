@@ -20,7 +20,7 @@ public class ProductoCantidadDao {
     public static int cantidad_productoCantidad =0;
     
     public boolean registrarPoductoCantidadQuery(ProductoCantidad produC) {
-        String query = "INSERT INTO ordenes_producto (orden_id, producto_id, cantidad) VALUES(?,?,?)";
+        String query = "INSERT INTO ordenes_productos (orden_id, producto_id, cantidad) VALUES(?,?,?)";
         
         try{
             conn = cn.getConnection();
@@ -38,8 +38,8 @@ public class ProductoCantidadDao {
     
     public List listaProductoCantidadQuery(String valor) {
         List<ProductoCantidad> lista_produC = new ArrayList();
-        String query = "SELECT * FROM ordenes_producto ORDER BY id ASC";
-        String query_search_produC = "SELECT * FROM ordenes_producto WHERE id LIKE '%" + valor + "%'";
+        String query = "SELECT * FROM ordenes_productos ORDER BY orden_id ASC";
+        String query_search_produC = "SELECT * FROM ordenes_productos WHERE orden_id LIKE '%" + valor + "%'";
         
         try{
             conn = cn.getConnection();
@@ -52,19 +52,19 @@ public class ProductoCantidadDao {
             
             while(rs.next()) {
                 ProductoCantidad produC = new ProductoCantidad();
-                produC.setId(rs.getInt("id"));
+                produC.setId(rs.getInt("orden_id"));
                 produC.setProductoId(rs.getInt("producto_id"));
                 produC.setCantidad(rs.getInt("cantidad"));
                 lista_produC.add(produC);
             }            
         } catch(SQLException e) {
-            JOptionPane.showMessageDialog(null, "Error al recuperar los datos de productos/cantidad");                   
+            JOptionPane.showMessageDialog(null, "Error al recuperar los datos de productos/cantidad " + e);                   
         } 
         return lista_produC;
     }
     
     public boolean modificarPoductoCantidadQuery(ProductoCantidad produC) {
-        String query = "UPDATE ordenes_producto SET producto_id = ?, cantidad = ? "
+        String query = "UPDATE ordenes_productos SET producto_id = ?, cantidad = ? "
                 + "WHERE id = ?";
         
         try{
@@ -82,7 +82,7 @@ public class ProductoCantidadDao {
     }
     
     public boolean borrarPoductoCantidadQuery(int id) {
-        String query = "DELETE FROM ordenes_producto WHERE id = " + id;
+        String query = "DELETE FROM ordenes_productos WHERE id = " + id;
         try {
             conn = cn.getConnection();
             pst = conn.prepareStatement(query);
