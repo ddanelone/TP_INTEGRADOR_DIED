@@ -51,7 +51,7 @@ public class OrdenesControlador implements ActionListener, MouseListener, KeyLis
 
     DefaultTableModel modeloProductos = new DefaultTableModel();
     DefaultTableModel modeloOrdenes = new DefaultTableModel();
-    DefaultTableModel temporal = new DefaultTableModel();
+    //DefaultTableModel temporal = new DefaultTableModel();
     private int id_sucursal_destino = 0;
     private double peso_total = 0.0;
     private int id_orden = 0;
@@ -120,7 +120,7 @@ public class OrdenesControlador implements ActionListener, MouseListener, KeyLis
                     String nombre = electro_cmb.getNombre();
                     int cantidad = Integer.parseInt(vista.txt_ordenes_cantidad_producto.getText().trim());
 
-                    temporal = (DefaultTableModel) vista.tabla_ordenes_productos.getModel();
+                    modeloProductos = (DefaultTableModel) vista.tabla_ordenes_productos.getModel();
                     for (int i = 0; i < vista.tabla_ordenes_productos.getRowCount(); i++) {
                         if (vista.tabla_ordenes_productos.getValueAt(i, 1).equals(nombre)) {
                             JOptionPane.showMessageDialog(null, "El producto ya esta agregado en la tabla de compras");
@@ -139,27 +139,35 @@ public class OrdenesControlador implements ActionListener, MouseListener, KeyLis
                     obj[1] = lista.get(1);
                     obj[2] = lista.get(2);
                     obj[3] = lista.get(3);
-                    temporal.addRow(obj);
-                    vista.tabla_ordenes_productos.setModel(temporal);
+                    modeloProductos.addRow(obj);
+                    vista.tabla_ordenes_productos.setModel(modeloProductos);
                     vista.txt_ordenes_cantidad_producto.setText("");
                     vista.cmb_ordenes_producto.requestFocus();
                 }
             }
-            
         } else if (e.getSource() == vista.btn_ordenes_producto_eliminar) {
-            int filaAux = vista.tabla_ordenes_productos.getSelectedRow();
-            int id = Integer.parseInt(vista.tabla_ordenes_productos.getValueAt(filaAux, 0).toString());
+            int col  = vista.tabla_ordenes_productos.getSelectedRow();
+            int id = Integer.parseInt(vista.tabla_ordenes_productos.getValueAt(col, 0).toString());
             int confirmacion = JOptionPane.showConfirmDialog(null, "¿Seguro de elminar este electrodomésticos de la Orden de Provisión?");
             if (confirmacion == 0) {
-                JOptionPane.showMessageDialog(null, filaAux + " Tamaño del modelo " + vista.tabla_ordenes_productos.getRowCount());
+                JOptionPane.showMessageDialog(null, col + " Tamaño del modelo " + vista.tabla_ordenes_productos.getRowCount());
 
+                // Eliminar el item del modelo de la tabla
+                DefaultTableModel modeloTabla = (DefaultTableModel) vista.tabla_ordenes_productos.getModel();
+                for (int i = 0; i < modeloTabla.getRowCount(); i++) {
+                    int idProductoEnModelo = (int) modeloTabla.getValueAt(i, 0);
+                    if (idProductoEnModelo == id) {
+                        modeloTabla.removeRow(i);
+                        break;
+                    }
+                }
 
                 vista.btn_ordenes_producto_agregar.setEnabled(true);
                 JOptionPane.showMessageDialog(null, "Electrodoméstico eliminado exitósamente de la Orden de Provisión");
-            }   
+            }
         } else if (e.getSource() == vista.btn_ordenes_crear) {
             //asignar los atributos a la orden
-            if (temporal.getRowCount() == 0) {
+            if (modeloProductos.getRowCount() == 0) {
                 JOptionPane.showMessageDialog(null, "Debe agregar productos a la orden para poder confirmarla");
             } else {
                 id_sucursal_destino = obtenerIdSucursalPorNombre(vista.cmb_ordenes_sucursal_destino.getSelectedItem().toString().trim());
@@ -192,7 +200,6 @@ public class OrdenesControlador implements ActionListener, MouseListener, KeyLis
                 orden.setFechaOrden(fechaOrden);
                 orden.setTiempoMaximo((int) Double.parseDouble(vista.txt_ordenes_tiempo.getText().trim()));
                 modificarOrden(orden);
-                limpiarTablaTemporal();
                 limpiarTablaArticulos();
                 limpiarCampos();
 
@@ -220,15 +227,12 @@ public class OrdenesControlador implements ActionListener, MouseListener, KeyLis
             vista.btn_ordenes_producto_eliminar.setEnabled(false);
             fechaActual = LocalDate.now();
             this.vista.txt_ordenes_fecha.setText(fechaActual.toString());
-            limpiarTablaTemporal();
             limpiarTablaArticulos();
             limpiarCampos();
         }
     }
 
-    //Listar todos los electros agregados OJO! ES LA TABLA DE PRODUCTOS QUE ESTÁ ASOCIADA A LA ORDEN, BOLUDIN!!!
-    public void listarTodosLosElectros(int id_orden) {
-        limpiarTablaArticulos();
+    private DefaultTableModel tablaModelo() {
         //Recupero todos los registros de la tabla y los filtro para dejar lo que correspondan a la orden actual
         List<ProductoCantidad> listaP = produCantDao.listaProductoCantidadQuery("");
         List<ProductoCantidad> lista = listaP.stream().filter(p -> p.getId() == id_orden).collect(Collectors.toList());
@@ -245,7 +249,12 @@ public class OrdenesControlador implements ActionListener, MouseListener, KeyLis
             fila[3] = obtenerPesoProductoId(lista.get(i).getProductoId()) * lista.get(i).getCantidad();
             modeloProductos.addRow(fila);
         }
-        vista.tabla_ordenes_productos.setModel(modeloProductos);
+        return modeloProductos;
+    }
+    //Listar todos los electros agregados a la orden
+    public void listarTodosLosElectros(int id_orden) {
+        limpiarTablaArticulos();
+        vista.tabla_ordenes_productos.setModel(tablaModelo());
     }
 
     //Método pararecuperar y mostrar en pantalla todas las ordenes cargadas. 
@@ -278,7 +287,6 @@ public class OrdenesControlador implements ActionListener, MouseListener, KeyLis
                 ordenDao.registrarDetalleOrdenQuery(orden_id, electro_id, cantidad);
             }
             JOptionPane.showMessageDialog(null, "Orden de provision cargada correctamente");
-            limpiarTablaTemporal();
             limpiarTablaArticulos();
             limpiarTablaOrdenes();
             limpiarCampos();
@@ -304,7 +312,6 @@ public class OrdenesControlador implements ActionListener, MouseListener, KeyLis
                 produCantDao.registrarPoductoCantidadQuery(produCant);
             }
             JOptionPane.showMessageDialog(null, "Orden de provision actualizada correctamente");
-            limpiarTablaTemporal();
             limpiarTablaArticulos();
             limpiarTablaOrdenes();
             limpiarCampos();
@@ -369,14 +376,6 @@ public class OrdenesControlador implements ActionListener, MouseListener, KeyLis
                 JOptionPane.showMessageDialog(null, "No se ha podido ejecutar la operación de actualizacíón (MODIFICACION)");
             }
         }
-    }
-
-    public void limpiarTablaTemporal() {
-        for (int i = 0; i < temporal.getRowCount(); i++) {
-            temporal.removeRow(i);
-            i = i - 1;
-        }
-
     }
 
     public void limpiarTablaArticulos() {
@@ -449,25 +448,24 @@ public class OrdenesControlador implements ActionListener, MouseListener, KeyLis
         }
         return -1; // Retorna un valor por defecto si no se encuentra la sucursal
     }
-    
+
     private String obtenerNombreElectro(int id) {
         List<Electrodomesticos> lista = electroDao.listaElectrodomesticosQuery("");
         return lista.stream()
-            .filter(unaSucursal -> unaSucursal.getId() == id)
-            .map(unaSucursal -> unaSucursal.getNombre().trim())
-            .findFirst()
-            .orElse("");
+                .filter(unaSucursal -> unaSucursal.getId() == id)
+                .map(unaSucursal -> unaSucursal.getNombre().trim())
+                .findFirst()
+                .orElse("");
     }
 
     private String obtenerNombreSucursal(int id) {
-    List<Sucursales> lista = sucursalDao.listaSucursalesQuery("");
-    return lista.stream()
-            .filter(unaSucursal -> unaSucursal.getId() == id)
-            .map(unaSucursal -> unaSucursal.getNombre().trim())
-            .findFirst()
-            .orElse("");
-}
-
+        List<Sucursales> lista = sucursalDao.listaSucursalesQuery("");
+        return lista.stream()
+                .filter(unaSucursal -> unaSucursal.getId() == id)
+                .map(unaSucursal -> unaSucursal.getNombre().trim())
+                .findFirst()
+                .orElse("");
+    }
 
     private String obtenerFechaOrden(int id) {
         List<Ordenes> lista = ordenDao.listaOrdenesQuery("");
@@ -509,7 +507,9 @@ public class OrdenesControlador implements ActionListener, MouseListener, KeyLis
             vista.btn_ordenes_crear.setEnabled(false);
             vista.btn_ordenes_modificar.setEnabled(true);
             vista.btn_ordenes_eliminar.setEnabled(true);
-        } else if(e.getSource()== vista.tabla_ordenes_productos) {
+        } else if (e.getSource() == vista.tabla_ordenes_productos) {
+            //Deshabilitar el botón de agregar
+            vista.btn_ordenes_producto_agregar.setEnabled(false);
             //Recupero el producto en el comboBox, y la cantidad 
             int fila = vista.tabla_ordenes_productos.rowAtPoint(e.getPoint());
             //Método para recupear el nombre del  producot en el comboBox
