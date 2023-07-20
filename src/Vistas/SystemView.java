@@ -218,7 +218,7 @@ public class SystemView extends javax.swing.JFrame {
         txt_ordenes_cantidad_producto = new javax.swing.JTextField();
         btn_ordenes_producto_agregar = new javax.swing.JButton();
         btn_ordenes_producto_eliminar = new javax.swing.JButton();
-        btn_ordenes_confirmar = new javax.swing.JButton();
+        btn_ordenes_crear = new javax.swing.JButton();
         btn_ordenes_modificar = new javax.swing.JButton();
         btn_ordenes_eliminar = new javax.swing.JButton();
         btn_ordenes_cancelar = new javax.swing.JButton();
@@ -1271,8 +1271,8 @@ public class SystemView extends javax.swing.JFrame {
                 .addContainerGap(15, Short.MAX_VALUE))
         );
 
-        btn_ordenes_confirmar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btn_ordenes_confirmar.setText("Crear");
+        btn_ordenes_crear.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btn_ordenes_crear.setText("Crear");
 
         btn_ordenes_modificar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btn_ordenes_modificar.setText("Modificar");
@@ -1341,7 +1341,7 @@ public class SystemView extends javax.swing.JFrame {
                         .addComponent(cmb_ordenes_caminos_posibles, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btn_ordenes_confirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_ordenes_crear, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btn_ordenes_modificar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btn_ordenes_eliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btn_ordenes_cancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1386,7 +1386,7 @@ public class SystemView extends javax.swing.JFrame {
                             .addGroup(jPanel14Layout.createSequentialGroup()
                                 .addComponent(jLabel44)
                                 .addGap(18, 18, 18)
-                                .addComponent(btn_ordenes_confirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btn_ordenes_crear, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(27, 27, 27)
                                 .addComponent(btn_ordenes_modificar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(31, 31, 31)
@@ -1751,7 +1751,7 @@ public class SystemView extends javax.swing.JFrame {
     public javax.swing.JButton btn_informes_flujo_maximo;
     public javax.swing.JButton btn_informes_page_rank;
     public javax.swing.JButton btn_ordenes_cancelar;
-    public javax.swing.JButton btn_ordenes_confirmar;
+    public javax.swing.JButton btn_ordenes_crear;
     public javax.swing.JButton btn_ordenes_eliminar;
     public javax.swing.JButton btn_ordenes_modificar;
     public javax.swing.JButton btn_ordenes_producto_agregar;

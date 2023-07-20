@@ -61,11 +61,11 @@ public class ProductoCantidadDao {
             JOptionPane.showMessageDialog(null, "Error al recuperar los datos de productos/cantidad " + e);                   
         } 
         return lista_produC;
-    }
+    } 
     
     public boolean modificarPoductoCantidadQuery(ProductoCantidad produC) {
         String query = "UPDATE ordenes_productos SET producto_id = ?, cantidad = ? "
-                + "WHERE id = ?";
+                + "WHERE orden_id = ?";
         
         try{
             conn = cn.getConnection();
@@ -82,7 +82,7 @@ public class ProductoCantidadDao {
     }
     
     public boolean borrarPoductoCantidadQuery(int id) {
-        String query = "DELETE FROM ordenes_productos WHERE id = " + id;
+        String query = "DELETE FROM ordenes_productos WHERE orden_id = " + id;
         try {
             conn = cn.getConnection();
             pst = conn.prepareStatement(query);

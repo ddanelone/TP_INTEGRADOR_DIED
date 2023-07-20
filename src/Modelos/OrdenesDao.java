@@ -161,7 +161,7 @@ public class OrdenesDao {
     
     //Método para modificar una orden;
     public boolean modificarOrdenQuery(Ordenes orden) {
-        String query = "UPDATE ordenes_provision SET sucursal_origen_id = ?, sucursal_destino_id = ?, fecha_orden= ?, tiempo_maximo= ?, estado =?, "
+        String query = "UPDATE ordenes_provision SET sucursal_origen_id = ?, sucursal_destino_id = ?, fecha_orden= ?, tiempo_maximo= ?, estado =?, camino_seleccionado_id=?, peso_total=? "
                 + "WHERE id = ?";
         
         try{
@@ -173,7 +173,9 @@ public class OrdenesDao {
             pst.setDate(3, fechaSql);
             pst.setInt(4, orden.getTiempoMaximo());
             pst.setString(5, orden.getEstado());
-            pst.setInt(6, orden.getId());
+            pst.setInt(6, orden.getCaminoId());
+            pst.setDouble(7, orden.getPesoTotal());
+            pst.setInt(8, orden.getId());
             pst.execute();
             return true;
         } catch(SQLException e) {
