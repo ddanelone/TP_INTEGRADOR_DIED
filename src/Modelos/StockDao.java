@@ -20,7 +20,7 @@ public class StockDao {
     public static int id_producto_stock=0;
     public static int stock_stock=0;
     
-   /* //Método para registrar stock en una sucursal;
+   //Método para registrar stock en una sucursal;
     public boolean registrarStockQuery(Stock stock) {
         String query = "INSERT INTO stock(id_sucursal, id_producto, stock) VALUES(?,?,?)";
         
@@ -36,7 +36,7 @@ public class StockDao {
             JOptionPane.showMessageDialog(null, "Error al registrar existencia de producto en la sucursal " + e);
             return false;        
         }         
-    } */
+    } 
     
     //Método para listar existencia de productos en sucursal
     public List listaStockQuery(String valor) {
@@ -67,11 +67,10 @@ public class StockDao {
         return lista_stock;
     }
     
-    //Método para modificar una existencia sucursal;
+    //Método para modificar una existencia de stock en sucursal;
     public boolean modificarStockQuery(Stock stock) {
         String query = "UPDATE stock SET stock = ? WHERE id_sucursal = ? AND id_producto = ?";
-                
-        
+        JOptionPane.showMessageDialog(null, "El id sucursal es " + stock.getId_sucursal() + " y el id producto" + stock.getId_producto());
         try{
             conn = cn.getConnection();
             pst = conn.prepareStatement(query);
@@ -88,7 +87,7 @@ public class StockDao {
     
     //Método para eliminar la existencia en sucursal
     public boolean borrarStockQuery(int id_sucursal, int id_producto) {
-        String query = "DELETE FROM stock WHERE id_sucursal = " + id_sucursal + "AND id_producto = " + id_producto;
+        String query = "DELETE FROM stock WHERE id_sucursal = " + id_sucursal + " AND id_producto = " + id_producto;
         try {
             conn = cn.getConnection();
             pst = conn.prepareStatement(query);

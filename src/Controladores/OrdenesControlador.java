@@ -56,7 +56,7 @@ public class OrdenesControlador implements ActionListener, MouseListener, KeyLis
     private double peso_total = 0.0;
     private int id_orden = 0;
     private LocalDate fechaActual;
-
+    
     //Instanciar el modelo de electrodomésticos
     Electrodomesticos electro = new Electrodomesticos();
     ElectrodomesticosDao electroDao = new ElectrodomesticosDao();
@@ -152,8 +152,6 @@ public class OrdenesControlador implements ActionListener, MouseListener, KeyLis
             int id = Integer.parseInt(vista.tabla_ordenes_productos.getValueAt(col, 0).toString());
             int confirmacion = JOptionPane.showConfirmDialog(null, "¿Seguro de elminar este electrodomésticos de la Orden de Provisión?");
             if (confirmacion == 0) {
-                JOptionPane.showMessageDialog(null, col + " Tamaño del modelo " + vista.tabla_ordenes_productos.getRowCount());
-
                 // Eliminar el item del modelo de la tabla
                 DefaultTableModel modeloTabla = (DefaultTableModel) vista.tabla_ordenes_productos.getModel();
                 for (int i = 0; i < modeloTabla.getRowCount(); i++) {
@@ -163,7 +161,6 @@ public class OrdenesControlador implements ActionListener, MouseListener, KeyLis
                         break;
                     }
                 }
-
                 vista.btn_ordenes_producto_agregar.setEnabled(true);
                 JOptionPane.showMessageDialog(null, "Electrodoméstico eliminado exitósamente de la Orden de Provisión");
             }
@@ -206,7 +203,7 @@ public class OrdenesControlador implements ActionListener, MouseListener, KeyLis
                 vista.btn_ordenes_modificar.setEnabled(false);
                 vista.btn_ordenes_eliminar.setEnabled(false);
                 modificarOrden(orden);
-                limpiarTablaArticulos();
+                limpiarTablas(modeloProductos);
                 limpiarCampos();
 
             }
@@ -216,8 +213,8 @@ public class OrdenesControlador implements ActionListener, MouseListener, KeyLis
             int confirmacion = JOptionPane.showConfirmDialog(null, "¿Seguro de elminar esta Orden de Provisión?");
             if (confirmacion == 0 && ordenDao.borrarOrdenQuery(id) != false) {
                 limpiarCampos();
-                limpiarTablaOrdenes();
-                limpiarTablaArticulos();
+                limpiarTablas(modeloOrdenes);
+                limpiarTablas(modeloProductos);
                 vista.btn_ordenes_crear.setEnabled(true);
                 JOptionPane.showMessageDialog(null, "Orden de Provisión eliminado exitosamente");
                 listarTodasLasOrdenes();
@@ -234,7 +231,7 @@ public class OrdenesControlador implements ActionListener, MouseListener, KeyLis
             vista.btn_ordenes_producto_agregar.setEnabled(true);
             fechaActual = LocalDate.now();
             this.vista.txt_ordenes_fecha.setText(fechaActual.toString());
-            limpiarTablaArticulos();
+            limpiarTablas(modeloProductos);
             limpiarCampos();
         }
     }
@@ -243,7 +240,6 @@ public class OrdenesControlador implements ActionListener, MouseListener, KeyLis
         //Recupero todos los registros de la tabla y los filtro para dejar lo que correspondan a la orden actual
         List<ProductoCantidad> listaP = produCantDao.listaProductoCantidadQuery("");
         List<ProductoCantidad> lista = listaP.stream().filter(p -> p.getId() == id_orden).collect(Collectors.toList());
-
         modeloProductos = (DefaultTableModel) vista.tabla_ordenes_productos.getModel();
         Object[] fila = new Object[4];
         for (int i = 0; i < lista.size(); i++) {
@@ -260,7 +256,7 @@ public class OrdenesControlador implements ActionListener, MouseListener, KeyLis
     }
     //Listar todos los electros agregados a la orden
     public void listarTodosLosElectros(int id_orden) {
-        limpiarTablaArticulos();
+        limpiarTablas(modeloProductos);
         vista.tabla_ordenes_productos.setModel(tablaModelo());
     }
 
@@ -289,13 +285,12 @@ public class OrdenesControlador implements ActionListener, MouseListener, KeyLis
             for (int i = 0; i < vista.tabla_ordenes_productos.getRowCount(); i++) {
                 int electro_id = Integer.parseInt(vista.tabla_ordenes_productos.getValueAt(i, 0).toString());
                 int cantidad = Integer.parseInt(vista.tabla_ordenes_productos.getValueAt(i, 2).toString());
-
                 //Registrar detalles de la orden
                 ordenDao.registrarDetalleOrdenQuery(orden_id, electro_id, cantidad);
             }
             JOptionPane.showMessageDialog(null, "Orden de provision cargada correctamente");
-            limpiarTablaArticulos();
-            limpiarTablaOrdenes();
+            limpiarTablas(modeloProductos);
+            limpiarTablas(modeloOrdenes);
             limpiarCampos();
             listarTodasLasOrdenes();
         } else {
@@ -307,20 +302,18 @@ public class OrdenesControlador implements ActionListener, MouseListener, KeyLis
     public void modificarOrden(Ordenes orden) {
         if (ordenDao.modificarOrdenQuery(orden)) {
             int orden_id = orden.getId();
-
             //Si se actualizó correctamente la tabla de ordenes, vamos a actualizar los detalles
             produCantDao.borrarPoductoCantidadQuery(orden_id);
             for (int i = 0; i < vista.tabla_ordenes_productos.getRowCount(); i++) {
                 produCant.setId(orden_id);
                 produCant.setProductoId(Integer.parseInt(vista.tabla_ordenes_productos.getValueAt(i, 0).toString()));
                 produCant.setCantidad(Integer.parseInt(vista.tabla_ordenes_productos.getValueAt(i, 2).toString()));
-
                 //Registrar detalles de la orden. 
                 produCantDao.registrarPoductoCantidadQuery(produCant);
             }
             JOptionPane.showMessageDialog(null, "Orden de provision actualizada correctamente");
-            limpiarTablaArticulos();
-            limpiarTablaOrdenes();
+            limpiarTablas(modeloProductos);
+            limpiarTablas(modeloOrdenes);
             limpiarCampos();
             listarTodasLasOrdenes();
         } else {
@@ -331,13 +324,10 @@ public class OrdenesControlador implements ActionListener, MouseListener, KeyLis
     public void actualizarOrdenProvision(int id_orden) {
         // Recuperar la lista actual de productos asociados a la orden original
         List<ProductoCantidad> lista = produCantDao.listaProductoCantidadQuery("");
-        List<ProductoCantidad> listaEnTabla = new ArrayList<>();
+        List<ProductoCantidad> listaEnTabla = lista.stream()
+                .filter(unProducto -> unProducto.getId() == id_orden)
+                .collect(Collectors.toList());
 
-        for (ProductoCantidad unProducto : lista) {
-            if (unProducto.getId() == id_orden) {
-                listaEnTabla.add(unProducto);
-            }
-        }
         //Lista actual en memoria
         List<ProductoCantidad> listaActual = new ArrayList<>();
         for (int i = 0; i < vista.tabla_ordenes_productos.getRowCount(); i++) {
@@ -347,54 +337,39 @@ public class OrdenesControlador implements ActionListener, MouseListener, KeyLis
             prod.setCantidad(Integer.parseInt(vista.tabla_ordenes_productos.getValueAt(i, 2).toString()));
             listaActual.add(prod);
         }
-        // Comparar las listas de productos actualizada y actual
-        List<ProductoCantidad> productosEliminar = new ArrayList<>();
-        List<ProductoCantidad> productosAgregar = new ArrayList<>();
-
-        // Identificar los productos a eliminar y agregar
-        for (ProductoCantidad unProducto : listaEnTabla) {
-            if (!listaActual.contains(unProducto)) {
-                productosEliminar.add(unProducto);
-            }
-        }
-
-        for (ProductoCantidad unProducto : listaEnTabla) {
-            if (!listaActual.contains(unProducto)) {
-                productosAgregar.add(unProducto);
-            }
-        }
+        // Comparar las listas de productos actualizada y actual, e identifico productos a agregar o eliminar
+        List<ProductoCantidad> productosEliminar = listaEnTabla.stream()
+        .filter(unProducto -> !listaActual.contains(unProducto))
+        .collect(Collectors.toList());
+        
+        List<ProductoCantidad> productosAgregar = listaEnTabla.stream()
+                .filter(unProducto -> !listaActual.contains(unProducto))
+                .collect(Collectors.toList());
 
         // Eliminar productos de la tabla de detalle de electrodomésticos
         for (ProductoCantidad unProducto : productosEliminar) {
             if (!produCantDao.borrarPoductoCantidadQuery(unProducto.getId())) {
-                JOptionPane.showMessageDialog(null, "No se ha podido ejecutar la operación de actualizacíón (BORRADO)");
+                JOptionPane.showMessageDialog(null, "No se ha podido ejecutar la operación de actualizacíón (BORRADO) de " + unProducto.getId());
             }
         }
 
         // Agregar productos a la tabla de detalle de electrodomésticos
         for (ProductoCantidad unProducto : productosAgregar) {
             if (!produCantDao.registrarPoductoCantidadQuery(unProducto)) {
-                JOptionPane.showMessageDialog(null, "No se ha podido ejecutar la operación de actualizacíón (AGREGADO)");
+                JOptionPane.showMessageDialog(null, "No se ha podido ejecutar la operación de actualizacíón (AGREGADO) de " + unProducto.getId());
             }
         }
         // Actualizar la orden de provisión
         for (ProductoCantidad unProducto : listaActual) {
             if (!produCantDao.modificarPoductoCantidadQuery(unProducto)) {
-                JOptionPane.showMessageDialog(null, "No se ha podido ejecutar la operación de actualizacíón (MODIFICACION)");
+                JOptionPane.showMessageDialog(null, "No se ha podido ejecutar la operación de actualizacíón (MODIFICACION)de " + unProducto.getId());
             }
         }
     }
-
-    public void limpiarTablaArticulos() {
-        for (int i = 0; i < modeloProductos.getRowCount(); i++) {
-            modeloProductos.removeRow(i);
-            i = i - 1;
-        }
-    }
-
-    public void limpiarTablaOrdenes() {
-        for (int i = 0; i < modeloOrdenes.getRowCount(); i++) {
-            modeloOrdenes.removeRow(i);
+    
+public void limpiarTablas(DefaultTableModel modelo) {
+        for (int i = 0; i < modelo.getRowCount(); i++) {
+            modelo.removeRow(i);
             i = i - 1;
         }
     }
@@ -508,7 +483,7 @@ public class OrdenesControlador implements ActionListener, MouseListener, KeyLis
             vista.txt_ordenes_id.setText(vista.tabla_ordenes.getValueAt(fila, 0).toString());
             id_orden = (int) vista.tabla_ordenes.getValueAt(fila, 0);
             vista.txt_ordenes_fecha.setText(obtenerFechaOrden(id_orden));
-            vista.txt_ordenes_tiempo.setText(vista.tabla_ordenes.getValueAt(fila, 3).toString());
+            vista.txt_ordenes_tiempo.setText(vista.tabla_ordenes.getValueAt(fila, 4).toString());
             peso_total = Double.parseDouble(vista.tabla_ordenes.getValueAt(fila, 3).toString());
             listarTodosLosElectros(id_orden);
             vista.btn_ordenes_crear.setEnabled(false);
@@ -560,7 +535,7 @@ public class OrdenesControlador implements ActionListener, MouseListener, KeyLis
     @Override
     public void keyPressed(KeyEvent e) {
         if (e.getSource()==vista.ordenes_search) {
-            limpiarTablaOrdenes();
+            limpiarTablas(modeloOrdenes);
             listarTodasLasOrdenes();
         }
     }

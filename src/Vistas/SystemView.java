@@ -166,10 +166,12 @@ public class SystemView extends javax.swing.JFrame {
         cmb_stock_sucursal = new javax.swing.JComboBox<>();
         txt_stock_stock = new javax.swing.JTextField();
         txt_stock_nombre_producto = new javax.swing.JTextField();
-        btn_stock_confirmar = new javax.swing.JButton();
+        btn_stock_asignar = new javax.swing.JButton();
         btn_stock_cancelar = new javax.swing.JButton();
         jLabel32 = new javax.swing.JLabel();
         txt_stock_id_producto = new javax.swing.JTextField();
+        btn_stock_modificar = new javax.swing.JButton();
+        btn_stock_eliminar = new javax.swing.JButton();
         jLabel31 = new javax.swing.JLabel();
         stock_search = new javax.swing.JTextField();
         jScrollPane5 = new javax.swing.JScrollPane();
@@ -877,16 +879,19 @@ public class SystemView extends javax.swing.JFrame {
         jLabel30.setText("Stock:");
 
         cmb_stock_sucursal.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        cmb_stock_sucursal.setEnabled(false);
 
         txt_stock_stock.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
         txt_stock_nombre_producto.setEditable(false);
         txt_stock_nombre_producto.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        txt_stock_nombre_producto.setEnabled(false);
 
-        btn_stock_confirmar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btn_stock_confirmar.setText("Confirmar");
+        btn_stock_asignar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btn_stock_asignar.setText("Asignar");
+        btn_stock_asignar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_stock_asignarActionPerformed(evt);
+            }
+        });
 
         btn_stock_cancelar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btn_stock_cancelar.setText("Cancelar");
@@ -896,39 +901,50 @@ public class SystemView extends javax.swing.JFrame {
 
         txt_stock_id_producto.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
+        btn_stock_modificar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btn_stock_modificar.setText("Modificar");
+        btn_stock_modificar.setEnabled(false);
+
+        btn_stock_eliminar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btn_stock_eliminar.setText("Eliminar");
+        btn_stock_eliminar.setEnabled(false);
+
         javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
         jPanel13.setLayout(jPanel13Layout);
         jPanel13Layout.setHorizontalGroup(
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel13Layout.createSequentialGroup()
-                .addGap(17, 17, 17)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel13Layout.createSequentialGroup()
                 .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel13Layout.createSequentialGroup()
-                        .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel13Layout.createSequentialGroup()
-                                .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18))
-                            .addGroup(jPanel13Layout.createSequentialGroup()
-                                .addComponent(jLabel29, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(7, 7, 7)))
+                        .addGap(17, 17, 17)
                         .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txt_stock_id_producto, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cmb_stock_sucursal, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel13Layout.createSequentialGroup()
+                                .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(jPanel13Layout.createSequentialGroup()
+                                        .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18))
+                                    .addGroup(jPanel13Layout.createSequentialGroup()
+                                        .addComponent(jLabel29, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(7, 7, 7)))
+                                .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txt_stock_id_producto, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(cmb_stock_sucursal, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel13Layout.createSequentialGroup()
+                                .addComponent(jLabel32, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txt_stock_nombre_producto, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jPanel13Layout.createSequentialGroup()
-                        .addComponent(jLabel32, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txt_stock_nombre_producto, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 273, Short.MAX_VALUE)
-                .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btn_stock_confirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btn_stock_cancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(83, 83, 83))
-            .addGroup(jPanel13Layout.createSequentialGroup()
-                .addGap(100, 100, 100)
-                .addComponent(jLabel30)
-                .addGap(18, 18, 18)
-                .addComponent(txt_stock_stock, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                        .addGap(100, 100, 100)
+                        .addComponent(jLabel30)
+                        .addGap(18, 18, 18)
+                        .addComponent(txt_stock_stock, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 283, Short.MAX_VALUE)
+                .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btn_stock_asignar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_stock_cancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_stock_modificar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_stock_eliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(73, 73, 73))
         );
         jPanel13Layout.setVerticalGroup(
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -936,32 +952,36 @@ public class SystemView extends javax.swing.JFrame {
                 .addGap(20, 20, 20)
                 .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cmb_stock_sucursal, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel19))
-                .addGap(18, 18, 18)
+                    .addComponent(jLabel19)
+                    .addComponent(btn_stock_asignar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(24, 24, 24)
+                .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txt_stock_id_producto, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel29, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_stock_modificar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel13Layout.createSequentialGroup()
-                        .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txt_stock_id_producto, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel29, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(11, 11, 11)
                         .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel32)
-                            .addComponent(txt_stock_nombre_producto, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel13Layout.createSequentialGroup()
-                        .addComponent(btn_stock_confirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txt_stock_nombre_producto, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
-                        .addComponent(btn_stock_cancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel30)
-                    .addComponent(txt_stock_stock, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(54, Short.MAX_VALUE))
+                        .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel30)
+                            .addComponent(txt_stock_stock, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(54, Short.MAX_VALUE))
+                    .addGroup(jPanel13Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
+                        .addComponent(btn_stock_eliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btn_stock_cancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(44, 44, 44))))
         );
 
         jPanel12.add(jPanel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(35, 20, 920, 270));
 
         jLabel31.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel31.setText("Buscar Sucursal:");
+        jLabel31.setText("Buscar Sucursal Id:");
         jPanel12.add(jLabel31, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 320, 120, -1));
 
         stock_search.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -970,7 +990,7 @@ public class SystemView extends javax.swing.JFrame {
                 stock_searchActionPerformed(evt);
             }
         });
-        jPanel12.add(stock_search, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 310, 220, 30));
+        jPanel12.add(stock_search, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 310, 220, 30));
 
         tabla_stock.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -1199,9 +1219,12 @@ public class SystemView extends javax.swing.JFrame {
         jScrollPane6.setViewportView(tabla_ordenes_productos);
         if (tabla_ordenes_productos.getColumnModel().getColumnCount() > 0) {
             tabla_ordenes_productos.getColumnModel().getColumn(0).setResizable(false);
+            tabla_ordenes_productos.getColumnModel().getColumn(0).setPreferredWidth(4);
             tabla_ordenes_productos.getColumnModel().getColumn(1).setResizable(false);
             tabla_ordenes_productos.getColumnModel().getColumn(2).setResizable(false);
+            tabla_ordenes_productos.getColumnModel().getColumn(2).setPreferredWidth(3);
             tabla_ordenes_productos.getColumnModel().getColumn(3).setResizable(false);
+            tabla_ordenes_productos.getColumnModel().getColumn(3).setPreferredWidth(8);
         }
 
         jLabel38.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -1702,6 +1725,10 @@ public class SystemView extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btn_ordenes_producto_eliminarActionPerformed
 
+    private void btn_stock_asignarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_stock_asignarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_stock_asignarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1759,8 +1786,10 @@ public class SystemView extends javax.swing.JFrame {
     public javax.swing.JButton btn_ordenes_producto_agregar;
     public javax.swing.JButton btn_ordenes_producto_eliminar;
     private javax.swing.JButton btn_salir;
+    public javax.swing.JButton btn_stock_asignar;
     public javax.swing.JButton btn_stock_cancelar;
-    public javax.swing.JButton btn_stock_confirmar;
+    public javax.swing.JButton btn_stock_eliminar;
+    public javax.swing.JButton btn_stock_modificar;
     public javax.swing.JButton btn_sucursales_cancelar;
     public javax.swing.JButton btn_sucursales_crear;
     public javax.swing.JButton btn_sucursales_eliminar;
