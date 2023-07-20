@@ -1178,6 +1178,7 @@ public class SystemView extends javax.swing.JFrame {
             }
         });
 
+        tabla_ordenes_productos.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         tabla_ordenes_productos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -1398,6 +1399,7 @@ public class SystemView extends javax.swing.JFrame {
 
         jPanel7.add(jPanel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(35, 20, 920, 300));
 
+        tabla_ordenes.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         tabla_ordenes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -1428,10 +1430,10 @@ public class SystemView extends javax.swing.JFrame {
         jPanel7.add(jScrollPane7, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 380, 910, 110));
 
         ordenes_search.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jPanel7.add(ordenes_search, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 330, 165, 30));
+        jPanel7.add(ordenes_search, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 330, 165, 30));
 
         jLabel45.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel45.setText("Buscar:");
+        jLabel45.setText("Buscar Id:");
         jPanel7.add(jLabel45, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 340, -1, -1));
 
         jTabbedPane1.addTab("Órdenes", jPanel7);

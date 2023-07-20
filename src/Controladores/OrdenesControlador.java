@@ -99,6 +99,8 @@ public class OrdenesControlador implements ActionListener, MouseListener, KeyLis
         this.vista.btn_ordenes_modificar.addActionListener(this);
         //Botón eliminar producto de la orden
         this.vista.btn_ordenes_producto_eliminar.addActionListener(this);
+        //Botón de búsqueda
+        this.vista.ordenes_search.addKeyListener(this);
     }
 
     @Override
@@ -199,6 +201,10 @@ public class OrdenesControlador implements ActionListener, MouseListener, KeyLis
                 LocalDate fechaOrden = LocalDate.parse(vista.txt_ordenes_fecha.getText().trim(), formatter);
                 orden.setFechaOrden(fechaOrden);
                 orden.setTiempoMaximo((int) Double.parseDouble(vista.txt_ordenes_tiempo.getText().trim()));
+                vista.btn_ordenes_producto_eliminar.setEnabled(false);
+                vista.btn_ordenes_crear.setEnabled(true);
+                vista.btn_ordenes_modificar.setEnabled(false);
+                vista.btn_ordenes_eliminar.setEnabled(false);
                 modificarOrden(orden);
                 limpiarTablaArticulos();
                 limpiarCampos();
@@ -225,6 +231,7 @@ public class OrdenesControlador implements ActionListener, MouseListener, KeyLis
             vista.btn_ordenes_modificar.setEnabled(false);
             vista.btn_ordenes_eliminar.setEnabled(false);
             vista.btn_ordenes_producto_eliminar.setEnabled(false);
+            vista.btn_ordenes_producto_agregar.setEnabled(true);
             fechaActual = LocalDate.now();
             this.vista.txt_ordenes_fecha.setText(fechaActual.toString());
             limpiarTablaArticulos();
@@ -552,6 +559,10 @@ public class OrdenesControlador implements ActionListener, MouseListener, KeyLis
 
     @Override
     public void keyPressed(KeyEvent e) {
+        if (e.getSource()==vista.ordenes_search) {
+            limpiarTablaOrdenes();
+            listarTodasLasOrdenes();
+        }
     }
 
     @Override
