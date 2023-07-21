@@ -36,35 +36,9 @@ public class InformesControlador implements ActionListener, MouseListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        //Creo una lista con todos los caminos. Ahí tengo sucursal origen, destno, y capacidad de cada uno
+        
         if (e.getSource() == vista.btn_informes_flujo_maximo) {
-            //grafo.printEdges();
-            //JOptionPane.showMessageDialog(null, "Grafo: " + grafo.toString());
-            
-            
-            Vertex<String> destino = grafo.getNodo(1);
-            JOptionPane.showMessageDialog(null, "grafo.getNodo(Centro) " + grafo.getNodo("Centro"));
-
-            // Encuentra los caminos desde cada vértice hasta el destino
-            List<List<Vertex<String>>> caminos = grafo.encontrarCaminos(destino.getValue());
-
-            JOptionPane.showMessageDialog(null, "Id destino: " + destino.getValue());
-
-            if (!caminos.isEmpty()) {
-                for (List<Vertex<String>> camino : caminos) {
-                    StringBuilder mensaje = new StringBuilder("Camino: ");
-                    for (int i = 0; i < camino.size(); i++) {
-                        Vertex<String> vertex = camino.get(i);
-                        mensaje.append(vertex.getValue());
-                        if (i < camino.size() - 1) {
-                            mensaje.append(" -> ");
-                        }
-                    }
-                    JOptionPane.showMessageDialog(null, mensaje.toString());
-                }
-            } else {
-                JOptionPane.showMessageDialog(null, "No se encontraron caminos al destino.");
-            }
+            JOptionPane.showMessageDialog(null, grafo.getAccessibleVertices(3));
         }
     }
 

@@ -3,25 +3,27 @@ package Modelos;
 import java.util.ArrayList;
 import java.util.List;
 
+import Modelos.Graph;
+
 public class GrafoCaminos {
 
-    private Graph<Integer> grafo;
+    private Graph grafo;
 
     public GrafoCaminos(List<Caminos> caminos) {
-        this.grafo = new Graph<>();
+        this.grafo = new Graph();
 
         // Filtrar los caminos que están marcados como "operativos"
         List<Caminos> caminosOperativos = filtrarCaminosOperativos(caminos);
 
         // Agregar los nodos al grafo
         for (Caminos camino : caminosOperativos) {
-            grafo.addNodo(camino.getOrigenId());
-            grafo.addNodo(camino.getDestinoId());
+            grafo.addVertex(new Vertex(camino.getOrigenId()));
+            grafo.addVertex(new Vertex(camino.getDestinoId()));
         }
 
         // Conectar los caminos al grafo
         for (Caminos camino : caminosOperativos) {
-            grafo.conectar(camino.getOrigenId(), camino.getDestinoId(), camino.getCapacidad());
+            grafo.addEdge(new Vertex(camino.getOrigenId()), new Vertex(camino.getDestinoId()), camino.getCapacidad());
         }
     }
 
@@ -35,7 +37,7 @@ public class GrafoCaminos {
         return caminosOperativos;
     }
 
-    public Graph<Integer> getGrafo() {
+    public Graph getGrafo() {
         return grafo;
     }
 }

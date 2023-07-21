@@ -1,54 +1,35 @@
 package Modelos;
 
-public class Vertex<T extends Comparable<T>> {
+import java.util.Objects;
 
-	private T value;
-	
-	public Vertex(){	}
-	 
-	public Vertex(T v){
-		this.value = v;
-	}
-	
-	public void setValue(T v){
-		this.value = v;
-	}
-	
-	public T getValue(){
-		return this.value;
-	}
-	
-	
-	
-	 @Override
+public class Vertex {
+    private int value;
+
+    public Vertex(int value) {
+        this.value = value;
+    }
+
+    public int getValue() {
+        return value;
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
-        if (obj == null)
+        if (obj == null || getClass() != obj.getClass())
             return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Vertex<?> other = (Vertex<?>) obj;
-        if (value == null) {
-            if (other.value != null)
-                return false;
-        } else if (!value.equals(other.value))
-            return false;
-        return true;
+        Vertex other = (Vertex) obj;
+        return value == other.value;
     }
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((value == null) ? 0 : value.hashCode());
-        return result;
+        return Objects.hash(value);
     }
 
-	@Override
-	public String toString() {
-		return value.toString();
-	}
-	
-	
+    @Override
+    public String toString() {
+        return String.valueOf(value);
+    }
 }
