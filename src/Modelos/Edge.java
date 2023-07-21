@@ -7,7 +7,7 @@ public class Edge<T extends Comparable<T>> {
 	private Number value;
 
 	public Edge(){
-		value=1.0;
+		value=0.0;
 	} 
 	
 	public Edge(Vertex<T> ini,Vertex<T> fin){

@@ -2,6 +2,9 @@ package Controladores;
 
 import Modelos.Caminos;
 import Modelos.CaminosDao;
+import Modelos.GrafoCaminos;
+import Modelos.Graph;
+import Modelos.Vertex;
 import Vistas.SystemView;
 import java.awt.event.ActionEvent;
 import java.util.List;
@@ -16,7 +19,10 @@ public class InformesControlador implements ActionListener, MouseListener {
     //Instanciamos el modelo de Caminos;
     Caminos camino = new Caminos();
     CaminosDao caminoDao = new CaminosDao();
-
+    
+    //recuperamos una lista de caminos, y se la pasamos al instanciar GrafoCaminos
+    GrafoCaminos grafoCamino = new GrafoCaminos(caminoDao.listaCaminosQuery(""));
+    Graph grafo = grafoCamino.getGrafo();
 
     public InformesControlador(SystemView vista) {
         this.vista = vista;
@@ -31,13 +37,35 @@ public class InformesControlador implements ActionListener, MouseListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         //Creo una lista con todos los caminos. Ahí tengo sucursal origen, destno, y capacidad de cada uno
-        List<Caminos> lista_caminos = caminoDao.listaCaminosQuery("");
-        if (e.getSource() == vista.btn_informes_flujo_maximo) {            
-            JOptionPane.showMessageDialog(null, "Flujo máximo ---> Algoritmo no terminado ");
-        } else if (e.getSource() == vista.btn_informes_page_rank) {
-            JOptionPane.showMessageDialog(null, "Page Rank ---> Algoritmo aún no terminado.");
-        }
+        if (e.getSource() == vista.btn_informes_flujo_maximo) {
+            //grafo.printEdges();
+            //JOptionPane.showMessageDialog(null, "Grafo: " + grafo.toString());
+            
+            
+            Vertex<String> destino = grafo.getNodo(1);
+            JOptionPane.showMessageDialog(null, "grafo.getNodo(Centro) " + grafo.getNodo("Centro"));
 
+            // Encuentra los caminos desde cada vértice hasta el destino
+            List<List<Vertex<String>>> caminos = grafo.encontrarCaminos(destino.getValue());
+
+            JOptionPane.showMessageDialog(null, "Id destino: " + destino.getValue());
+
+            if (!caminos.isEmpty()) {
+                for (List<Vertex<String>> camino : caminos) {
+                    StringBuilder mensaje = new StringBuilder("Camino: ");
+                    for (int i = 0; i < camino.size(); i++) {
+                        Vertex<String> vertex = camino.get(i);
+                        mensaje.append(vertex.getValue());
+                        if (i < camino.size() - 1) {
+                            mensaje.append(" -> ");
+                        }
+                    }
+                    JOptionPane.showMessageDialog(null, mensaje.toString());
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "No se encontraron caminos al destino.");
+            }
+        }
     }
 
     @Override

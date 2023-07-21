@@ -54,7 +54,7 @@ public class StockControlador implements ActionListener, MouseListener, KeyListe
         this.vista.tabla_stock.addMouseListener(this);
         //Ponemos en escucha el Label
         this.vista.jLabelStock.addMouseListener(this);
-        //Botón del campo id de producto
+        //Botón del campo id de producto. Le asigno el KeyListener para escuchar el enter
         this.vista.txt_stock_id_producto.addKeyListener(this);
 
         //Recuperar las sucursales para mostrar en el comboBox
@@ -225,6 +225,7 @@ public class StockControlador implements ActionListener, MouseListener, KeyListe
 
     @Override
     public void mouseReleased(MouseEvent e) {
+        
     }
 
     @Override
