@@ -251,6 +251,11 @@ public class SystemView extends javax.swing.JFrame {
         btn_informes_page_rank = new javax.swing.JButton();
         jScrollPane8 = new javax.swing.JScrollPane();
         txt_areat_informes = new javax.swing.JTextArea();
+        btn_informes_page_limpiar = new javax.swing.JButton();
+        jLabel39 = new javax.swing.JLabel();
+        txt_informes_factorA = new javax.swing.JTextField();
+        txt_informes_cantI = new javax.swing.JTextField();
+        jLabel46 = new javax.swing.JLabel();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -833,6 +838,7 @@ public class SystemView extends javax.swing.JFrame {
         electrodomesticos_search.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jPanel5.add(electrodomesticos_search, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 310, 220, 30));
 
+        tabla_electrodomesticos.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         tabla_electrodomesticos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -992,6 +998,7 @@ public class SystemView extends javax.swing.JFrame {
         });
         jPanel12.add(stock_search, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 310, 220, 30));
 
+        tabla_stock.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         tabla_stock.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -1198,7 +1205,7 @@ public class SystemView extends javax.swing.JFrame {
             }
         });
 
-        tabla_ordenes_productos.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        tabla_ordenes_productos.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
         tabla_ordenes_productos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -1605,33 +1612,88 @@ public class SystemView extends javax.swing.JFrame {
         txt_areat_informes.setColumns(20);
         txt_areat_informes.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txt_areat_informes.setRows(5);
-        txt_areat_informes.setText("Aquí se desplegará la información correspondiente  al cálculo seleccionado...");
+        txt_areat_informes.setText("Seleccione un algoritmo para mostrar su resultado en pantala.\n\nLos valores indicados en 'Factor de Amortiguación' y 'Cantidad iteraciones' serán utilizados para el cálculo del PageRank (R).");
         jScrollPane8.setViewportView(txt_areat_informes);
+
+        btn_informes_page_limpiar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btn_informes_page_limpiar.setText("Limpiar");
+
+        jLabel39.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel39.setText("Factor de Amortiguación:");
+
+        txt_informes_factorA.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        txt_informes_factorA.setText("0.85");
+        txt_informes_factorA.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txt_informes_factorAActionPerformed(evt);
+            }
+        });
+
+        txt_informes_cantI.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        txt_informes_cantI.setText("12");
+        txt_informes_cantI.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txt_informes_cantIActionPerformed(evt);
+            }
+        });
+
+        jLabel46.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel46.setText("Cantidad iteraciones:");
 
         javax.swing.GroupLayout jPanel20Layout = new javax.swing.GroupLayout(jPanel20);
         jPanel20.setLayout(jPanel20Layout);
         jPanel20Layout.setHorizontalGroup(
             jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel20Layout.createSequentialGroup()
-                .addGap(14, 14, 14)
                 .addGroup(jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 881, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel20Layout.createSequentialGroup()
-                        .addComponent(btn_informes_flujo_maximo, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(48, 48, 48)
-                        .addComponent(btn_informes_page_rank, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(14, 14, 14)
+                        .addGroup(jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 881, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel20Layout.createSequentialGroup()
+                                .addComponent(btn_informes_flujo_maximo, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(48, 48, 48)
+                                .addComponent(btn_informes_page_rank, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel20Layout.createSequentialGroup()
+                                        .addComponent(jLabel39)
+                                        .addGap(15, 15, 15))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel20Layout.createSequentialGroup()
+                                        .addComponent(jLabel46)
+                                        .addGap(18, 18, 18)))
+                                .addGroup(jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txt_informes_factorA, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txt_informes_cantI, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(55, 55, 55))))
+                    .addGroup(jPanel20Layout.createSequentialGroup()
+                        .addGap(380, 380, 380)
+                        .addComponent(btn_informes_page_limpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(15, Short.MAX_VALUE))
         );
         jPanel20Layout.setVerticalGroup(
             jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel20Layout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addGroup(jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btn_informes_flujo_maximo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btn_informes_page_rank, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(32, 32, 32)
-                .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 332, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addGroup(jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel20Layout.createSequentialGroup()
+                        .addGap(14, 14, 14)
+                        .addGroup(jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btn_informes_flujo_maximo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btn_informes_page_rank, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(32, 32, 32))
+                    .addGroup(jPanel20Layout.createSequentialGroup()
+                        .addGroup(jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel39)
+                            .addComponent(txt_informes_factorA, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel46)
+                            .addComponent(txt_informes_cantI, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)))
+                .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btn_informes_page_limpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         jPanel19.add(jPanel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(35, 20, 920, 450));
@@ -1729,6 +1791,14 @@ public class SystemView extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btn_stock_asignarActionPerformed
 
+    private void txt_informes_factorAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_informes_factorAActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_informes_factorAActionPerformed
+
+    private void txt_informes_cantIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_informes_cantIActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_informes_cantIActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1778,6 +1848,7 @@ public class SystemView extends javax.swing.JFrame {
     public javax.swing.JButton btn_electrodomesticos_eliminar;
     public javax.swing.JButton btn_electrodomesticos_modificar;
     public javax.swing.JButton btn_informes_flujo_maximo;
+    public javax.swing.JButton btn_informes_page_limpiar;
     public javax.swing.JButton btn_informes_page_rank;
     public javax.swing.JButton btn_ordenes_cancelar;
     public javax.swing.JButton btn_ordenes_crear;
@@ -1839,6 +1910,7 @@ public class SystemView extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel36;
     private javax.swing.JLabel jLabel37;
     private javax.swing.JLabel jLabel38;
+    private javax.swing.JLabel jLabel39;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel40;
     private javax.swing.JLabel jLabel41;
@@ -1846,6 +1918,7 @@ public class SystemView extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel43;
     private javax.swing.JLabel jLabel44;
     private javax.swing.JLabel jLabel45;
+    private javax.swing.JLabel jLabel46;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -1915,6 +1988,8 @@ public class SystemView extends javax.swing.JFrame {
     public javax.swing.JTextField txt_electrodomesticos_nombre;
     public javax.swing.JTextField txt_electrodomesticos_peso;
     public javax.swing.JTextField txt_electrodomesticos_precio;
+    public javax.swing.JTextField txt_informes_cantI;
+    public javax.swing.JTextField txt_informes_factorA;
     public javax.swing.JTextField txt_ordenes_cantidad_producto;
     public javax.swing.JTextField txt_ordenes_fecha;
     public javax.swing.JTextField txt_ordenes_id;

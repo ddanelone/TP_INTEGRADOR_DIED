@@ -4,6 +4,15 @@ import java.util.Objects;
 
 public class Vertex {
     private int value;
+    private double page_rank;
+
+    public double getPageRank() {
+        return page_rank;
+    }
+
+    public void setPageRank(double page_rank) {
+        this.page_rank = page_rank;
+    }
 
     public Vertex(int value) {
         this.value = value;

@@ -28,8 +28,8 @@ public class ElectrodomesticosDao {
     public boolean registrarElectrodomesticoQuery(Electrodomesticos electrodomestico) {
         String query = "INSERT INTO electrodomesticos(id, codigo, nombre, descripcion,precio_unitario, peso_kg) VALUES(?,?,?,?,?,?)";
         
-        try{
-            conn = cn.getConnection();
+        try{ conn = cn.getConnection();
+            //conn = cn.getConnection();
             pst = conn.prepareStatement(query);
             pst.setInt(1, electrodomestico.getId());
             pst.setInt(2, electrodomestico.getCodigo());
@@ -51,8 +51,7 @@ public class ElectrodomesticosDao {
         String query = "SELECT * FROM electrodomesticos ORDER BY nombre ASC";
         String query_search_electrodomestico = "SELECT * FROM electrodomesticos WHERE id LIKE '%" + valor + "%'";
         
-        try{
-            conn = cn.getConnection();
+        try{ conn = cn.getConnection();             
             if (valor.equalsIgnoreCase("")) {
                 pst = conn.prepareStatement(query);
             } else {
@@ -81,8 +80,7 @@ public class ElectrodomesticosDao {
         String query = "UPDATE electrodomesticos SET codigo= ?, nombre = ?, descripcion = ?, precio_unitario = ?, peso_kg =? "
                 + "WHERE id = ?";
         
-        try{
-            conn = cn.getConnection();
+        try{ conn = cn.getConnection();            
             pst = conn.prepareStatement(query);
             pst.setInt(1, electrodomestico.getCodigo());
             pst.setString(2, electrodomestico.getNombre());
@@ -101,8 +99,7 @@ public class ElectrodomesticosDao {
     //Método para eliminar sucursal
     public boolean borrarElectrodomesticoQuery(int id) {
         String query = "DELETE FROM electrodomesticos WHERE id = " + id;
-        try {
-            conn = cn.getConnection();
+        try {             conn = cn.getConnection();
             pst = conn.prepareStatement(query);
             pst.execute();
             return true;        

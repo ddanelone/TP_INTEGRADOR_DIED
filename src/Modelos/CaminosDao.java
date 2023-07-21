@@ -28,8 +28,7 @@ public class CaminosDao {
     public boolean registrarCaminoQuery(Caminos camino) {
         String query = "INSERT INTO caminos(id, origen_id, destino_id, capacidad,tiempo,operativo,observaciones ) VALUES(?,?,?,?,?,?,?)";
         
-        try{
-            conn = cn.getConnection();
+        try{ conn = cn.getConnection();
             pst = conn.prepareStatement(query);
             pst.setInt(1, camino.getId());
             pst.setInt(2, camino.getOrigenId());
@@ -52,8 +51,7 @@ public class CaminosDao {
         String query = "SELECT * FROM caminos ORDER BY id ASC";
         String query_search_camino = "SELECT * FROM caminos WHERE id LIKE '%" + valor + "%'";
         
-        try{
-            conn = cn.getConnection();
+        try{ conn = cn.getConnection();
             if (valor.equalsIgnoreCase("")) {
                 pst = conn.prepareStatement(query);
             } else {
@@ -83,8 +81,7 @@ public class CaminosDao {
         String query = "UPDATE caminos SET origen_id = ?, destino_id = ?, capacidad = ?, tiempo= ?, operativo =?, observaciones = ?"
                 + "WHERE id = ?";
         
-        try{
-            conn = cn.getConnection();
+        try{ conn = cn.getConnection();
             pst = conn.prepareStatement(query);
             pst.setInt(1, camino.getOrigenId());
             pst.setInt(2, camino.getDestinoId());
