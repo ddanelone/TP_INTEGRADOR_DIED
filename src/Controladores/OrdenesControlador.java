@@ -20,7 +20,6 @@ import Vistas.SystemView;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.time.LocalDate;
@@ -28,11 +27,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-public class OrdenesControlador implements ActionListener, MouseListener, KeyListener {
+public class OrdenesControlador implements ActionListener, MouseListener {
 
     private SystemView vista;
     private Ordenes orden;
@@ -43,7 +41,7 @@ public class OrdenesControlador implements ActionListener, MouseListener, KeyLis
 
     DefaultTableModel modeloProductos = new DefaultTableModel();
     DefaultTableModel modeloOrdenes = new DefaultTableModel();
-    //DefaultTableModel temporal = new DefaultTableModel();
+    DefaultTableModel modeloCaminos = new DefaultTableModel();
     private int id_sucursal_destino = 0;
     private double peso_total = 0.0;
     private int id_orden = 0;
@@ -97,8 +95,8 @@ public class OrdenesControlador implements ActionListener, MouseListener, KeyLis
         this.vista.btn_ordenes_modificar.addActionListener(this);
         //Botón eliminar producto de la orden
         this.vista.btn_ordenes_producto_eliminar.addActionListener(this);
-        //Botón de búsqueda
-        this.vista.ordenes_search.addKeyListener(this);
+        //Pongo a escuchar la tabla de caminos
+        this.vista.tabla_ordenes_caminos.addMouseListener(this);
     }
 
     @Override
@@ -229,6 +227,7 @@ public class OrdenesControlador implements ActionListener, MouseListener, KeyLis
             vista.btn_ordenes_eliminar.setEnabled(false);
             vista.btn_ordenes_producto_eliminar.setEnabled(false);
             vista.btn_ordenes_producto_agregar.setEnabled(true);
+            vista.tabla_ordenes_caminos.setEnabled(false);
             fechaActual = LocalDate.now();
             this.vista.txt_ordenes_fecha.setText(fechaActual.toString());
             limpiarTablas(modeloProductos);
@@ -254,7 +253,7 @@ public class OrdenesControlador implements ActionListener, MouseListener, KeyLis
         }
         return modeloProductos;
     }
-
+    
     //Listar todos los electros agregados a la orden
     public void listarTodosLosElectros(int id_orden) {
         limpiarTablas(modeloProductos);
@@ -263,7 +262,7 @@ public class OrdenesControlador implements ActionListener, MouseListener, KeyLis
 
     //Método pararecuperar y mostrar en pantalla todas las ordenes cargadas. 
     public void listarTodasLasOrdenes() {
-        List<Ordenes> lista = ordenDao.listaOrdenesQuery(vista.ordenes_search.getText());
+        List<Ordenes> lista = ordenDao.listaOrdenesQuery("");
         modeloOrdenes = (DefaultTableModel) vista.tabla_ordenes.getModel();
         Object[] fila = new Object[6];
         for (int i = 0; i < lista.size(); i++) {
@@ -460,6 +459,27 @@ public class OrdenesControlador implements ActionListener, MouseListener, KeyLis
         return "";
     }
 
+   private DefaultTableModel tablaModeloCaminos(List<List<Integer>> caminos, List<Integer> tiempo) {
+    modeloCaminos = (DefaultTableModel) vista.tabla_ordenes_caminos.getModel();
+    Object[] col = new Object[4];
+    for (int j = 0; j < caminos.size(); j++) {
+        List<Integer> camino = caminos.get(j);
+        int tiempoTotal = tiempo.get(j);
+
+        col[0] = camino.get(0); // id de la sucursal de origen
+        String recorrido = "";
+        for (int i = 0; i < camino.size(); i++) {
+            recorrido += camino.get(i) + "->";
+        }
+        col[1] = recorrido;
+        col[2] = camino.get(camino.size() - 1); // id de la sucursal de destino
+        col[3] = tiempoTotal;
+
+        modeloCaminos.addRow(col);
+    }
+    return modeloCaminos;
+}
+
     @Override
     public void mouseClicked(MouseEvent e) {
         if (e.getSource() == vista.jLabelOrdenes) {
@@ -493,7 +513,6 @@ public class OrdenesControlador implements ActionListener, MouseListener, KeyLis
             vista.btn_ordenes_modificar.setEnabled(true);
             vista.btn_ordenes_eliminar.setEnabled(true);
             //Lógica para calcular los caminos posibles y ver sucursalde origen
-            
             //Recupear los Stock de sucursales
             List<Stock> listaSucursales = stockDao.listaStockQuery("");
             //Recuperar los items incluidos en el pedido actual
@@ -523,16 +542,17 @@ public class OrdenesControlador implements ActionListener, MouseListener, KeyLis
             //en tiempoTotal tengo una lista de igual cantidad de elementos que caminosEnteros, y tiene el tiempo total de cada viaje. 
             List<Integer> tiempoTotal = calcularTiempoTransito(caminosEnteros);
             //Ahora, a cargar los valores en la tabla, mostrarlos al usuario, pedirle confirmación, y si confirma, grabarlos en la tabla. 
+            vista.tabla_ordenes_caminos.setModel(tablaModeloCaminos(caminosEnteros, tiempoTotal));
+            vista.tabla_ordenes_caminos.setEnabled(true);
             
             
             
-            
-            
+            /*
             String representacionCaminos = grafo.representarCaminos(caminos);
             JOptionPane.showMessageDialog(null, representacionCaminos);
             JOptionPane.showMessageDialog(null, caminosEnteros.toString());
             JOptionPane.showMessageDialog(null, "Tamaño de la lista " + tiempoTotal.size());
-
+*/
 
         } else if (e.getSource() == vista.tabla_ordenes_productos) {
             //Deshabilitar el botón de agregar
@@ -620,21 +640,4 @@ public class OrdenesControlador implements ActionListener, MouseListener, KeyLis
     @Override
     public void mouseExited(MouseEvent e) {
     }
-
-    @Override
-    public void keyTyped(KeyEvent e) {
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-        if (e.getSource() == vista.ordenes_search) {
-            limpiarTablas(modeloOrdenes);
-            listarTodasLasOrdenes();
-        }
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-    }
-
 }
