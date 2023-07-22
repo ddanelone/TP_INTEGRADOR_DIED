@@ -1,27 +1,12 @@
-/*
-La lógica de esta clase es compleja. Trataremos de implementarla de la siguiente manera:
-En un primer momento, el comboBox de Sucursales de Origen posibles estará deshabilitado. El usuario seleccionará el destino de entrega, 
-la fecha de la orden quizás la ponemos con un setTimeStamp(), pero lo resolveremos luego; y el sistema le permitirá elegir productos
-en el comboBox correspondiente y agregarlos a la lista; un método irá calculando el peso total; también habrá que calcular el tiempo máximo desde
-el momento del envío y ver si las sucursales por las cuales el pedido debe transitar, están abiertas dentro del tiempo útil (un quilombo, básicamente);
-fecho, otro método filtrará las sucursales operativas y cuyos caminos están operativos y permiten el flujo de kilogramos; Se habilitará así
-la posiblidad de elegir en el comboBox correspondiente la sucursalde origen posible (previo verificar que tengan stock de todos los productos en cantidad
-suficiente.
-IDEA INICIAL: 
-PASO 1: traer el modelo de grafos, vertices y aristas de Martín, y ver la forma de crear un grafo con esa lógica, en base a la información que tenemos de 
-sucursales y caminos. X
-PASO 2: filtrar las sucursales con Stock;
-PASO 3: eliminar esos vértices del grafo;
-PASO 4: hacer un recorrido en profundidad para encontrar todos los caminos posibles.
-PASO 5: presentarle al usuario las opciones posibles, y que ese seleccione una ruta (hay que mostrar el tiempo total de demora).
-PASO 6: asignarsela a la tabla ordenes_provision y cambiar el estado a EN PROCESO.
-PASO 7: no morir en el intento.
- */
 package Controladores;
 
+import Modelos.Caminos;
+import Modelos.CaminosDao;
 import Modelos.DynamicComboBox;
 import Modelos.Electrodomesticos;
 import Modelos.ElectrodomesticosDao;
+import Modelos.GrafoCaminos;
+import Modelos.Graph;
 import Modelos.Ordenes;
 import Modelos.OrdenesDao;
 import Modelos.ProductoCantidad;
@@ -66,7 +51,10 @@ public class OrdenesControlador implements ActionListener, MouseListener, KeyLis
     //Instanciar el modelo ProductoCantidad
     ProductoCantidad produCant = new ProductoCantidad();
     ProductoCantidadDao produCantDao = new ProductoCantidadDao();
-
+     //Instanciamos el modelo de Caminos;
+    Caminos camino = new Caminos();
+    CaminosDao caminoDao = new CaminosDao();
+    
     public OrdenesControlador(Ordenes orden, OrdenesDao ordenDao, SystemView vista) {
         this.orden = orden;
         this.ordenDao = ordenDao;
@@ -101,6 +89,10 @@ public class OrdenesControlador implements ActionListener, MouseListener, KeyLis
         this.vista.btn_ordenes_producto_eliminar.addActionListener(this);
         //Botón de búsqueda
         this.vista.ordenes_search.addKeyListener(this);
+        
+        //PRUEBAS SOBRE EL GRAFO. BORRAR!!!!
+        this.vista.btn_prueba.addActionListener(this);
+        
     }
 
     @Override
@@ -233,6 +225,28 @@ public class OrdenesControlador implements ActionListener, MouseListener, KeyLis
             this.vista.txt_ordenes_fecha.setText(fechaActual.toString());
             limpiarTablas(modeloProductos);
             limpiarCampos();
+        } else if (e.getSource()== vista.btn_prueba) {
+            //recuperamos una lista de caminos, y se la pasamos al instanciar GrafoCaminos
+            GrafoCaminos grafoCamino = new GrafoCaminos(caminoDao.listaCaminosQuery(""), sucursalDao.listaSucursalesQuery(""));
+            Graph grafo = grafoCamino.getGrafo();
+            /*ESTRATEGIA: el método graph.findAllPaths(vertex inicio, vertex fin) funciona.
+            1. Conozco la sucursal de destino (la que carga la orden. Así que debería filtrar la lista de Sucursales seleccionado aquellas que
+            puedan satisfacer el stock.
+            2. luego, aplicarle a esta lista el algoritmo graph.bfs(grafo.getVertex(id sucursal de destino)) para que me de la lista de sucursales
+            que pueden llegar a la sucursal que originó el pedido.
+            3. Itero esta última lista, usando sus Id en el método graph.getVertex(id sucur orig posible) y los voy a agregando a una lista
+            4. Recupero la lista en alguna tabla, para que el usuario seleccione el camino que le apetezca.
+            */
+
+            //JOptionPane.showMessageDialog(null, grafo.getAccessibleVertices(3).toString());
+            //JOptionPane.showMessageDialog(null, "Nodos Accesibles: " + grafo.bfs(grafo.getVertex(3)).toString());
+            //Necesito iterar todos los vértices accesibles e ir probando de a uno
+           /* List <Integer> listaVerticesAccesibles = grafo.bfs(grafo.getVertex(3));
+            for (Integer unVertice: listaVerticesAccesibles) {
+                
+            }*/
+            JOptionPane.showMessageDialog(null, "Nodos Accesibles: " + grafo.findAllPaths( grafo.getVertex(1), grafo.getVertex(3)).toString());  
+            
         }
     }
 

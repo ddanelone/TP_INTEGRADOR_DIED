@@ -173,7 +173,7 @@ public class Graph {
         return vertices.size();
     }
 
-    public List<Vertex> getAccessibleVertices(int destinationId) {
+    /*public List<Vertex> getAccessibleVertices(int destinationId) {
         List<Vertex> accessibleVertices = new ArrayList<>();
         Set<Vertex> visited = new HashSet<>();
         Vertex destinationVertex = new Vertex(destinationId);
@@ -185,7 +185,7 @@ public class Graph {
         }
 
         return accessibleVertices;
-    }
+    } */
 
     private void dfs(Vertex current, Vertex destination, Set<Vertex> visited, List<Vertex> accessibleVertices) {
         visited.add(current);

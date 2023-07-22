@@ -14,7 +14,6 @@ import java.util.List;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import javax.swing.JOptionPane;
 
 public class InformesControlador implements ActionListener, MouseListener {
 
@@ -31,7 +30,7 @@ public class InformesControlador implements ActionListener, MouseListener {
     List<Sucursales> sucursales = sucursalDao.listaSucursalesQuery("");
 
     //recuperamos una lista de caminos, y se la pasamos al instanciar GrafoCaminos
-    GrafoCaminos grafoCamino = new GrafoCaminos(caminoDao.listaCaminosQuery(""));
+    GrafoCaminos grafoCamino = new GrafoCaminos(caminoDao.listaCaminosQuery(""), sucursalDao.listaSucursalesQuery(""));
     Graph grafo = grafoCamino.getGrafo();
 
     //Flujo máximo: instanciamos la clase MaxEnvioCalculator
@@ -57,14 +56,15 @@ public class InformesControlador implements ActionListener, MouseListener {
             // Calcular el máximo envío en kilos desde la sucursal puerto al centro
             int maxEnvio = calculator.getMaxFlow();
             vista.txt_areat_informes.setText("Flujo Máximo posible entre el Puerto y la Sucursal Centro: " + maxEnvio + " Kg");
-            //JOptionPane.showMessageDialog(null, grafo.getAccessibleVertices(3));
         } else if (e.getSource() == vista.btn_informes_page_rank) {
             double damping = Double.parseDouble(vista.txt_informes_factorA.getText().trim());
             int iteraciones = Integer.parseInt(vista.txt_informes_cantI.getText().trim());
             vista.txt_areat_informes.setText(formatPageRank(grafo.calculatePageRank(damping, iteraciones)));
         } else if (e.getSource() == vista.btn_informes_page_limpiar) {
             vista.txt_areat_informes.setText("Seleccione un algoritmo para mostrar su resultado en pantala.\n\n Los valores indicados en 'Factor de Amortiguación' y "
-                    + "'Cantidad iteraciones' serán utilizados para el cálculo del PageRank (R).");
+                    + "'Cantidad iteraciones' serán utilizados para el cálculo del PageRank (R). \n\n"
+                    + "Puede modificar el estado Operativo/No Operativo de Sucursales y el estado Habilitado/No Habilitado de Caminos en el\n\n" 
+                    + "menú de Administración Rápido o en el ABM de cada entidad.");
         }
     }
 
@@ -77,6 +77,7 @@ public class InformesControlador implements ActionListener, MouseListener {
 
     //Método para formatear la salida del PageRank y asignarlo a la pantalla.
     public String formatPageRank(List<Vertex> pageRankVertices) {
+        int i = 1;
         StringBuilder sb = new StringBuilder();
         sb.append("PageRank (R)  :  Sucursal\n"); // Encabezado
         sb.append("=========================\n\n");
@@ -87,11 +88,12 @@ public class InformesControlador implements ActionListener, MouseListener {
                     nombreSuc = unaSucursal.getNombre();
                 }
             }
-            sb.append("Sucursal ")
+            sb.append("#" + i+" - ")
                     .append(nombreSuc)
                     .append(": ")
                     .append(vertex.getPageRank())
                     .append("\n");
+            i++;
         }
 
         return sb.toString();
