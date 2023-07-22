@@ -268,4 +268,34 @@ public class Graph {
 
         return sortedVertices;
     } 
+    
+    public String representarCaminos(List<List<Vertex>> caminos) {
+    StringBuilder sb = new StringBuilder();
+
+    for (List<Vertex> camino : caminos) {
+        for (Vertex vertex : camino) {
+            sb.append(vertex.getValue()).append(" -> ");
+        }
+        sb.setLength(sb.length() - 4); // Eliminar la última flecha "->"
+        sb.append("\n");
+    }
+
+    return sb.toString();
+}
+    
+     // Método para obtener una lista de listas de enteros a partir de los caminos
+    public List<List<Integer>> obtenerCaminosComoListaDeEnteros(List<List<Vertex>> caminos) {
+        List<List<Integer>> caminosEnteros = new ArrayList<>();
+
+        for (List<Vertex> camino : caminos) {
+            List<Integer> caminoEntero = new ArrayList<>();
+            for (Vertex vertex : camino) {
+                caminoEntero.add(vertex.getValue());
+            }
+            caminosEnteros.add(caminoEntero);
+        }
+
+        return caminosEnteros;
+    }
+
 }

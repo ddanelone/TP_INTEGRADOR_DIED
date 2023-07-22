@@ -233,7 +233,6 @@ public class SystemView extends javax.swing.JFrame {
         tabla_ordenes = new javax.swing.JTable();
         ordenes_search = new javax.swing.JTextField();
         jLabel45 = new javax.swing.JLabel();
-        btn_prueba = new javax.swing.JButton();
         jPanel8 = new javax.swing.JPanel();
         jPanel16 = new javax.swing.JPanel();
         jPanel17 = new javax.swing.JPanel();
@@ -1485,10 +1484,6 @@ public class SystemView extends javax.swing.JFrame {
         jLabel45.setText("Buscar Id:");
         jPanel7.add(jLabel45, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 380, -1, -1));
 
-        btn_prueba.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        btn_prueba.setText("PRUEBA");
-        jPanel7.add(btn_prueba, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 370, 120, 30));
-
         jTabbedPane1.addTab("Órdenes", jPanel7);
 
         jPanel8.setBackground(new java.awt.Color(242, 242, 204));
@@ -1875,7 +1870,6 @@ public class SystemView extends javax.swing.JFrame {
     public javax.swing.JButton btn_ordenes_modificar;
     public javax.swing.JButton btn_ordenes_producto_agregar;
     public javax.swing.JButton btn_ordenes_producto_eliminar;
-    public javax.swing.JButton btn_prueba;
     private javax.swing.JButton btn_salir;
     public javax.swing.JButton btn_stock_asignar;
     public javax.swing.JButton btn_stock_cancelar;

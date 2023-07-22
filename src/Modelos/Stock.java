@@ -1,9 +1,10 @@
 package Modelos;
 
 public class Stock {
+
     private int id_sucursal;
     private int id_producto;
-    private int  stock;
+    private int stock;
 
     public Stock() {
     }
@@ -37,6 +38,12 @@ public class Stock {
     public void setStock(int stock) {
         this.stock = stock;
     }
-    
-    
+
+    public int getCantidad(int productoId) {
+        if (id_producto == productoId) {
+            return stock;
+        }
+        return 0; // Si no se encuentra el producto, se devuelve 0
+    }
+
 }
