@@ -149,6 +149,8 @@ public class OrdenesControlador implements ActionListener, MouseListener, KeyLis
                 for (int i = 0; i < modeloTabla.getRowCount(); i++) {
                     int idProductoEnModelo = (int) modeloTabla.getValueAt(i, 0);
                     if (idProductoEnModelo == id) {
+                        peso_total -= obtenerPesoProductoId(id) * (int) modeloTabla.getValueAt(i, 2);
+                    
                         modeloTabla.removeRow(i);
                         break;
                     }

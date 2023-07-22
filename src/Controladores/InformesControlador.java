@@ -14,10 +14,13 @@ import java.util.List;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 
 public class InformesControlador implements ActionListener, MouseListener {
 
     private SystemView vista;
+    private Graph grafo;
+    private MaxEnvioCalculator calculator;
 
     //Instanciamos el modelo de Caminos;
     Caminos camino = new Caminos();
@@ -26,17 +29,10 @@ public class InformesControlador implements ActionListener, MouseListener {
     //Instanciamos el modelo de Sucursales
     Sucursales sucursal = new Sucursales();
     SucursalesDao sucursalDao = new SucursalesDao();
-    //Obtenemos la lista de sucursales
-    List<Sucursales> sucursales = sucursalDao.listaSucursalesQuery("");
-
-    //recuperamos una lista de caminos, y se la pasamos al instanciar GrafoCaminos
-    GrafoCaminos grafoCamino = new GrafoCaminos(caminoDao.listaCaminosQuery(""), sucursalDao.listaSucursalesQuery(""));
-    Graph grafo = grafoCamino.getGrafo();
-
-    //Flujo máximo: instanciamos la clase MaxEnvioCalculator
-    // Crear una instancia de MaxEnvioCalculator con el grafo, el nodo fuente (1) y el nodo sumidero (11)
-    MaxEnvioCalculator calculator = new MaxEnvioCalculator(grafo, 1, 11);
-
+    
+    private List<Caminos> caminos = new ArrayList<>();
+    private List<Sucursales> sucursales = new ArrayList<>();
+       
     public InformesControlador(SystemView vista) {
         this.vista = vista;
         //Botón de flujo máximo
@@ -47,16 +43,19 @@ public class InformesControlador implements ActionListener, MouseListener {
         this.vista.jLabelInformes.addMouseListener(this);
         //Botón cancelar
         this.vista.btn_informes_page_limpiar.addActionListener(this);
+        this.actualizarGrafo();
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
 
         if (e.getSource() == vista.btn_informes_flujo_maximo) {
+            actualizarGrafo();
             // Calcular el máximo envío en kilos desde la sucursal puerto al centro
             int maxEnvio = calculator.getMaxFlow();
             vista.txt_areat_informes.setText("Flujo Máximo posible entre el Puerto y la Sucursal Centro: " + maxEnvio + " Kg");
         } else if (e.getSource() == vista.btn_informes_page_rank) {
+            actualizarGrafo();
             double damping = Double.parseDouble(vista.txt_informes_factorA.getText().trim());
             int iteraciones = Integer.parseInt(vista.txt_informes_cantI.getText().trim());
             vista.txt_areat_informes.setText(formatPageRank(grafo.calculatePageRank(damping, iteraciones)));
@@ -98,7 +97,19 @@ public class InformesControlador implements ActionListener, MouseListener {
 
         return sb.toString();
     }
+    
+    // Método para actualizar el grafo con la información actualizada de caminos y sucursales
+    private void actualizarGrafo() {
+        List<Caminos> caminos = caminoDao.listaCaminosQuery("");
+        List<Sucursales> sucursales = sucursalDao.listaSucursalesQuery("");
 
+        GrafoCaminos grafoCamino = new GrafoCaminos(caminos, sucursales);
+        this.grafo = grafoCamino.getGrafo();
+
+        // Crear una nueva instancia de MaxEnvioCalculator con el grafo actualizado
+        this.calculator = new MaxEnvioCalculator(grafo, 1, 11);
+    }
+    
     @Override
     public void mousePressed(MouseEvent e) {
     }
