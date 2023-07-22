@@ -87,7 +87,7 @@ public class Graph {
 
         return sb.toString();
     }
-
+    
     public List<Integer> getNeighbourhood(int value) {
         Vertex vertex = getVertex(value);
         List<Integer> neighbours = new ArrayList<>();
@@ -165,6 +165,14 @@ public class Graph {
         return null;
     }
 
+    public List<Edge> getEdges() {
+        return edges;
+    }
+
+    public int getVertexCount() {
+        return vertices.size();
+    }
+
     public List<Vertex> getAccessibleVertices(int destinationId) {
         List<Vertex> accessibleVertices = new ArrayList<>();
         Set<Vertex> visited = new HashSet<>();
@@ -223,44 +231,41 @@ public class Graph {
     }
 
     public List<Vertex> calculatePageRank(double dampingFactor, int iterations) {
-    // Asignar valor inicial de 1.0 a cada vértice
-    for (Vertex vertex : vertices) {
-        vertex.setPageRank(1.0);
-    }
-
-    // Realizar las iteraciones para calcular el PageRank
-    for (int i = 0; i < iterations; i++) {
-        // Copiar los valores de PageRank actuales para cada vértice
-        Map<Vertex, Double> currentPageRanks = new HashMap<>();
+        // Asignar valor inicial de 1.0 a cada vértice
         for (Vertex vertex : vertices) {
-            currentPageRanks.put(vertex, vertex.getPageRank());
+            vertex.setPageRank(1.0);
         }
 
-        // Calcular los nuevos PageRank en esta iteración
-        for (Vertex vertex : vertices) {
-            double sum = 0.0;
-            List<Vertex> neighbours = getNeighbours(vertex);
-            for (Vertex neighbour : neighbours) {
-                int outDegree = gradoSalida(neighbour);
-                if (outDegree > 0) {
-                    sum += currentPageRanks.get(neighbour) / outDegree;
-                }
+        // Realizar las iteraciones para calcular el PageRank
+        for (int i = 0; i < iterations; i++) {
+            // Copiar los valores de PageRank actuales para cada vértice
+            Map<Vertex, Double> currentPageRanks = new HashMap<>();
+            for (Vertex vertex : vertices) {
+                currentPageRanks.put(vertex, vertex.getPageRank());
             }
-            double newPageRank = (1 - dampingFactor) + dampingFactor * sum;
-            vertex.setPageRank(newPageRank);
+
+            // Calcular los nuevos PageRank en esta iteración
+            for (Vertex vertex : vertices) {
+                double sum = 0.0;
+                List<Vertex> neighbours = getNeighbours(vertex);
+                for (Vertex neighbour : neighbours) {
+                    int outDegree = gradoSalida(neighbour);
+                    if (outDegree > 0) {
+                        sum += currentPageRanks.get(neighbour) / outDegree;
+                    }
+                }
+                double newPageRank = (1 - dampingFactor) + dampingFactor * sum;
+                vertex.setPageRank(newPageRank);
+            }
         }
-    }
 
-    // Usar un conjunto HashSet para evitar duplicados y mantener el orden según el PageRank
-    Set<Vertex> uniqueVertices = new HashSet<>(vertices);
+        // Usar un conjunto HashSet para evitar duplicados y mantener el orden según el PageRank
+        Set<Vertex> uniqueVertices = new HashSet<>(vertices);
 
-    // Convertir el conjunto en una lista y ordenarla según el PageRank descendente
-    List<Vertex> sortedVertices = new ArrayList<>(uniqueVertices);
-    sortedVertices.sort((v1, v2) -> Double.compare(v2.getPageRank(), v1.getPageRank()));
+        // Convertir el conjunto en una lista y ordenarla según el PageRank descendente
+        List<Vertex> sortedVertices = new ArrayList<>(uniqueVertices);
+        sortedVertices.sort((v1, v2) -> Double.compare(v2.getPageRank(), v1.getPageRank()));
 
-    return sortedVertices;
-}
-
-
-
+        return sortedVertices;
+    } 
 }
