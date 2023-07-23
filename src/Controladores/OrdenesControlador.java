@@ -494,6 +494,7 @@ public class OrdenesControlador implements ActionListener, MouseListener {
             vista.jTabbedPane1.setSelectedIndex(4);
         } else if (e.getSource() == vista.tabla_ordenes) {
             // necesito una variable para la sucursal de destino
+            limpiarTablas(modeloCaminos);
             int id_suc;
             //Recupero en el comboBox la Sucursal de Destino, la fecha, el tiempo y la lista de productos.
             int fila = vista.tabla_ordenes.rowAtPoint(e.getPoint());
@@ -579,6 +580,7 @@ public class OrdenesControlador implements ActionListener, MouseListener {
             vista.txt_ordenes_cantidad_producto.setText(String.valueOf(vista.tabla_ordenes_productos.getValueAt(fila, 2)));
             vista.btn_ordenes_producto_eliminar.setEnabled(true);
         } else if (e.getSource() == vista.tabla_ordenes_caminos) {
+            limpiarTablas(modeloCaminos);
             int fila = vista.tabla_ordenes_caminos.rowAtPoint(e.getPoint());
             CaminoSeleccionado caminoSel = new CaminoSeleccionado();
             CaminoSeleccionadoDao caminoSelDao = new CaminoSeleccionadoDao();
@@ -594,15 +596,14 @@ public class OrdenesControlador implements ActionListener, MouseListener {
                     JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
             if (confirmacion == 0 && caminoSelDao.registrarCaminoQuery(caminoSel) && ordenDao.modificarOrdenQuery(orden)) {
                 JOptionPane.showMessageDialog(null, "Camino asignado exitósamente. La orden ahora se encuentra EN PROCESO");
-                limpiarTablas(modeloProductos);
                 limpiarTablas(modeloCaminos);
                 limpiarCampos();
                 listarTodasLasOrdenes();
                 refrescar();
             } else {
-                JOptionPane.showMessageDialog(null, "El Camino no ha sido asignado.");
+                JOptionPane.showMessageDialog(null, "El Camino no ha sido asignado.");                
             }
-
+            limpiarTablas(modeloCaminos);
         }
     }
 
