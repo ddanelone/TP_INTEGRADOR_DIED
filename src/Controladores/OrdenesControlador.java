@@ -27,6 +27,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -227,6 +228,7 @@ public class OrdenesControlador implements ActionListener, MouseListener {
             fechaActual = LocalDate.now();
             this.vista.txt_ordenes_fecha.setText(fechaActual.toString());
             limpiarTablas(modeloProductos);
+            limpiarTablas(modeloCaminos);
             limpiarCampos();
         }
     }
@@ -497,7 +499,6 @@ public class OrdenesControlador implements ActionListener, MouseListener {
             int fila = vista.tabla_ordenes.rowAtPoint(e.getPoint());
             //Método para recupear el nombre de la sucursal en el comboBox
             id_suc = (int) vista.tabla_ordenes.getValueAt(fila, 2);
-            //JOptionPane.showMessageDialog(null, obtenerNombreSucursal(id_suc));
             String nombreSucursalSeleccionada = obtenerNombreSucursal(id_suc);
             for (int i = 0; i < vista.cmb_ordenes_sucursal_destino.getItemCount(); i++) {
                 Object item = vista.cmb_ordenes_sucursal_destino.getItemAt(i);
@@ -533,7 +534,6 @@ public class OrdenesControlador implements ActionListener, MouseListener {
                 List<Stock> sucursalesFiltradas = listaSucursales.stream()
                         .filter(sucursal -> cumpleRequisitos(sucursal, listaProduc))
                         .collect(Collectors.toList());
-                //Hago un recorrido en profundida 
                 //recuperamos una lista de caminos, y se la pasamos al instanciar GrafoCaminos
                 List<Sucursales> listaTodasLasSuc = sucursalDao.listaSucursalesQuery("");
                 List<Sucursales> listaSuc = sucursalesFiltradas.stream()
@@ -541,8 +541,9 @@ public class OrdenesControlador implements ActionListener, MouseListener {
                         .filter(sucursal -> stock.getId_sucursal() == sucursal.getId()))
                         .collect(Collectors.toList());
                 //Tengo una lista de sucursales que tienen el stock requerido por mi pedido. La itero y agrego los caminos posibles a una lista
-                if (listaSuc.size()== 0) {  //No tengo ninguna sucursal con stock suficiente. Le aviso al usuario.
+                if (listaSuc.size() == 0) {  //No tengo ninguna sucursal con stock suficiente. Le aviso al usuario.
                     JOptionPane.showMessageDialog(null, "No hay sucursales que puedan atender esta orden. No existen caminos posibles aun");
+                    limpiarTablas(modeloCaminos);
                 }
                 List<List<Vertex>> caminos = listaSuc.stream()
                         .flatMap(unaSucursal -> grafo.findAllPaths(grafo.getVertex(unaSucursal.getId()), grafo.getVertex(id_suc)).stream())
@@ -554,7 +555,9 @@ public class OrdenesControlador implements ActionListener, MouseListener {
                 //Ahora, a cargar los valores en la tabla, mostrarlos al usuario, pedirle confirmación, y si confirma, grabarlos en la tabla. 
                 vista.tabla_ordenes_caminos.setModel(tablaModeloCaminos(caminosEnteros, tiempoTotal));
                 vista.tabla_ordenes_caminos.setEnabled(true);
-            } 
+            } else {
+                limpiarTablas(modeloCaminos);
+            }
         } else if (e.getSource() == vista.tabla_ordenes_productos) {
             //Deshabilitar el botón de agregar
             vista.btn_ordenes_producto_agregar.setEnabled(false);
@@ -604,19 +607,25 @@ public class OrdenesControlador implements ActionListener, MouseListener {
     }
 
     private static boolean cumpleRequisitos(Stock sucursal, List<ProductoCantidad> cantidadesRequeridas) {
-        return cantidadesRequeridas.stream()
-                .allMatch(cantidadRequerida -> sucursalTieneCantidad(sucursal, cantidadRequerida));
+        // Agrupar las cantidades requeridas por productoId
+        Map<Integer, List<ProductoCantidad>> cantidadesPorProductoId = cantidadesRequeridas.stream()
+                .collect(Collectors.groupingBy(ProductoCantidad::getProductoId));
+
+        // Verificar si la sucursal tiene la cantidad adecuada para cada productoId
+        return cantidadesPorProductoId.entrySet().stream()
+                .allMatch(entry -> sucursalTieneCantidad(sucursal, entry.getKey(), entry.getValue()));
     }
 
-    private static boolean sucursalTieneCantidad(Stock sucursal, ProductoCantidad cantidadRequerida) {
-        int productoId = cantidadRequerida.getProductoId();
-        int cantidadRequeridaValor = cantidadRequerida.getCantidad();
+    private static boolean sucursalTieneCantidad(Stock sucursal, int productoId, List<ProductoCantidad> cantidadesRequeridas) {
+        int cantidadRequeridaTotal = cantidadesRequeridas.stream()
+                .mapToInt(ProductoCantidad::getCantidad)
+                .sum();
 
-        // Aquí obtendrías la cantidad de producto en la sucursal a través del id_producto
+        // Aquí obtendrías la cantidad de producto en la sucursal a través del productoId
         int cantidadEnSucursal = sucursal.getCantidad(productoId);
 
-        // Verificar si la cantidad en la sucursal es menor que la requerida
-        return cantidadEnSucursal >= cantidadRequeridaValor;
+        // Verificar si la cantidad en la sucursal es mayor o igual que la requerida total
+        return cantidadEnSucursal >= cantidadRequeridaTotal;
     }
 
     // Método para calcular el tiempo de tránsito para cada camino en la lista de listas de enteros
