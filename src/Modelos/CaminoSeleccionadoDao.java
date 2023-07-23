@@ -10,25 +10,27 @@ import java.util.List;
 
 public class CaminoSeleccionadoDao {
 //Instanciar la conexión
+
     ConnectionMySQL cn = new ConnectionMySQL();
     Connection conn;
     PreparedStatement pst;
     ResultSet rs;
-    
+
     //Variables para enviear datos entre interfaces
     public static int id = 0;
-    public static int orden_provision_id=0;
-    public static int sucursal_origen_id=0;
-    public static  int sucursal_destino_id=0;
-    public static  String camino="";
-    public static  int tiempo=0;
-    
+    public static int orden_provision_id = 0;
+    public static int sucursal_origen_id = 0;
+    public static int sucursal_destino_id = 0;
+    public static String camino = "";
+    public static int tiempo = 0;
+
     //No se programan los otros métodos porque al quedar la orden EN PROCESO, sería incosistente modificar o borrar un camino asignado.
     //Método para registrar un camino;
     public boolean registrarCaminoQuery(CaminoSeleccionado camino) {
         String query = "INSERT INTO caminos_seleccionados (id, orden_provision_id, sucursal_origen_id, sucursal_destino_id, camino, tiempo_estimado) VALUES(?,?,?,?,?,?)";
-        
-        try{ conn = cn.getConnection();
+
+        try {
+            conn = cn.getConnection();
             pst = conn.prepareStatement(query);
             pst.setInt(1, camino.getId());
             pst.setInt(2, camino.getOrden_provision_id());
@@ -38,9 +40,28 @@ public class CaminoSeleccionadoDao {
             pst.setInt(6, camino.getTiempo());
             pst.execute();
             return true;
-        } catch(SQLException e) {
+        } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Error al registrar el camino seleccionado" + e);
-            return false;        
-        }         
+            return false;
+        }
+    }
+
+    //Obtener el próximo id que será asignado
+    public int obtenerProximoId() {
+        int id = 0;
+        String query = "SELECT AUTO_INCREMENT FROM information_schema.TABLES WHERE TABLE_NAME = 'caminos_seleccionados';";
+
+        try {
+            conn = cn.getConnection();
+            pst = conn.prepareStatement(query);
+            rs = pst.executeQuery();
+
+            if (rs.next()) {
+                id = rs.getInt("AUTO_INCREMENT");
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al recuperar el ID de la última orden: " + e);
+        }
+        return id;
     }
 }

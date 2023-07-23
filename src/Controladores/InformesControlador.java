@@ -76,6 +76,7 @@ public class InformesControlador implements ActionListener, MouseListener {
 
     //Método para formatear la salida del PageRank y asignarlo a la pantalla.
     public String formatPageRank(List<Vertex> pageRankVertices) {
+        sucursales = sucursalDao.listaSucursalesQuery("");
         int i = 1;
         StringBuilder sb = new StringBuilder();
         sb.append("PageRank (R)  :  Sucursal\n"); // Encabezado

@@ -302,7 +302,7 @@ public class OrdenesControlador implements ActionListener, MouseListener {
             limpiarCampos();
             listarTodasLasOrdenes();
         } else {
-            JOptionPane.showMessageDialog(null, "No se pudo actualizar la  orden de provision correctamente");
+            JOptionPane.showMessageDialog(null, "No se pudo cargar la  orden de provision correctamente");
         }
     }
 
@@ -580,8 +580,8 @@ public class OrdenesControlador implements ActionListener, MouseListener {
             vista.txt_ordenes_cantidad_producto.setText(String.valueOf(vista.tabla_ordenes_productos.getValueAt(fila, 2)));
             vista.btn_ordenes_producto_eliminar.setEnabled(true);
         } else if (e.getSource() == vista.tabla_ordenes_caminos) {
-            limpiarTablas(modeloCaminos);
             int fila = vista.tabla_ordenes_caminos.rowAtPoint(e.getPoint());
+            //Instanciamos el modelo de caminos  y su clase Dao
             CaminoSeleccionado caminoSel = new CaminoSeleccionado();
             CaminoSeleccionadoDao caminoSelDao = new CaminoSeleccionadoDao();
             caminoSel.setSucursal_origen_id(Integer.parseInt(vista.tabla_ordenes_caminos.getValueAt(fila, 0).toString().trim()));
@@ -591,19 +591,24 @@ public class OrdenesControlador implements ActionListener, MouseListener {
             //Necesito recuperar las órdenes para poder cambiarle el estado luego.
             List<Ordenes> listaOrdenes = ordenDao.listaOrdenesQuery(String.valueOf(id_orden));
             orden = listaOrdenes.isEmpty() ? null : listaOrdenes.get(0);
+            orden.setCaminoId(caminoSelDao.obtenerProximoId());
+            orden.setSucursalOrigenId(Integer.parseInt(vista.tabla_ordenes_caminos.getValueAt(fila, 0).toString().trim()));
             orden.setEstado("EN PROCESO");
             int confirmacion = JOptionPane.showOptionDialog(null, "¿Seguro de asignar esta ruta a la Orden de Provisión?", "Confirmar elección",
                     JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
             if (confirmacion == 0 && caminoSelDao.registrarCaminoQuery(caminoSel) && ordenDao.modificarOrdenQuery(orden)) {
                 JOptionPane.showMessageDialog(null, "Camino asignado exitósamente. La orden ahora se encuentra EN PROCESO");
-                limpiarTablas(modeloCaminos);
                 limpiarCampos();
-                listarTodasLasOrdenes();
-                refrescar();
             } else {
                 JOptionPane.showMessageDialog(null, "El Camino no ha sido asignado.");                
             }
-            limpiarTablas(modeloCaminos);
+                limpiarTablas(modeloCaminos);
+                limpiarTablas(modeloOrdenes);
+                limpiarTablas(modeloProductos);
+                refrescar();
+                
+                listarTodasLasOrdenes();
+
         }
     }
 
