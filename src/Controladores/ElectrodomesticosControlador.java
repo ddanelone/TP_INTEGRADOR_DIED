@@ -18,6 +18,7 @@ public class ElectrodomesticosControlador implements ActionListener, MouseListen
     private ElectrodomesticosDao electroDao;
     private SystemView vista;
     DefaultTableModel modelo = new DefaultTableModel();
+    private Object [] options = {"Sí", "No"};
 
     public ElectrodomesticosControlador(Electrodomesticos electro, ElectrodomesticosDao electroDao, SystemView vista) {
         this.electro = electro;
@@ -36,8 +37,6 @@ public class ElectrodomesticosControlador implements ActionListener, MouseListen
         this.vista.btn_electrodomesticos_cancelar.addActionListener(this);
         //Ponemos en escucha el Label
         this.vista.jLabelElectrodomesticos.addMouseListener(this);
-        
-        
     }
 
     @Override
@@ -110,7 +109,8 @@ public class ElectrodomesticosControlador implements ActionListener, MouseListen
                 JOptionPane.showMessageDialog(null, "Debes seleccionar un item para eliminar");
             } else {
                 int id = Integer.parseInt(vista.tabla_electrodomesticos.getValueAt(fila, 0).toString());
-                int confirmacion = JOptionPane.showConfirmDialog(null, "¿Seguro de elminar este electrodoméstico?");
+                int confirmacion = JOptionPane.showOptionDialog(null, "¿Seguro de eliminar este electrodoméstico?", "Confirmar eliminación",
+                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
                 if (confirmacion == 0 && electroDao.borrarElectrodomesticoQuery(id)!= false) {
                     limpiarCampos();
                     limpiarTabla();

@@ -19,6 +19,7 @@ public class SucursalesControlador implements ActionListener, MouseListener, Key
     private SucursalesDao sucursalDao;
     private SystemView vista;
     DefaultTableModel modelo = new DefaultTableModel();
+    private Object[] options = {"Sí", "No"};
 
     public SucursalesControlador(Sucursales sucursal, SucursalesDao sucursalDao, SystemView vista) {
         this.sucursal = sucursal;
@@ -37,8 +38,6 @@ public class SucursalesControlador implements ActionListener, MouseListener, Key
         this.vista.btn_sucursales_cancelar.addActionListener(this);
         //Ponemos en escucha el Label
         this.vista.jLabelSucursales.addMouseListener(this);
-        
-        
     }
 
     @Override
@@ -120,7 +119,8 @@ public class SucursalesControlador implements ActionListener, MouseListener, Key
                 JOptionPane.showMessageDialog(null, "Debes seleccionar una sucursal para eliminar");
             } else {
                 int id = Integer.parseInt(vista.tabla_sucursales.getValueAt(fila, 0).toString());
-                int confirmacion = JOptionPane.showConfirmDialog(null, "¿Seguro de elminar la sucursal?");
+                int confirmacion = JOptionPane.showOptionDialog(null, "¿Seguro de eliminar esta Sucursal?", "Confirmar eliminación",
+                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
                 if (confirmacion == 0 && sucursalDao.borrarSucursalQuery(id)!= false) {
                     limpiarCampos();
                     limpiarTabla();

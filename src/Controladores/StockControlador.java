@@ -27,6 +27,7 @@ public class StockControlador implements ActionListener, MouseListener, KeyListe
     private StockDao stockDao;
     private SystemView vista;
     DefaultTableModel modelo = new DefaultTableModel();
+    private Object[] options = {"Sí", "No"};
 
     //Lo uso en el método para recupear nombre de sucursal por Id, y a la inversa.
     private SucursalesDao sucursalDao = new SucursalesDao();
@@ -152,7 +153,8 @@ public class StockControlador implements ActionListener, MouseListener, KeyListe
             } else {
                 int id_suc = Integer.parseInt(vista.tabla_stock.getValueAt(fila, 0).toString());
                 int id_elec = Integer.parseInt(vista.tabla_stock.getValueAt(fila, 2).toString());
-                int confirmacion = JOptionPane.showConfirmDialog(null, "¿Seguro de elminar la fila?");
+                int confirmacion = JOptionPane.showOptionDialog(null, "¿Seguro de eliminar el stock de este producto en esta sucursal?", "Confirmar eliminación",
+                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
                 if (confirmacion == 0 && stockDao.borrarStockQuery(id_suc, id_elec) != false) {
                     limpiarCampos();
                     limpiarTabla();

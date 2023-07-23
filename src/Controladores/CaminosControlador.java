@@ -23,7 +23,8 @@ public class CaminosControlador implements ActionListener, MouseListener, KeyLis
     private CaminosDao caminoDao;
     private SystemView vista;
     DefaultTableModel modelo = new DefaultTableModel();
-
+    private Object[] options = {"Sí", "No"};
+ 
     //Lo uso en el método para recupear nombre de sucursal por Id, y a la inversa.
     private SucursalesDao sucursalDao = new SucursalesDao();
     
@@ -47,7 +48,7 @@ public class CaminosControlador implements ActionListener, MouseListener, KeyLis
         this.vista.jLabelCaminos.addMouseListener(this);
         
         
-//Recuperar las sucursales para mostrar en el comboBox
+        //Recuperar las sucursales para mostrar en el comboBox
         //Paso 1: Obtener la lista de sucursales desde la base de datos
         List<Sucursales> listaSucursales = sucursalDao.listaSucursalesQuery("");
         // Paso 2: Crear una lista de nombres de sucursales
@@ -147,7 +148,8 @@ public class CaminosControlador implements ActionListener, MouseListener, KeyLis
                 JOptionPane.showMessageDialog(null, "Debes seleccionar un item para eliminar");
             } else {
                 int id = Integer.parseInt(vista.tabla_caminos.getValueAt(fila, 0).toString());
-                int confirmacion = JOptionPane.showConfirmDialog(null, "¿Seguro de elminar este Camno?");
+                int confirmacion = JOptionPane.showOptionDialog(null, "¿Seguro de eliminar este Camino?", "Confirmar eliminación",
+                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
                 if (confirmacion == 0 && caminoDao.borrarCaminoQuery(id) != false) {
                     limpiarCampos();
                     limpiarTabla();

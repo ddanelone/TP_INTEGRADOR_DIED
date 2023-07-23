@@ -21,7 +21,6 @@ import Modelos.Vertex;
 import Vistas.SystemView;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.time.LocalDate;
@@ -37,7 +36,7 @@ public class OrdenesControlador implements ActionListener, MouseListener {
     private SystemView vista;
     private Ordenes orden;
     private OrdenesDao ordenDao;
-    Object[] options = {"Sí", "No"};
+    private Object[] options = {"Sí", "No"};
     private GrafoCaminos grafoCamino;
     private Graph grafo;
 
@@ -519,38 +518,43 @@ public class OrdenesControlador implements ActionListener, MouseListener {
             vista.btn_ordenes_crear.setEnabled(false);
             vista.btn_ordenes_modificar.setEnabled(true);
             vista.btn_ordenes_eliminar.setEnabled(true);
-            //Lógica para calcular los caminos posibles y ver sucursalde origen
-            //Recupear los Stock de sucursales
-            List<Stock> listaSucursales = stockDao.listaStockQuery("");
-            //Recuperar los items incluidos en el pedido actual
-            List<ProductoCantidad> listaProduc = produCantDao.listaProductoCantidadQuery("" + id_orden);
-            //Crep el grafo con todas las sucursales!!!!
-            grafoCamino = new GrafoCaminos(caminoDao.listaCaminosQuery(""), sucursalDao.listaSucursalesQuery(""));
-            grafo = grafoCamino.getGrafo();
-            // Obtener una lista con los IDs de los productos presentes en listaProduc
-            // Filtrar la lista de sucursales
-            List<Stock> sucursalesFiltradas = listaSucursales.stream()
-                    .filter(sucursal -> cumpleRequisitos(sucursal, listaProduc))
-                    .collect(Collectors.toList());
-            //Hago un recorrido en profundida 
-            //recuperamos una lista de caminos, y se la pasamos al instanciar GrafoCaminos
-            List<Sucursales> listaTodasLasSuc = sucursalDao.listaSucursalesQuery("");
-            List<Sucursales> listaSuc = sucursalesFiltradas.stream()
-                    .flatMap(stock -> listaTodasLasSuc.stream()
-                    .filter(sucursal -> stock.getId_sucursal() == sucursal.getId()))
-                    .collect(Collectors.toList());
-
-            //Tengo una lista de sucursales que tienen el stock requerido por mi pedido. La itero y agrego los caminos posibles a una lista
-            List<List<Vertex>> caminos = listaSuc.stream()
-                    .flatMap(unaSucursal -> grafo.findAllPaths(grafo.getVertex(unaSucursal.getId()), grafo.getVertex(id_suc)).stream())
-                    .collect(Collectors.toList());
-            //Tengo todos los caminos posibles, los voy a pasar una lista de listas de enteros para facilitar la exploración.
-            List<List<Integer>> caminosEnteros = grafo.obtenerCaminosComoListaDeEnteros(caminos);
-            //en tiempoTotal tengo una lista de igual cantidad de elementos que caminosEnteros, y tiene el tiempo total de cada viaje. 
-            List<Integer> tiempoTotal = calcularTiempoTransito(caminosEnteros);
-            //Ahora, a cargar los valores en la tabla, mostrarlos al usuario, pedirle confirmación, y si confirma, grabarlos en la tabla. 
-            vista.tabla_ordenes_caminos.setModel(tablaModeloCaminos(caminosEnteros, tiempoTotal));
-            vista.tabla_ordenes_caminos.setEnabled(true);
+            //Vamos a ver si la orden está pendiente, si es así, permitimos se le asigne un camino. Caso contrario, nope.
+            if (vista.tabla_ordenes.getValueAt(fila, 5).equals("PENDIENTE")) {
+                //Lógica para calcular los caminos posibles y ver sucursalde origen
+                //Recupear los Stock de sucursales
+                List<Stock> listaSucursales = stockDao.listaStockQuery("");
+                //Recuperar los items incluidos en el pedido actual
+                List<ProductoCantidad> listaProduc = produCantDao.listaProductoCantidadQuery("" + id_orden);
+                //Crep el grafo con todas las sucursales!!!!
+                grafoCamino = new GrafoCaminos(caminoDao.listaCaminosQuery(""), sucursalDao.listaSucursalesQuery(""));
+                grafo = grafoCamino.getGrafo();
+                // Obtener una lista con los IDs de los productos presentes en listaProduc
+                // Filtrar la lista de sucursales
+                List<Stock> sucursalesFiltradas = listaSucursales.stream()
+                        .filter(sucursal -> cumpleRequisitos(sucursal, listaProduc))
+                        .collect(Collectors.toList());
+                //Hago un recorrido en profundida 
+                //recuperamos una lista de caminos, y se la pasamos al instanciar GrafoCaminos
+                List<Sucursales> listaTodasLasSuc = sucursalDao.listaSucursalesQuery("");
+                List<Sucursales> listaSuc = sucursalesFiltradas.stream()
+                        .flatMap(stock -> listaTodasLasSuc.stream()
+                        .filter(sucursal -> stock.getId_sucursal() == sucursal.getId()))
+                        .collect(Collectors.toList());
+                //Tengo una lista de sucursales que tienen el stock requerido por mi pedido. La itero y agrego los caminos posibles a una lista
+                if (listaSuc.size()== 0) {  //No tengo ninguna sucursal con stock suficiente. Le aviso al usuario.
+                    JOptionPane.showMessageDialog(null, "No hay sucursales que puedan atender esta orden. No existen caminos posibles aun");
+                }
+                List<List<Vertex>> caminos = listaSuc.stream()
+                        .flatMap(unaSucursal -> grafo.findAllPaths(grafo.getVertex(unaSucursal.getId()), grafo.getVertex(id_suc)).stream())
+                        .collect(Collectors.toList());
+                //Tengo todos los caminos posibles, los voy a pasar una lista de listas de enteros para facilitar la exploración.
+                List<List<Integer>> caminosEnteros = grafo.obtenerCaminosComoListaDeEnteros(caminos);
+                //en tiempoTotal tengo una lista de igual cantidad de elementos que caminosEnteros, y tiene el tiempo total de cada viaje. 
+                List<Integer> tiempoTotal = calcularTiempoTransito(caminosEnteros);
+                //Ahora, a cargar los valores en la tabla, mostrarlos al usuario, pedirle confirmación, y si confirma, grabarlos en la tabla. 
+                vista.tabla_ordenes_caminos.setModel(tablaModeloCaminos(caminosEnteros, tiempoTotal));
+                vista.tabla_ordenes_caminos.setEnabled(true);
+            } 
         } else if (e.getSource() == vista.tabla_ordenes_productos) {
             //Deshabilitar el botón de agregar
             vista.btn_ordenes_producto_agregar.setEnabled(false);
