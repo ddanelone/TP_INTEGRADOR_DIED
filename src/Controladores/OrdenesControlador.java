@@ -1,5 +1,7 @@
 package Controladores;
 
+import Modelos.CaminoSeleccionado;
+import Modelos.CaminoSeleccionadoDao;
 import Modelos.Caminos;
 import Modelos.CaminosDao;
 import Modelos.DynamicComboBox;
@@ -36,7 +38,7 @@ public class OrdenesControlador implements ActionListener, MouseListener {
     private Ordenes orden;
     private OrdenesDao ordenDao;
     Object[] options = {"Sí", "No"};
-    private GrafoCaminos grafoCamino; 
+    private GrafoCaminos grafoCamino;
     private Graph grafo;
 
     DefaultTableModel modeloProductos = new DefaultTableModel();
@@ -201,6 +203,7 @@ public class OrdenesControlador implements ActionListener, MouseListener {
                 vista.btn_ordenes_eliminar.setEnabled(false);
                 modificarOrden(orden);
                 limpiarTablas(modeloProductos);
+                limpiarTablas(modeloCaminos);
                 limpiarCampos();
 
             }
@@ -221,18 +224,22 @@ public class OrdenesControlador implements ActionListener, MouseListener {
             }
         } else if (e.getSource() == vista.btn_ordenes_cancelar) {
             //Habilitamos todos los botones y limpiamos las tablas y campos
-            vista.cmb_ordenes_sucursal_destino.setEnabled(true);
-            vista.btn_ordenes_crear.setEnabled(true);
-            vista.btn_ordenes_modificar.setEnabled(false);
-            vista.btn_ordenes_eliminar.setEnabled(false);
-            vista.btn_ordenes_producto_eliminar.setEnabled(false);
-            vista.btn_ordenes_producto_agregar.setEnabled(true);
-            vista.tabla_ordenes_caminos.setEnabled(false);
+            refrescar();
             fechaActual = LocalDate.now();
             this.vista.txt_ordenes_fecha.setText(fechaActual.toString());
             limpiarTablas(modeloProductos);
             limpiarCampos();
-        } 
+        }
+    }
+
+    private void refrescar() {
+        vista.cmb_ordenes_sucursal_destino.setEnabled(true);
+        vista.btn_ordenes_crear.setEnabled(true);
+        vista.btn_ordenes_modificar.setEnabled(false);
+        vista.btn_ordenes_eliminar.setEnabled(false);
+        vista.btn_ordenes_producto_eliminar.setEnabled(false);
+        vista.btn_ordenes_producto_agregar.setEnabled(true);
+        vista.tabla_ordenes_caminos.setEnabled(false);
     }
 
     private DefaultTableModel tablaModelo() {
@@ -253,7 +260,7 @@ public class OrdenesControlador implements ActionListener, MouseListener {
         }
         return modeloProductos;
     }
-    
+
     //Listar todos los electros agregados a la orden
     public void listarTodosLosElectros(int id_orden) {
         limpiarTablas(modeloProductos);
@@ -459,26 +466,26 @@ public class OrdenesControlador implements ActionListener, MouseListener {
         return "";
     }
 
-   private DefaultTableModel tablaModeloCaminos(List<List<Integer>> caminos, List<Integer> tiempo) {
-    modeloCaminos = (DefaultTableModel) vista.tabla_ordenes_caminos.getModel();
-    Object[] col = new Object[4];
-    for (int j = 0; j < caminos.size(); j++) {
-        List<Integer> camino = caminos.get(j);
-        int tiempoTotal = tiempo.get(j);
+    private DefaultTableModel tablaModeloCaminos(List<List<Integer>> caminos, List<Integer> tiempo) {
+        modeloCaminos = (DefaultTableModel) vista.tabla_ordenes_caminos.getModel();
+        Object[] col = new Object[4];
+        for (int j = 0; j < caminos.size(); j++) {
+            List<Integer> camino = caminos.get(j);
+            int tiempoTotal = tiempo.get(j);
 
-        col[0] = camino.get(0); // id de la sucursal de origen
-        String recorrido = "";
-        for (int i = 0; i < camino.size(); i++) {
-            recorrido += camino.get(i) + "->";
+            col[0] = camino.get(0); // id de la sucursal de origen
+            String recorrido = "";
+            for (int i = 0; i < camino.size(); i++) {
+                recorrido += camino.get(i) + "->";
+            }
+            col[1] = recorrido;
+            col[2] = camino.get(camino.size() - 1); // id de la sucursal de destino
+            col[3] = tiempoTotal;
+
+            modeloCaminos.addRow(col);
         }
-        col[1] = recorrido;
-        col[2] = camino.get(camino.size() - 1); // id de la sucursal de destino
-        col[3] = tiempoTotal;
-
-        modeloCaminos.addRow(col);
+        return modeloCaminos;
     }
-    return modeloCaminos;
-}
 
     @Override
     public void mouseClicked(MouseEvent e) {
@@ -532,7 +539,7 @@ public class OrdenesControlador implements ActionListener, MouseListener {
                     .flatMap(stock -> listaTodasLasSuc.stream()
                     .filter(sucursal -> stock.getId_sucursal() == sucursal.getId()))
                     .collect(Collectors.toList());
- 
+
             //Tengo una lista de sucursales que tienen el stock requerido por mi pedido. La itero y agrego los caminos posibles a una lista
             List<List<Vertex>> caminos = listaSuc.stream()
                     .flatMap(unaSucursal -> grafo.findAllPaths(grafo.getVertex(unaSucursal.getId()), grafo.getVertex(id_suc)).stream())
@@ -544,16 +551,6 @@ public class OrdenesControlador implements ActionListener, MouseListener {
             //Ahora, a cargar los valores en la tabla, mostrarlos al usuario, pedirle confirmación, y si confirma, grabarlos en la tabla. 
             vista.tabla_ordenes_caminos.setModel(tablaModeloCaminos(caminosEnteros, tiempoTotal));
             vista.tabla_ordenes_caminos.setEnabled(true);
-            
-            
-            
-            /*
-            String representacionCaminos = grafo.representarCaminos(caminos);
-            JOptionPane.showMessageDialog(null, representacionCaminos);
-            JOptionPane.showMessageDialog(null, caminosEnteros.toString());
-            JOptionPane.showMessageDialog(null, "Tamaño de la lista " + tiempoTotal.size());
-*/
-
         } else if (e.getSource() == vista.tabla_ordenes_productos) {
             //Deshabilitar el botón de agregar
             vista.btn_ordenes_producto_agregar.setEnabled(false);
@@ -574,6 +571,31 @@ public class OrdenesControlador implements ActionListener, MouseListener {
             }
             vista.txt_ordenes_cantidad_producto.setText(String.valueOf(vista.tabla_ordenes_productos.getValueAt(fila, 2)));
             vista.btn_ordenes_producto_eliminar.setEnabled(true);
+        } else if (e.getSource() == vista.tabla_ordenes_caminos) {
+            int fila = vista.tabla_ordenes_caminos.rowAtPoint(e.getPoint());
+            CaminoSeleccionado caminoSel = new CaminoSeleccionado();
+            CaminoSeleccionadoDao caminoSelDao = new CaminoSeleccionadoDao();
+            caminoSel.setSucursal_origen_id(Integer.parseInt(vista.tabla_ordenes_caminos.getValueAt(fila, 0).toString().trim()));
+            caminoSel.setSucursal_destino_id(Integer.parseInt(vista.tabla_ordenes_caminos.getValueAt(fila, 2).toString().trim()));
+            caminoSel.setTiempo(Integer.parseInt(vista.tabla_ordenes_caminos.getValueAt(fila, 3).toString().trim()));
+            caminoSel.setOrden_provision_id(id_orden);
+            //Necesito recuperar las órdenes para poder cambiarle el estado luego.
+            List<Ordenes> listaOrdenes = ordenDao.listaOrdenesQuery(String.valueOf(id_orden));
+            orden = listaOrdenes.isEmpty() ? null : listaOrdenes.get(0);
+            orden.setEstado("EN PROCESO");
+            int confirmacion = JOptionPane.showOptionDialog(null, "¿Seguro de asignar esta ruta a la Orden de Provisión?", "Confirmar elección",
+                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+            if (confirmacion == 0 && caminoSelDao.registrarCaminoQuery(caminoSel) && ordenDao.modificarOrdenQuery(orden)) {
+                JOptionPane.showMessageDialog(null, "Camino asignado exitósamente. La orden ahora se encuentra EN PROCESO");
+                limpiarTablas(modeloProductos);
+                limpiarTablas(modeloCaminos);
+                limpiarCampos();
+                listarTodasLasOrdenes();
+                refrescar();
+            } else {
+                JOptionPane.showMessageDialog(null, "El Camino no ha sido asignado.");
+            }
+
         }
     }
 
@@ -592,9 +614,9 @@ public class OrdenesControlador implements ActionListener, MouseListener {
         // Verificar si la cantidad en la sucursal es menor que la requerida
         return cantidadEnSucursal >= cantidadRequeridaValor;
     }
-    
+
     // Método para calcular el tiempo de tránsito para cada camino en la lista de listas de enteros
-   public List<Integer> calcularTiempoTransito(List<List<Integer>> caminosEnteros) {
+    public List<Integer> calcularTiempoTransito(List<List<Integer>> caminosEnteros) {
         return caminosEnteros.stream()
                 .map(caminoEntero -> calcularTiempoSublista(caminoEntero))
                 .collect(Collectors.toList());
@@ -619,7 +641,7 @@ public class OrdenesControlador implements ActionListener, MouseListener {
     // Método para obtener el tiempo de tránsito entre dos sucursales
     private int obtenerTiempoTransito(int origenId, int destinoId) {
         List<Caminos> lista = caminoDao.listaCaminosQuery("");
-         return lista.stream()
+        return lista.stream()
                 .filter(camino -> camino.getOrigenId() == origenId && camino.getDestinoId() == destinoId)
                 .mapToInt(Caminos::getTiempo)
                 .sum();
