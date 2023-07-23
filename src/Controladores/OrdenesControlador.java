@@ -607,25 +607,19 @@ public class OrdenesControlador implements ActionListener, MouseListener {
     }
 
     private static boolean cumpleRequisitos(Stock sucursal, List<ProductoCantidad> cantidadesRequeridas) {
-        // Agrupar las cantidades requeridas por productoId
-        Map<Integer, List<ProductoCantidad>> cantidadesPorProductoId = cantidadesRequeridas.stream()
-                .collect(Collectors.groupingBy(ProductoCantidad::getProductoId));
-
-        // Verificar si la sucursal tiene la cantidad adecuada para cada productoId
-        return cantidadesPorProductoId.entrySet().stream()
-                .allMatch(entry -> sucursalTieneCantidad(sucursal, entry.getKey(), entry.getValue()));
+        return cantidadesRequeridas.stream()
+                .anyMatch(cantidadRequerida -> sucursalTieneCantidad(sucursal, cantidadRequerida));
     }
 
-    private static boolean sucursalTieneCantidad(Stock sucursal, int productoId, List<ProductoCantidad> cantidadesRequeridas) {
-        int cantidadRequeridaTotal = cantidadesRequeridas.stream()
-                .mapToInt(ProductoCantidad::getCantidad)
-                .sum();
+    private static boolean sucursalTieneCantidad(Stock sucursal, ProductoCantidad cantidadRequerida) {
+        int productoId = cantidadRequerida.getProductoId();
+        int cantidadRequeridaValor = cantidadRequerida.getCantidad();
 
         // Aquí obtendrías la cantidad de producto en la sucursal a través del productoId
         int cantidadEnSucursal = sucursal.getCantidad(productoId);
 
-        // Verificar si la cantidad en la sucursal es mayor o igual que la requerida total
-        return cantidadEnSucursal >= cantidadRequeridaTotal;
+        // Verificar si la cantidad en la sucursal es mayor o igual que la requerida
+        return cantidadEnSucursal >= cantidadRequeridaValor;
     }
 
     // Método para calcular el tiempo de tránsito para cada camino en la lista de listas de enteros

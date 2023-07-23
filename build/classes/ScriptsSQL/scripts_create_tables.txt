@@ -1,0 +1,60 @@
+CREATE TABLE electrodomesticos (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  codigo INT UNIQUE,
+  nombre VARCHAR(255) NOT NULL,
+  descripcion VARCHAR(255),
+  precio_unitario DECIMAL(10, 2),
+  peso_kg DECIMAL(10, 2)
+);
+
+CREATE TABLE sucursales (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  codigo INT UNIQUE,
+  nombre VARCHAR(255) NOT NULL,
+  horario_apertura TIME,
+  horario_cierre TIME,
+  operativa BOOLEAN
+);
+
+CREATE TABLE caminos (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  origen_id INT,
+  destino_id INT,
+  capacidad INT,
+  tiempo INT,
+  operativo BOOLEAN,
+  observaciones VARCHAR(255),
+  FOREIGN KEY (origen_id) REFERENCES sucursales(id),
+  FOREIGN KEY (destino_id) REFERENCES sucursales(id)
+);
+
+CREATE TABLE Stock (
+  id_sucursal INT,
+  id_producto INT,
+  stock INT,
+  PRIMARY KEY (id_sucursal, id_producto),
+  FOREIGN KEY (id_sucursal) REFERENCES sucursales(id),
+  FOREIGN KEY (id_producto) REFERENCES electrodomesticos(id)
+);
+
+CREATE TABLE ordenes_provision (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  sucursal_origen_id INT,
+  sucursal_destino_id INT,
+  fecha_orden DATE,
+  tiempo_maximo INT,
+  estado VARCHAR(20),
+  FOREIGN KEY (sucursal_origen_id) REFERENCES sucursales(id),
+  FOREIGN KEY (sucursal_destino_id) REFERENCES sucursales(id)
+);
+
+CREATE TABLE ordenes_productos (
+  orden_id INT,
+  producto_id INT,
+  cantidad INT,
+  FOREIGN KEY (orden_id) REFERENCES ordenes_provision(id),
+  FOREIGN KEY (producto_id) REFERENCES electrodomesticos(id)
+);
+
+
+
