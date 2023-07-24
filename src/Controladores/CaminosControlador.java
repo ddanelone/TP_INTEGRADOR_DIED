@@ -168,21 +168,21 @@ public class CaminosControlador implements ActionListener, MouseListener, KeyLis
     public void listarTodosLosCaminos() {
         List<Caminos> lista = caminoDao.listaCaminosQuery(vista.caminos_search.getText());
         modelo = (DefaultTableModel) vista.tabla_caminos.getModel();
-        Object[] fila = new Object[7];
+        Object[] col = new Object[7];
         for (int i = 0; i < lista.size(); i++) {
-            fila[0] = lista.get(i).getId();
+            col[0] = lista.get(i).getId();
             //Acomodar para que aparezca nombres de las sucursales, no los Id ************************
             int origenId = lista.get(i).getOrigenId();
             String nombreOrigen = obtenerNombreSucursalPorId(origenId);
-            fila[1] = nombreOrigen;
+            col[1] = nombreOrigen;
             int destinoId = lista.get(i).getDestinoId();
             String nombreDestino = obtenerNombreSucursalPorId(destinoId);
-            fila[2] = nombreDestino;
-            fila[3] = lista.get(i).getTiempo();
-            fila[4] = lista.get(i).getCapacidad();
-            fila[5] = lista.get(i).isOperativo() ? "Operativo" : "No Operativo";
-            fila[6] = lista.get(i).getObservaciones();
-            modelo.addRow(fila);
+            col[2] = nombreDestino;
+            col[3] = lista.get(i).getTiempo();
+            col[4] = lista.get(i).getCapacidad();
+            col[5] = lista.get(i).isOperativo() ? "Operativo" : "No Operativo";
+            col[6] = lista.get(i).getObservaciones();
+            modelo.addRow(col);
         }
     }
 

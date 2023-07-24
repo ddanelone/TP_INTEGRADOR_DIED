@@ -270,7 +270,7 @@ public class OrdenesControlador implements ActionListener, MouseListener {
             listarTodosLosElectros(id_orden);
             vista.btn_ordenes_crear.setEnabled(false);
             //Vamos a ver si la orden está pendiente, si es así, permitimos se le asigne un camino. Caso contrario, nope.
-            if (estado.equals("PENDIENTE")) {
+            if (estado.equals("PENDIENTE") && sucursalHabilitada(id_suc)) {
                 vista.cmb_ordenes_sucursal_origen.removeAllItems();
                 vista.btn_ordenes_modificar.setEnabled(true);
                 vista.btn_ordenes_eliminar.setEnabled(true);
@@ -728,6 +728,11 @@ public class OrdenesControlador implements ActionListener, MouseListener {
                 .filter(camino -> camino.getOrigenId() == origenId && camino.getDestinoId() == destinoId)
                 .mapToInt(Caminos::getTiempo)
                 .sum();
+    }
+    
+    private boolean sucursalHabilitada(int id_suc) {
+       List<Sucursales> sucursales = sucursalDao.listaSucursalesQuery(""+id_suc);
+       return sucursales.isEmpty() ? false : sucursales.get(0).isOperativa();       
     }
 
     @Override

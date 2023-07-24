@@ -130,15 +130,15 @@ public class ElectrodomesticosControlador implements ActionListener, MouseListen
     public void listarTodosLosElectrodomesticos() {
         List<Electrodomesticos> lista = electroDao.listaElectrodomesticosQuery(vista.electrodomesticos_search.getText());
         modelo = (DefaultTableModel) vista.tabla_electrodomesticos.getModel();
-        Object[] fila = new Object[6];
+        Object[] col = new Object[6];
         for (int i = 0; i < lista.size(); i++) {
-            fila[0] = lista.get(i).getId();
-            fila[1] = lista.get(i).getCodigo();
-            fila[2] = lista.get(i).getNombre();
-            fila[3] = lista.get(i).getDescripcion();
-            fila[4] = lista.get(i).getPrecioUnitario();
-            fila[5] = lista.get(i).getPesoKg();
-            modelo.addRow(fila);
+            col[0] = lista.get(i).getId();
+            col[1] = lista.get(i).getCodigo();
+            col[2] = lista.get(i).getNombre();
+            col[3] = lista.get(i).getDescripcion();
+            col[4] = lista.get(i).getPrecioUnitario();
+            col[5] = lista.get(i).getPesoKg();
+            modelo.addRow(col);
         }
 
     }

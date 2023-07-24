@@ -181,20 +181,20 @@ public class StockControlador implements ActionListener, MouseListener, KeyListe
     public void listarTodosLosStock() {
         List<Stock> lista = stockDao.listaStockQuery(vista.stock_search.getText());
         modelo = (DefaultTableModel) vista.tabla_stock.getModel();
-        Object[] fila = new Object[5];
+        Object[] col = new Object[5];
         for (int i = 0; i < lista.size(); i++) {
-            fila[0] = lista.get(i).getId_sucursal();
+            col[0] = lista.get(i).getId_sucursal();
             //Acomodar para que aparezca nombres de las sucursales, no los Id ************************
             int origenId = lista.get(i).getId_sucursal();
             String nombreOrigen = obtenerNombreSucursalPorId(origenId);
-            fila[1] = nombreOrigen;
-            fila[2] = lista.get(i).getId_producto();
+            col[1] = nombreOrigen;
+            col[2] = lista.get(i).getId_producto();
             // Obtener el nombre del producto utilizando el ID del producto como clave en el mapa
             int productoId = lista.get(i).getId_producto();
             String nombreProducto = nombresElectro.get(Integer.valueOf(productoId));
-            fila[3] = nombreProducto;
-            fila[4] = lista.get(i).getStock();
-            modelo.addRow(fila);
+            col[3] = nombreProducto;
+            col[4] = lista.get(i).getStock();
+            modelo.addRow(col);
         }
 
     }
