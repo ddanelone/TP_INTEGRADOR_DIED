@@ -30,19 +30,11 @@ VALUES
   (4, 5, 8);
 
 INSERT INTO ordenes_provision (sucursal_origen_id, sucursal_destino_id, fecha_orden, tiempo_maximo, estado, peso_total, camino_seleccionado_id)
-VALUES (0, 3, '2023-07-01', 48, 'PENDIENTE', 10.5, 1);
-
-INSERT INTO ordenes_provision (sucursal_origen_id, sucursal_destino_id, fecha_orden, tiempo_maximo, estado, peso_total, camino_seleccionado_id)
-VALUES (0, 4, '2023-07-02', 72, 'PENDIENTE', 15.2, 2);
-
-INSERT INTO ordenes_provision (sucursal_origen_id, sucursal_destino_id, fecha_orden, tiempo_maximo, estado, peso_total, camino_seleccionado_id)
-VALUES (0, 5, '2023-07-03', 24, 'PENDIENTE', 8.9, 1);
-
-INSERT INTO ordenes_provision (sucursal_origen_id, sucursal_destino_id, fecha_orden, tiempo_maximo, estado, peso_total, camino_seleccionado_id)
-VALUES (0, 1, '2023-07-04', 36, 'PENDIENTE', 12.7, 3);
-
-INSERT INTO ordenes_provision (sucursal_origen_id, sucursal_destino_id, fecha_orden, tiempo_maximo, estado, peso_total, camino_seleccionado_id)
-VALUES (0, 2, '2023-07-05', 48, 'PENDIENTE', 9.4, 2);
+VALUES 
+  (0, 3, '2023-07-01', 48, 'PENDIENTE', 10.5, 0),
+  (0, 11, '2023-07-01', 24, 'PENDIENTE', 10.5, 0),
+  (0, 8, '2023-07-01', 12, 'PENDIENTE', 10.5, 0);
+  
 
 INSERT INTO caminos (origen_id, destino_id, capacidad, tiempo, operativo, observaciones)
 VALUES
@@ -75,11 +67,7 @@ VALUES
   (2, 2, 3),
   (2, 3, 1),
   -- Orden 3 - Productos
-  (3, 3, 10),
-  (3, 4, 10),
-  -- Orden 4 - Productos
-  (4, 4, 1),
-  (4, 5, 3),
-  -- Orden 5 - Productos
-  (5, 5, 3),
-  (5, 1, 10);
+  (3, 2, 10),
+  (3, 1, 10),
+  (3, 5, 10);
+
