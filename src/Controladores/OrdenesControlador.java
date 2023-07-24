@@ -223,11 +223,8 @@ public class OrdenesControlador implements ActionListener, MouseListener {
                 limpiarCampos();
                 limpiarTablas(modeloOrdenes);
                 limpiarTablas(modeloProductos);
-                vista.btn_ordenes_crear.setEnabled(true);
                 listarTodasLasOrdenes();
-                vista.btn_ordenes_modificar.setEnabled(false);
-                vista.btn_ordenes_eliminar.setEnabled(false);
-                vista.cmb_ordenes_sucursal_origen.removeAllItems();
+                refrescar();
                 JOptionPane.showMessageDialog(null, "Orden de Provisión eliminada exitosamente");
             }
         } else if (e.getSource() == vista.btn_ordenes_cancelar) {
