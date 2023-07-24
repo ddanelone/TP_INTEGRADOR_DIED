@@ -177,7 +177,7 @@ public class OrdenesControlador implements ActionListener, MouseListener {
                 orden.setTiempoMaximo(id_sucursal_destino);
                 insertarOrden(orden);
                 vista.cmb_ordenes_sucursal_destino.setEnabled(true);
-                id_sucursal_destino=0;
+                id_sucursal_destino = 0;
             }
         } else if (e.getSource() == this.vista.btn_ordenes_modificar) {
             //Verificamos si la tabla de electrodomesticos y el campo de tiempo están vacíos
@@ -201,7 +201,7 @@ public class OrdenesControlador implements ActionListener, MouseListener {
                 vista.btn_ordenes_crear.setEnabled(true);
                 vista.btn_ordenes_modificar.setEnabled(false);
                 vista.btn_ordenes_eliminar.setEnabled(false);
-                id_sucursal_destino=0;
+                id_sucursal_destino = 0;
                 modificarOrden(orden);
                 limpiarTablas(modeloProductos);
                 limpiarTablas(modeloCaminos);
@@ -234,6 +234,7 @@ public class OrdenesControlador implements ActionListener, MouseListener {
     }
 
     private void refrescar() {
+        vista.txt_ordenes_tiempo.setEnabled(true);
         vista.cmb_ordenes_sucursal_destino.setEnabled(true);
         vista.btn_ordenes_crear.setEnabled(true);
         vista.btn_ordenes_modificar.setEnabled(false);
@@ -385,7 +386,7 @@ public class OrdenesControlador implements ActionListener, MouseListener {
     public void limpiarCampos() {
         vista.txt_ordenes_tiempo.setText("");
         vista.txt_ordenes_cantidad_producto.setText("");
-        id_orden =0;
+        id_orden = 0;
         peso_total = 0.0;
     }
 
@@ -521,6 +522,10 @@ public class OrdenesControlador implements ActionListener, MouseListener {
             vista.btn_ordenes_crear.setEnabled(false);
             vista.btn_ordenes_modificar.setEnabled(true);
             vista.btn_ordenes_eliminar.setEnabled(true);
+            //Aquí hay que insertar un método que recupere los caminos asignados a la orden. Y la sucursal de origen seleccionada!!!!
+            // #PENDIENTE
+            
+            
             //Vamos a ver si la orden está pendiente, si es así, permitimos se le asigne un camino. Caso contrario, nope.
             if (vista.tabla_ordenes.getValueAt(fila, 5).equals("PENDIENTE")) {
                 //Lógica para calcular los caminos posibles y ver sucursalde origen
@@ -561,6 +566,12 @@ public class OrdenesControlador implements ActionListener, MouseListener {
                 vista.tabla_ordenes_caminos.setModel(tablaModeloCaminos(caminosEnteros, tiempoTotal));
                 vista.tabla_ordenes_caminos.setEnabled(true);
             } else {
+                vista.cmb_caminos_sucursal_destino.setEnabled(false);
+                vista.txt_ordenes_tiempo.setEnabled(false);
+                vista.btn_ordenes_producto_agregar.setEnabled(false);
+                vista.btn_ordenes_producto_eliminar.setEnabled(false);
+                vista.btn_ordenes_crear.setEnabled(false);
+                vista.btn_ordenes_modificar.setEnabled(false);
                 limpiarTablas(modeloCaminos);
             }
         } else if (e.getSource() == vista.tabla_ordenes_productos) {
@@ -593,7 +604,7 @@ public class OrdenesControlador implements ActionListener, MouseListener {
             caminoSel.setTiempo(Integer.parseInt(vista.tabla_ordenes_caminos.getValueAt(fila, 3).toString().trim()));
             caminoSel.setOrden_provision_id(id_orden);
             int confirmacion = JOptionPane.showOptionDialog(null, "¿Seguro de asignar esta ruta a la Orden de Provisión?", "Confirmar elección",
-            JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
             if (confirmacion == 0 && caminoSelDao.registrarCaminoQuery(caminoSel)) {
                 orden.setCaminoId(caminoSelDao.recuperarIdUltimoCamino());
                 //Necesito recuperar las órdenes para poder cambiarle el estado luego.
@@ -601,17 +612,17 @@ public class OrdenesControlador implements ActionListener, MouseListener {
                 orden = listaOrdenes.isEmpty() ? null : listaOrdenes.get(0);
                 orden.setSucursalOrigenId(Integer.parseInt(vista.tabla_ordenes_caminos.getValueAt(fila, 0).toString().trim()));
                 orden.setEstado("EN PROCESO");
-                if(ordenDao.modificarOrdenQuery(orden)) {
+                if (ordenDao.modificarOrdenQuery(orden)) {
                     JOptionPane.showMessageDialog(null, "Camino asignado exitósamente. La orden ahora se encuentra EN PROCESO");
                     limpiarCampos();
                 } else {
-                    JOptionPane.showMessageDialog(null, "El Camino no ha sido asignado.");                
+                    JOptionPane.showMessageDialog(null, "El Camino no ha sido asignado.");
                 }
-                    limpiarTablas(modeloCaminos);
-                    limpiarTablas(modeloOrdenes);
-                    limpiarTablas(modeloProductos);
-                    refrescar();                
-                    listarTodasLasOrdenes();
+                limpiarTablas(modeloCaminos);
+                limpiarTablas(modeloOrdenes);
+                limpiarTablas(modeloProductos);
+                refrescar();
+                listarTodasLasOrdenes();
             }
         }
     }
