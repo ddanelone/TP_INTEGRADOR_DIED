@@ -75,8 +75,12 @@ public class OrdenesControlador implements ActionListener, MouseListener {
         vista.btn_ordenes_eliminar.setEnabled(false);
         vista.btn_ordenes_modificar.setEnabled(false);
 
+        this.getNombreComboBox("Electrodomesticos");
+        this.getNombreComboBox("SucursalesDestino");
+        /*
         this.getElectroNombre();
         this.getSucursalDestinoNombre();
+        this.getSucursalOrigenNombre(); */
 
         //Ponemos en escucha el Label
         this.vista.jLabelOrdenes.addMouseListener(this);
@@ -221,6 +225,7 @@ public class OrdenesControlador implements ActionListener, MouseListener {
                 listarTodasLasOrdenes();
                 vista.btn_ordenes_modificar.setEnabled(false);
                 vista.btn_ordenes_eliminar.setEnabled(false);
+                vista.cmb_ordenes_sucursal_origen.removeAllItems();
             }
         } else if (e.getSource() == vista.btn_ordenes_cancelar) {
             //Habilitamos todos los botones y limpiamos las tablas y campos
@@ -242,6 +247,7 @@ public class OrdenesControlador implements ActionListener, MouseListener {
         vista.btn_ordenes_producto_eliminar.setEnabled(false);
         vista.btn_ordenes_producto_agregar.setEnabled(true);
         vista.tabla_ordenes_caminos.setEnabled(false);
+        vista.cmb_ordenes_sucursal_origen.removeAllItems();
     }
 
     private DefaultTableModel tablaModelo() {
@@ -390,23 +396,31 @@ public class OrdenesControlador implements ActionListener, MouseListener {
         peso_total = 0.0;
     }
 
-    //Metodo para mostrar el nombre de los Electrodomésticos
-    public void getElectroNombre() {
-        List<Electrodomesticos> lista = electroDao.listaElectrodomesticosQuery("");
-        for (int i = 0; i < lista.size(); i++) {
-            int id = lista.get(i).getId();
-            String nombre = lista.get(i).getNombre();
-            vista.cmb_ordenes_producto.addItem(new DynamicComboBox(id, nombre));
-        }
-    }
-
-    //Metodo para mostrar las sucursales de Destino
-    public void getSucursalDestinoNombre() {
-        List<Sucursales> lista = sucursalDao.listaSucursalesQuery("");
-        for (int i = 0; i < lista.size(); i++) {
-            int id = lista.get(i).getId();
-            String nombre = lista.get(i).getNombre();
-            vista.cmb_ordenes_sucursal_destino.addItem(new DynamicComboBox(id, nombre));
+    // Método para mostrar los nombres de los Electrodomésticos, Sucursales de Destino o Sucursales de Origen
+    public void getNombreComboBox(String tipo) {
+        if (tipo.equalsIgnoreCase("Electrodomesticos")) {
+            List<Electrodomesticos> lista = electroDao.listaElectrodomesticosQuery("");
+            for (int i = 0; i < lista.size(); i++) {
+                int id = lista.get(i).getId();
+                String nombre = lista.get(i).getNombre();
+                vista.cmb_ordenes_producto.addItem(new DynamicComboBox(id, nombre));
+            }
+        } else if (tipo.equalsIgnoreCase("SucursalesDestino")) {
+            List<Sucursales> lista = sucursalDao.listaSucursalesQuery("");
+            for (int i = 0; i < lista.size(); i++) {
+                int id = lista.get(i).getId();
+                String nombre = lista.get(i).getNombre();
+                vista.cmb_ordenes_sucursal_destino.addItem(new DynamicComboBox(id, nombre));
+            }
+        } else if (tipo.equalsIgnoreCase("SucursalesOrigen")) {
+            List<Sucursales> lista = sucursalDao.listaSucursalesQuery("");
+            for (int i = 0; i < lista.size(); i++) {
+                int id = lista.get(i).getId();
+                String nombre = lista.get(i).getNombre();
+                vista.cmb_ordenes_sucursal_origen.addItem(new DynamicComboBox(id, nombre));
+            }
+        } else {
+            // Tipo inválido, puedes mostrar un mensaje de error o realizar otra acción si lo deseas
         }
     }
 
@@ -522,10 +536,6 @@ public class OrdenesControlador implements ActionListener, MouseListener {
             vista.btn_ordenes_crear.setEnabled(false);
             vista.btn_ordenes_modificar.setEnabled(true);
             vista.btn_ordenes_eliminar.setEnabled(true);
-            //Aquí hay que insertar un método que recupere los caminos asignados a la orden. Y la sucursal de origen seleccionada!!!!
-            // #PENDIENTE
-            
-            
             //Vamos a ver si la orden está pendiente, si es así, permitimos se le asigne un camino. Caso contrario, nope.
             if (vista.tabla_ordenes.getValueAt(fila, 5).equals("PENDIENTE")) {
                 //Lógica para calcular los caminos posibles y ver sucursalde origen
@@ -566,6 +576,23 @@ public class OrdenesControlador implements ActionListener, MouseListener {
                 vista.tabla_ordenes_caminos.setModel(tablaModeloCaminos(caminosEnteros, tiempoTotal));
                 vista.tabla_ordenes_caminos.setEnabled(true);
             } else {
+                //ORDEN EN PROCESO: Aquí hay que insertar un método que recupere los caminos asignados a la orden. 
+                //Método para recupear el nombre de la sucursal Destino en el comboBox
+                this.getNombreComboBox("SucursalesOrigen");
+                int id_sucD = (int) vista.tabla_ordenes.getValueAt(fila, 1);
+                String nombreSucursalDestino = obtenerNombreSucursal(id_sucD);
+                for (int i = 0; i < vista.cmb_ordenes_sucursal_origen.getItemCount(); i++) {
+                    Object item = vista.cmb_ordenes_sucursal_origen.getItemAt(i);
+                    if (item instanceof DynamicComboBox) {
+                        DynamicComboBox comboBoxItem = (DynamicComboBox) item;
+                        if (comboBoxItem.getNombre().equals(nombreSucursalDestino)) {
+                            vista.cmb_ordenes_sucursal_origen.setSelectedIndex(i);
+                            break;
+                        }
+                    }
+                }
+
+                vista.cmb_ordenes_sucursal_destino.setEnabled(false);
                 vista.cmb_caminos_sucursal_destino.setEnabled(false);
                 vista.txt_ordenes_tiempo.setEnabled(false);
                 vista.btn_ordenes_producto_agregar.setEnabled(false);
