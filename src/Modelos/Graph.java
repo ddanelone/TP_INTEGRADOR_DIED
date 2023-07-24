@@ -70,6 +70,7 @@ public class Graph {
         return paths;
     }
 
+    //SE PUEDE ELIMINAR AL FINAL
     public String graphToString() {
         List<Edge> sortedEdges = edges.stream()
                 .sorted(Comparator.comparingInt(e -> e.getOrigin().getValue()))
@@ -84,10 +85,9 @@ public class Graph {
                     .append(edge.getEnd().getValue())
                     .append("\n");
         }
-
         return sb.toString();
     }
-    
+
     public List<Integer> getNeighbourhood(int value) {
         Vertex vertex = getVertex(value);
         List<Integer> neighbours = new ArrayList<>();
@@ -173,20 +173,6 @@ public class Graph {
         return vertices.size();
     }
 
-    /*public List<Vertex> getAccessibleVertices(int destinationId) {
-        List<Vertex> accessibleVertices = new ArrayList<>();
-        Set<Vertex> visited = new HashSet<>();
-        Vertex destinationVertex = new Vertex(destinationId);
-
-        for (Vertex vertex : vertices) {
-            if (vertex.getValue() != destinationId && !visited.contains(vertex)) {
-                dfs(vertex, destinationVertex, visited, accessibleVertices);
-            }
-        }
-
-        return accessibleVertices;
-    } */
-
     private void dfs(Vertex current, Vertex destination, Set<Vertex> visited, List<Vertex> accessibleVertices) {
         visited.add(current);
 
@@ -267,23 +253,24 @@ public class Graph {
         sortedVertices.sort((v1, v2) -> Double.compare(v2.getPageRank(), v1.getPageRank()));
 
         return sortedVertices;
-    } 
-    
-    public String representarCaminos(List<List<Vertex>> caminos) {
-    StringBuilder sb = new StringBuilder();
-
-    for (List<Vertex> camino : caminos) {
-        for (Vertex vertex : camino) {
-            sb.append(vertex.getValue()).append(" -> ");
-        }
-        sb.setLength(sb.length() - 4); // Eliminar la última flecha "->"
-        sb.append("\n");
     }
 
-    return sb.toString();
-}
-    
-     // Método para obtener una lista de listas de enteros a partir de los caminos
+    //BORRAR AL FINAL
+    public String representarCaminos(List<List<Vertex>> caminos) {
+        StringBuilder sb = new StringBuilder();
+
+        for (List<Vertex> camino : caminos) {
+            for (Vertex vertex : camino) {
+                sb.append(vertex.getValue()).append(" -> ");
+            }
+            sb.setLength(sb.length() - 4); // Eliminar la última flecha "->"
+            sb.append("\n");
+        }
+
+        return sb.toString();
+    }
+
+    // Método para obtener una lista de listas de enteros a partir de los caminos
     public List<List<Integer>> obtenerCaminosComoListaDeEnteros(List<List<Vertex>> caminos) {
         List<List<Integer>> caminosEnteros = new ArrayList<>();
 

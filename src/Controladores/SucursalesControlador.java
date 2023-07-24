@@ -140,18 +140,17 @@ public class SucursalesControlador implements ActionListener, MouseListener, Key
     public void listarTodasLasSucursales() {
         List<Sucursales> lista = sucursalDao.listaSucursalesQuery(vista.sucursales_search.getText());
         modelo = (DefaultTableModel) vista.tabla_sucursales.getModel();
-        Object[] fila = new Object[6];
+        Object[] col = new Object[6];
         for (int i = 0; i < lista.size(); i++) {
-            fila[0] = lista.get(i).getId();
-            fila[1] = lista.get(i).getCodigo();
-            fila[2] = lista.get(i).getNombre();
+            col[0] = lista.get(i).getId();
+            col[1] = lista.get(i).getCodigo();
+            col[2] = lista.get(i).getNombre();
             //Lógica para que ponga "Operativa / No Operativa en la tabla
-            fila[3] = lista.get(i).isOperativa() ? "Operativa" : "No Operativa";
-            fila[4] = lista.get(i).getHorarioApertura();
-            fila[5] = lista.get(i).getHorarioCierre();
-            modelo.addRow(fila);
+            col[3] = lista.get(i).isOperativa() ? "Operativa" : "No Operativa";
+            col[4] = lista.get(i).getHorarioApertura();
+            col[5] = lista.get(i).getHorarioCierre();
+            modelo.addRow(col);
         }
-
     }
 
     @Override
@@ -167,7 +166,7 @@ public class SucursalesControlador implements ActionListener, MouseListener, Key
             vista.txt_sucursales_cierre.setText(vista.tabla_sucursales.getValueAt(fila, 5).toString());
 
             //Desahbilitar
-            vista.txt_sucursales_id.setEditable(false);
+            //vista.txt_sucursales_id.setEditable(false);
             vista.btn_sucursales_crear.setEnabled(false);
         } else if(e.getSource()== vista.jLabelSucursales) {
             vista.jTabbedPane1.setSelectedIndex(0);

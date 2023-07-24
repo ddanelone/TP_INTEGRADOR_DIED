@@ -280,14 +280,9 @@ public class CaminosControlador implements ActionListener, MouseListener, KeyLis
         return -1; // Retorna un valor por defecto si no se encuentra la sucursal
     }
 
+    //MODIFICAR EL MÉTODO
     private String obtenerNombreSucursalPorId(int idSucursal) {
-        List<Sucursales> listaSucursales = sucursalDao.listaSucursalesQuery("");
-        for (Sucursales sucursal : listaSucursales) {
-            if (sucursal.getId() == idSucursal) {
-                return sucursal.getNombre().trim();
-            }
-        }
-        return ""; // Retorna un valor por defecto si no se encuentra la sucursal
+        List<Sucursales> listaSucursales = sucursalDao.listaSucursalesQuery("" + idSucursal);
+        return listaSucursales.isEmpty() ? "" : listaSucursales.get(0).getNombre();
     }
-
 }

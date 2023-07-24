@@ -27,7 +27,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -178,6 +177,7 @@ public class OrdenesControlador implements ActionListener, MouseListener {
                 orden.setTiempoMaximo(id_sucursal_destino);
                 insertarOrden(orden);
                 vista.cmb_ordenes_sucursal_destino.setEnabled(true);
+                id_sucursal_destino=0;
             }
         } else if (e.getSource() == this.vista.btn_ordenes_modificar) {
             //Verificamos si la tabla de electrodomesticos y el campo de tiempo están vacíos
@@ -201,11 +201,11 @@ public class OrdenesControlador implements ActionListener, MouseListener {
                 vista.btn_ordenes_crear.setEnabled(true);
                 vista.btn_ordenes_modificar.setEnabled(false);
                 vista.btn_ordenes_eliminar.setEnabled(false);
+                id_sucursal_destino=0;
                 modificarOrden(orden);
                 limpiarTablas(modeloProductos);
                 limpiarTablas(modeloCaminos);
                 limpiarCampos();
-
             }
         } else if (e.getSource() == this.vista.btn_ordenes_eliminar) {
             int fila = vista.tabla_ordenes.getSelectedRow();
@@ -385,6 +385,7 @@ public class OrdenesControlador implements ActionListener, MouseListener {
     public void limpiarCampos() {
         vista.txt_ordenes_tiempo.setText("");
         vista.txt_ordenes_cantidad_producto.setText("");
+        id_orden =0;
         peso_total = 0.0;
     }
 
@@ -542,7 +543,7 @@ public class OrdenesControlador implements ActionListener, MouseListener {
                         .filter(sucursal -> stock.getId_sucursal() == sucursal.getId()))
                         .collect(Collectors.toList());
                 //Tengo una lista de sucursales que tienen el stock requerido por mi pedido. La itero y agrego los caminos posibles a una lista
-                if (listaSuc.size() == 0) {  //No tengo ninguna sucursal con stock suficiente. Le aviso al usuario.
+                if (listaSuc.isEmpty()) {  //No tengo ninguna sucursal con stock suficiente. Le aviso al usuario.
                     JOptionPane.showMessageDialog(null, "No hay sucursales que puedan atender esta orden. No existen caminos posibles aun");
                     limpiarTablas(modeloCaminos);
                 }
@@ -550,6 +551,9 @@ public class OrdenesControlador implements ActionListener, MouseListener {
                         .flatMap(unaSucursal -> grafo.findAllPaths(grafo.getVertex(unaSucursal.getId()), grafo.getVertex(id_suc)).stream())
                         .collect(Collectors.toList());
                 //Tengo todos los caminos posibles, los voy a pasar una lista de listas de enteros para facilitar la exploración.
+                if (caminos.isEmpty()) {  //No tengo ningun camino disponible. Le aviso al usuario.
+                    JOptionPane.showMessageDialog(null, "No hay caminos que puedan conectar las sucursales.");
+                }
                 List<List<Integer>> caminosEnteros = grafo.obtenerCaminosComoListaDeEnteros(caminos);
                 //en tiempoTotal tengo una lista de igual cantidad de elementos que caminosEnteros, y tiene el tiempo total de cada viaje. 
                 List<Integer> tiempoTotal = calcularTiempoTransito(caminosEnteros);
@@ -588,27 +592,27 @@ public class OrdenesControlador implements ActionListener, MouseListener {
             caminoSel.setSucursal_destino_id(Integer.parseInt(vista.tabla_ordenes_caminos.getValueAt(fila, 2).toString().trim()));
             caminoSel.setTiempo(Integer.parseInt(vista.tabla_ordenes_caminos.getValueAt(fila, 3).toString().trim()));
             caminoSel.setOrden_provision_id(id_orden);
-            //Necesito recuperar las órdenes para poder cambiarle el estado luego.
-            List<Ordenes> listaOrdenes = ordenDao.listaOrdenesQuery(String.valueOf(id_orden));
-            orden = listaOrdenes.isEmpty() ? null : listaOrdenes.get(0);
-            orden.setCaminoId(caminoSelDao.obtenerProximoId());
-            orden.setSucursalOrigenId(Integer.parseInt(vista.tabla_ordenes_caminos.getValueAt(fila, 0).toString().trim()));
-            orden.setEstado("EN PROCESO");
             int confirmacion = JOptionPane.showOptionDialog(null, "¿Seguro de asignar esta ruta a la Orden de Provisión?", "Confirmar elección",
-                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
-            if (confirmacion == 0 && caminoSelDao.registrarCaminoQuery(caminoSel) && ordenDao.modificarOrdenQuery(orden)) {
-                JOptionPane.showMessageDialog(null, "Camino asignado exitósamente. La orden ahora se encuentra EN PROCESO");
-                limpiarCampos();
-            } else {
-                JOptionPane.showMessageDialog(null, "El Camino no ha sido asignado.");                
+            JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+            if (confirmacion == 0 && caminoSelDao.registrarCaminoQuery(caminoSel)) {
+                orden.setCaminoId(caminoSelDao.recuperarIdUltimoCamino());
+                //Necesito recuperar las órdenes para poder cambiarle el estado luego.
+                List<Ordenes> listaOrdenes = ordenDao.listaOrdenesQuery(String.valueOf(id_orden));
+                orden = listaOrdenes.isEmpty() ? null : listaOrdenes.get(0);
+                orden.setSucursalOrigenId(Integer.parseInt(vista.tabla_ordenes_caminos.getValueAt(fila, 0).toString().trim()));
+                orden.setEstado("EN PROCESO");
+                if(ordenDao.modificarOrdenQuery(orden)) {
+                    JOptionPane.showMessageDialog(null, "Camino asignado exitósamente. La orden ahora se encuentra EN PROCESO");
+                    limpiarCampos();
+                } else {
+                    JOptionPane.showMessageDialog(null, "El Camino no ha sido asignado.");                
+                }
+                    limpiarTablas(modeloCaminos);
+                    limpiarTablas(modeloOrdenes);
+                    limpiarTablas(modeloProductos);
+                    refrescar();                
+                    listarTodasLasOrdenes();
             }
-                limpiarTablas(modeloCaminos);
-                limpiarTablas(modeloOrdenes);
-                limpiarTablas(modeloProductos);
-                refrescar();
-                
-                listarTodasLasOrdenes();
-
         }
     }
 

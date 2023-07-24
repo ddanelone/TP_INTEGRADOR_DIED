@@ -46,10 +46,11 @@ public class CaminoSeleccionadoDao {
         }
     }
 
-    //Obtener el próximo id que será asignado
-    public int obtenerProximoId() {
+    //Como el id es autoincremental, previo a asignar el detalle de los articulos correspondientes, debo recuperar el id.
+    public int recuperarIdUltimoCamino() {
         int id = 0;
-        String query = "SELECT AUTO_INCREMENT FROM information_schema.TABLES WHERE TABLE_NAME = 'caminos_seleccionados';";
+
+        String query = "SELECT MAX(id) FROM caminos_seleccionados";
 
         try {
             conn = cn.getConnection();
@@ -57,11 +58,12 @@ public class CaminoSeleccionadoDao {
             rs = pst.executeQuery();
 
             if (rs.next()) {
-                id = rs.getInt("AUTO_INCREMENT");
+                id = rs.getInt(1);
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Error al recuperar el ID de la última orden: " + e);
+            JOptionPane.showMessageDialog(null, "Error al recuperar el ID del último camino entre sucursales registrado: " + e);
         }
+
         return id;
     }
 }

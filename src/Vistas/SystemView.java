@@ -19,10 +19,6 @@ import Modelos.StockDao;
 import Modelos.Sucursales;
 import Modelos.SucursalesDao;
 
-/**
- *
- * @author Diego
- */
 public class SystemView extends javax.swing.JFrame {
 
     //Sucursales
@@ -487,7 +483,7 @@ public class SystemView extends javax.swing.JFrame {
         jLabel4.setText("Nombre:");
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel5.setText("Estado");
+        jLabel5.setText("Estado:");
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel6.setText("Apertura");
@@ -1435,9 +1431,9 @@ public class SystemView extends javax.swing.JFrame {
                 .addComponent(jScrollPane9, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(46, 46, 46))
             .addGroup(jPanel14Layout.createSequentialGroup()
-                .addGap(39, 39, 39)
+                .addGap(27, 27, 27)
                 .addComponent(jLabel44)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addComponent(btn_ordenes_crear, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btn_ordenes_modificar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
