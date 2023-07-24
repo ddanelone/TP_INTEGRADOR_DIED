@@ -960,9 +960,9 @@ public class SystemView extends javax.swing.JFrame {
                     .addComponent(txt_stock_id_producto, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel29, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btn_stock_modificar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel13Layout.createSequentialGroup()
-                        .addGap(11, 11, 11)
                         .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel32)
                             .addComponent(txt_stock_nombre_producto, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -971,7 +971,6 @@ public class SystemView extends javax.swing.JFrame {
                             .addComponent(jLabel30)
                             .addComponent(txt_stock_stock, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel13Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btn_stock_eliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(btn_stock_cancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1347,10 +1346,8 @@ public class SystemView extends javax.swing.JFrame {
         tabla_ordenes_caminos.getTableHeader().setReorderingAllowed(false);
         jScrollPane9.setViewportView(tabla_ordenes_caminos);
         if (tabla_ordenes_caminos.getColumnModel().getColumnCount() > 0) {
-            tabla_ordenes_caminos.getColumnModel().getColumn(0).setPreferredWidth(2);
-            tabla_ordenes_caminos.getColumnModel().getColumn(1).setPreferredWidth(40);
-            tabla_ordenes_caminos.getColumnModel().getColumn(2).setPreferredWidth(2);
-            tabla_ordenes_caminos.getColumnModel().getColumn(3).setPreferredWidth(3);
+            tabla_ordenes_caminos.getColumnModel().getColumn(1).setMinWidth(500);
+            tabla_ordenes_caminos.getColumnModel().getColumn(1).setMaxWidth(500);
         }
 
         jLabel40.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N

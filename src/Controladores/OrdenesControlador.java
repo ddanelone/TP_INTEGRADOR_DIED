@@ -179,7 +179,7 @@ public class OrdenesControlador implements ActionListener, MouseListener {
                 orden.setSucursalDestinoId(id_sucursal_destino);
                 orden.setEstado(estado);
                 orden.setFechaOrden(fechaActual);
-                orden.setTiempoMaximo(id_sucursal_destino);
+                orden.setTiempoMaximo(Integer.parseInt(vista.txt_ordenes_tiempo.getText().toString().trim()));
                 insertarOrden(orden);
                 vista.cmb_ordenes_sucursal_destino.setEnabled(true);
                 id_sucursal_destino = 0;
@@ -249,19 +249,17 @@ public class OrdenesControlador implements ActionListener, MouseListener {
             int id_suc;
             //Recupero en el comboBox la Sucursal de Destino, la fecha, el tiempo y la lista de productos.
             int fila = vista.tabla_ordenes.rowAtPoint(e.getPoint());
-            //Método para recupear el nombre de la sucursal en el comboBox
-            id_suc = (int) vista.tabla_ordenes.getValueAt(fila, 2);
-            String nombreSucursalSeleccionada = obtenerNombreSucursal(id_suc);
             for (int i = 0; i < vista.cmb_ordenes_sucursal_destino.getItemCount(); i++) {
                 Object item = vista.cmb_ordenes_sucursal_destino.getItemAt(i);
                 if (item instanceof DynamicComboBox) {
                     DynamicComboBox comboBoxItem = (DynamicComboBox) item;
-                    if (comboBoxItem.getNombre().equals(nombreSucursalSeleccionada)) {
+                    if (comboBoxItem.getNombre().equals(vista.tabla_ordenes.getValueAt(fila, 2).toString().trim())) {
                         vista.cmb_ordenes_sucursal_destino.setSelectedIndex(i);
                         break;
                     }
                 }
             }
+            id_suc = obtenerIdSucursalPorNombre(vista.tabla_ordenes.getValueAt(fila, 2).toString().trim());
             vista.txt_ordenes_id.setText(vista.tabla_ordenes.getValueAt(fila, 0).toString());
             id_orden = (int) vista.tabla_ordenes.getValueAt(fila, 0);
             //actualizo el estado de la orden
@@ -273,8 +271,10 @@ public class OrdenesControlador implements ActionListener, MouseListener {
             vista.btn_ordenes_crear.setEnabled(false);
             //Vamos a ver si la orden está pendiente, si es así, permitimos se le asigne un camino. Caso contrario, nope.
             if (estado.equals("PENDIENTE")) {
+                vista.cmb_ordenes_sucursal_origen.removeAllItems();
                 vista.btn_ordenes_modificar.setEnabled(true);
                 vista.btn_ordenes_eliminar.setEnabled(true);
+                vista.txt_ordenes_tiempo.setEnabled(true);
                 //Lógica para calcular los caminos posibles y ver sucursalde origen
                 //Recupear los Stock de sucursales
                 List<Stock> listaSucursales = stockDao.listaStockQuery("");
@@ -314,13 +314,11 @@ public class OrdenesControlador implements ActionListener, MouseListener {
             } else {
                 //Método para recuperar el nombre de la sucursal Origen en el comboBox
                 this.getNombreComboBox("SucursalesOrigen");
-                int id_sucD = (int) vista.tabla_ordenes.getValueAt(fila, 1);
-                String nombreSucursalDestino = obtenerNombreSucursal(id_sucD);
                 for (int i = 0; i < vista.cmb_ordenes_sucursal_origen.getItemCount(); i++) {
                     Object item = vista.cmb_ordenes_sucursal_origen.getItemAt(i);
                     if (item instanceof DynamicComboBox) {
                         DynamicComboBox comboBoxItem = (DynamicComboBox) item;
-                        if (comboBoxItem.getNombre().equals(nombreSucursalDestino)) {
+                        if (comboBoxItem.getNombre().equals(vista.tabla_ordenes.getValueAt(fila, 1).toString().trim())) {
                             vista.cmb_ordenes_sucursal_origen.setSelectedIndex(i);
                             break;
                         }
@@ -349,7 +347,7 @@ public class OrdenesControlador implements ActionListener, MouseListener {
             vista.btn_ordenes_producto_agregar.setEnabled(false);
             //Recupero el producto en el comboBox, y la cantidad 
             int fila = vista.tabla_ordenes_productos.rowAtPoint(e.getPoint());
-            //Método para recupear el nombre del  producot en el comboBox
+            //Método para recuperar el nombre del  producot en el comboBox
             int id_prod = (int) vista.tabla_ordenes_productos.getValueAt(fila, 0);
             String nombreElectroSeleccionado = obtenerNombreElectro(id_prod);
             for (int i = 0; i < vista.cmb_ordenes_producto.getItemCount(); i++) {
@@ -418,16 +416,16 @@ public class OrdenesControlador implements ActionListener, MouseListener {
         List<ProductoCantidad> listaP = produCantDao.listaProductoCantidadQuery("");
         List<ProductoCantidad> lista = listaP.stream().filter(p -> p.getId() == id_orden).collect(Collectors.toList());
         modeloProductos = (DefaultTableModel) vista.tabla_ordenes_productos.getModel();
-        Object[] fila = new Object[4];
+        Object[] col = new Object[4];
         for (int i = 0; i < lista.size(); i++) {
-            fila[0] = lista.get(i).getProductoId();
+            col[0] = lista.get(i).getProductoId();
             //Tengo que consultar la tabla de productos, para ver la descripcion del que corresponde al Id. Lo tengo en el comboBox...
             int origenId = lista.get(i).getProductoId();
             String nombre = obtenerNombreProductoId(origenId);
-            fila[1] = nombre;
-            fila[2] = lista.get(i).getCantidad();
-            fila[3] = obtenerPesoProductoId(lista.get(i).getProductoId()) * lista.get(i).getCantidad();
-            modeloProductos.addRow(fila);
+            col[1] = nombre;
+            col[2] = lista.get(i).getCantidad();
+            col[3] = obtenerPesoProductoId(lista.get(i).getProductoId()) * lista.get(i).getCantidad();
+            modeloProductos.addRow(col);
         }
         return modeloProductos;
     }
@@ -442,15 +440,15 @@ public class OrdenesControlador implements ActionListener, MouseListener {
     public void listarTodasLasOrdenes() {
         List<Ordenes> lista = ordenDao.listaOrdenesQuery("");
         modeloOrdenes = (DefaultTableModel) vista.tabla_ordenes.getModel();
-        Object[] fila = new Object[6];
+        Object[] col = new Object[6];
         for (int i = 0; i < lista.size(); i++) {
-            fila[0] = lista.get(i).getId();
-            fila[1] = lista.get(i).getSucursalOrigenId();
-            fila[2] = lista.get(i).getSucursalDestinoId();
-            fila[3] = lista.get(i).getPesoTotal();
-            fila[4] = lista.get(i).getTiempoMaximo();
-            fila[5] = lista.get(i).getEstado();
-            modeloOrdenes.addRow(fila);
+            col[0] = lista.get(i).getId();            
+            col[1] = obtenerNombreSucursal(lista.get(i).getSucursalOrigenId());
+            col[2] = obtenerNombreSucursal(lista.get(i).getSucursalDestinoId());
+            col[3] = lista.get(i).getPesoTotal();
+            col[4] = lista.get(i).getTiempoMaximo();
+            col[5] = lista.get(i).getEstado();
+            modeloOrdenes.addRow(col);
         }
         vista.tabla_ordenes.setModel(modeloOrdenes);
     }
@@ -655,8 +653,13 @@ public class OrdenesControlador implements ActionListener, MouseListener {
 
             col[0] = camino.get(0); // id de la sucursal de origen
             String recorrido = "";
+            String nombre;
             for (int i = 0; i < camino.size(); i++) {
-                recorrido += camino.get(i) + "->";
+                nombre = obtenerNombreSucursal(camino.get(i)).trim();
+                if (i != camino.size() - 1) {
+                    nombre +="->";
+                }
+                recorrido+=nombre;
             }
             col[1] = recorrido;
             col[2] = camino.get(camino.size() - 1); // id de la sucursal de destino

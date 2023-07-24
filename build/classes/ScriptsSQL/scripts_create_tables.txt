@@ -6,7 +6,7 @@ USE died_tp;
 CREATE TABLE electrodomesticos (
   id INT PRIMARY KEY AUTO_INCREMENT,
   codigo INT UNIQUE,
-  nombre VARCHAR(255) NOT NULL,
+  nombre VARCHAR(255) NOT NULL UNIQUE,
   descripcion VARCHAR(255),
   precio_unitario DECIMAL(10, 2),
   peso_kg DECIMAL(10, 2)
@@ -15,7 +15,7 @@ CREATE TABLE electrodomesticos (
 CREATE TABLE sucursales (
   id INT PRIMARY KEY AUTO_INCREMENT,
   codigo INT UNIQUE,
-  nombre VARCHAR(255) NOT NULL,
+  nombre VARCHAR(255) NOT NULL UNIQUE,
   horario_apertura TIME,
   horario_cierre TIME,
   operativa BOOLEAN
