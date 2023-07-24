@@ -827,11 +827,11 @@ public class SystemView extends javax.swing.JFrame {
         jPanel5.add(jPanel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(35, 20, 920, 270));
 
         jLabel18.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel18.setText("Buscar:");
-        jPanel5.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 320, -1, -1));
+        jLabel18.setText("Buscar por Id:");
+        jPanel5.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 310, -1, -1));
 
         electrodomesticos_search.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jPanel5.add(electrodomesticos_search, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 310, 220, 30));
+        jPanel5.add(electrodomesticos_search, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 300, 220, 30));
 
         tabla_electrodomesticos.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         tabla_electrodomesticos.setModel(new javax.swing.table.DefaultTableModel(
@@ -861,7 +861,7 @@ public class SystemView extends javax.swing.JFrame {
             tabla_electrodomesticos.getColumnModel().getColumn(5).setResizable(false);
         }
 
-        jPanel5.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 370, 920, 130));
+        jPanel5.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 340, 920, 160));
 
         jTabbedPane1.addTab("Electrodomésticos", jPanel5);
 
@@ -950,7 +950,7 @@ public class SystemView extends javax.swing.JFrame {
         jPanel13Layout.setVerticalGroup(
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel13Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
+                .addContainerGap()
                 .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cmb_stock_sucursal, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel19)
@@ -969,21 +969,21 @@ public class SystemView extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel30)
-                            .addComponent(txt_stock_stock, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(54, Short.MAX_VALUE))
+                            .addComponent(txt_stock_stock, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel13Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btn_stock_eliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(btn_stock_cancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(44, 44, 44))))
+                        .addGap(5, 5, 5)))
+                .addGap(53, 53, 53))
         );
 
-        jPanel12.add(jPanel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(35, 20, 920, 270));
+        jPanel12.add(jPanel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(35, 20, 920, 220));
 
         jLabel31.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel31.setText("Buscar Sucursal Id:");
-        jPanel12.add(jLabel31, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 320, 120, -1));
+        jPanel12.add(jLabel31, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 250, 120, -1));
 
         stock_search.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         stock_search.addActionListener(new java.awt.event.ActionListener() {
@@ -991,7 +991,7 @@ public class SystemView extends javax.swing.JFrame {
                 stock_searchActionPerformed(evt);
             }
         });
-        jPanel12.add(stock_search, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 310, 220, 30));
+        jPanel12.add(stock_search, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 240, 220, 30));
 
         tabla_stock.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         tabla_stock.setModel(new javax.swing.table.DefaultTableModel(
@@ -1020,7 +1020,7 @@ public class SystemView extends javax.swing.JFrame {
             tabla_stock.getColumnModel().getColumn(4).setResizable(false);
         }
 
-        jPanel12.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 360, 920, 110));
+        jPanel12.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 280, 920, 220));
 
         jTabbedPane1.addTab("Stock", jPanel12);
 
@@ -1344,7 +1344,6 @@ public class SystemView extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        tabla_ordenes_caminos.setEnabled(false);
         tabla_ordenes_caminos.getTableHeader().setReorderingAllowed(false);
         jScrollPane9.setViewportView(tabla_ordenes_caminos);
         if (tabla_ordenes_caminos.getColumnModel().getColumnCount() > 0) {

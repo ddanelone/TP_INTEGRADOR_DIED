@@ -45,6 +45,36 @@ public class CaminoSeleccionadoDao {
             return false;
         }
     }
+    
+    //Método para listar caminosSeleccionados
+    public List listaCaminosSeleccionadosQuery(String valor) {
+        List<CaminoSeleccionado> lista_caminos = new ArrayList();
+        String query = "SELECT * FROM caminos_seleccionados ORDER BY id ASC";
+        String query_search_camino = "SELECT * FROM caminos_seleccionados WHERE id LIKE '%" + valor + "%'";
+        
+        try{ conn = cn.getConnection();
+            if (valor.equalsIgnoreCase("")) {
+                pst = conn.prepareStatement(query);
+            } else {
+                pst = conn.prepareStatement(query_search_camino);
+            }
+            rs = pst.executeQuery();
+            
+            while(rs.next()) {
+                CaminoSeleccionado camino = new CaminoSeleccionado();
+                camino.setId(rs.getInt("id"));
+                camino.setOrden_provision_id(rs.getInt("orden_provision_id"));
+                camino.setSucursal_origen_id(rs.getInt("sucursal_origen_id"));
+                camino.setSucursal_destino_id(rs.getInt("sucursal_destino_id")); 
+                camino.setCamino(rs.getString("camino")); 
+                camino.setTiempo(rs.getInt("tiempo_estimado"));
+                lista_caminos.add(camino);
+            }            
+        } catch(SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al recuperar los datos de caminos");                   
+        } 
+        return lista_caminos;
+    }
 
     //Como el id es autoincremental, previo a asignar el detalle de los articulos correspondientes, debo recuperar el id.
     public int recuperarIdUltimoCamino() {

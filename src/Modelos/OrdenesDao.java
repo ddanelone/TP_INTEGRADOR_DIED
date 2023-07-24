@@ -189,8 +189,11 @@ public class OrdenesDao {
     public boolean borrarOrdenQuery(int id) {
         String query = "DELETE FROM ordenes_provision WHERE id = " + id;
         String query2 = "DELETE FROM ordenes_productos WHERE orden_id = " + id;
+        String query3 = "DELETE FROM caminos_seleccionados WHERE orden_provision_id = " + id;
         try {
             conn = cn.getConnection();
+            pst = conn.prepareStatement(query3);
+            pst.execute();
             pst = conn.prepareStatement(query2);
             pst.execute();
             //conn = cn.getConnection();

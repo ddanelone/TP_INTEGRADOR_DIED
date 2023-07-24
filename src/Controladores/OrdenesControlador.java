@@ -46,6 +46,7 @@ public class OrdenesControlador implements ActionListener, MouseListener {
     private int id_sucursal_destino = 0;
     private double peso_total = 0.0;
     private int id_orden = 0;
+    private String estado = "";
     private LocalDate fechaActual;
 
     //Instanciar el modelo de electrodomésticos
@@ -63,6 +64,9 @@ public class OrdenesControlador implements ActionListener, MouseListener {
     //Instanciar el modelo de Stock
     Stock stock = new Stock();
     StockDao stockDao = new StockDao();
+    //Instanciamos el modelo de caminos  y su clase Dao
+    CaminoSeleccionado caminoSel = new CaminoSeleccionado();
+    CaminoSeleccionadoDao caminoSelDao = new CaminoSeleccionadoDao();
 
     public OrdenesControlador(Ordenes orden, OrdenesDao ordenDao, SystemView vista) {
         this.orden = orden;
@@ -77,11 +81,7 @@ public class OrdenesControlador implements ActionListener, MouseListener {
 
         this.getNombreComboBox("Electrodomesticos");
         this.getNombreComboBox("SucursalesDestino");
-        /*
-        this.getElectroNombre();
-        this.getSucursalDestinoNombre();
-        this.getSucursalOrigenNombre(); */
-
+        
         //Ponemos en escucha el Label
         this.vista.jLabelOrdenes.addMouseListener(this);
         //Ponemos la tabla de ordenes a la escucha
@@ -171,17 +171,19 @@ public class OrdenesControlador implements ActionListener, MouseListener {
             if (modeloProductos.getRowCount() == 0) {
                 JOptionPane.showMessageDialog(null, "Debe agregar productos a la orden para poder confirmarla");
             } else {
+                estado = "PENDIENTE";
                 id_sucursal_destino = obtenerIdSucursalPorNombre(vista.cmb_ordenes_sucursal_destino.getSelectedItem().toString().trim());
                 orden.setSucursalOrigenId(0); //No tengo aun sucursal de origen.
                 orden.setCaminoId(0); //Tampoco tengo camino, porque se asignar luego.
                 orden.setPesoTotal(peso_total);
                 orden.setSucursalDestinoId(id_sucursal_destino);
-                orden.setEstado("PENDIENTE");
+                orden.setEstado(estado);
                 orden.setFechaOrden(fechaActual);
                 orden.setTiempoMaximo(id_sucursal_destino);
                 insertarOrden(orden);
                 vista.cmb_ordenes_sucursal_destino.setEnabled(true);
                 id_sucursal_destino = 0;
+                estado ="";
             }
         } else if (e.getSource() == this.vista.btn_ordenes_modificar) {
             //Verificamos si la tabla de electrodomesticos y el campo de tiempo están vacíos
@@ -210,10 +212,11 @@ public class OrdenesControlador implements ActionListener, MouseListener {
                 limpiarTablas(modeloProductos);
                 limpiarTablas(modeloCaminos);
                 limpiarCampos();
+                estado="";
             }
         } else if (e.getSource() == this.vista.btn_ordenes_eliminar) {
             int fila = vista.tabla_ordenes.getSelectedRow();
-            int id = Integer.parseInt(vista.tabla_ordenes.getValueAt(fila, 0).toString());
+            int id = Integer.parseInt(vista.tabla_ordenes.getValueAt(fila, 0).toString());            
             int confirmacion = JOptionPane.showOptionDialog(null, "¿Seguro de elminar esta Orden de Provisión?", "Confirmar eliminación",
                     JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
             if (confirmacion == 0 && ordenDao.borrarOrdenQuery(id) != false) {
@@ -221,20 +224,183 @@ public class OrdenesControlador implements ActionListener, MouseListener {
                 limpiarTablas(modeloOrdenes);
                 limpiarTablas(modeloProductos);
                 vista.btn_ordenes_crear.setEnabled(true);
-                JOptionPane.showMessageDialog(null, "Orden de Provisión eliminado exitosamente");
                 listarTodasLasOrdenes();
                 vista.btn_ordenes_modificar.setEnabled(false);
                 vista.btn_ordenes_eliminar.setEnabled(false);
                 vista.cmb_ordenes_sucursal_origen.removeAllItems();
+                JOptionPane.showMessageDialog(null, "Orden de Provisión eliminada exitosamente");
             }
         } else if (e.getSource() == vista.btn_ordenes_cancelar) {
             //Habilitamos todos los botones y limpiamos las tablas y campos
             refrescar();
             fechaActual = LocalDate.now();
+            estado = "";
             this.vista.txt_ordenes_fecha.setText(fechaActual.toString());
             limpiarTablas(modeloProductos);
             limpiarTablas(modeloCaminos);
             limpiarCampos();
+        }
+    }
+    
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        if (e.getSource() == vista.jLabelOrdenes) {
+            vista.jTabbedPane1.setSelectedIndex(4);
+        } else if (e.getSource() == vista.tabla_ordenes) {
+            limpiarTablas(modeloCaminos);
+            // necesito una variable para la sucursal de destino
+            int id_suc;
+            //Recupero en el comboBox la Sucursal de Destino, la fecha, el tiempo y la lista de productos.
+            int fila = vista.tabla_ordenes.rowAtPoint(e.getPoint());
+            //Método para recupear el nombre de la sucursal en el comboBox
+            id_suc = (int) vista.tabla_ordenes.getValueAt(fila, 2);
+            String nombreSucursalSeleccionada = obtenerNombreSucursal(id_suc);
+            for (int i = 0; i < vista.cmb_ordenes_sucursal_destino.getItemCount(); i++) {
+                Object item = vista.cmb_ordenes_sucursal_destino.getItemAt(i);
+                if (item instanceof DynamicComboBox) {
+                    DynamicComboBox comboBoxItem = (DynamicComboBox) item;
+                    if (comboBoxItem.getNombre().equals(nombreSucursalSeleccionada)) {
+                        vista.cmb_ordenes_sucursal_destino.setSelectedIndex(i);
+                        break;
+                    }
+                }
+            }
+            vista.txt_ordenes_id.setText(vista.tabla_ordenes.getValueAt(fila, 0).toString());
+            id_orden = (int) vista.tabla_ordenes.getValueAt(fila, 0);
+            //actualizo el estado de la orden
+            estado = vista.tabla_ordenes.getValueAt(fila, 5).toString().trim();
+            vista.txt_ordenes_fecha.setText(obtenerFechaOrden(id_orden));
+            vista.txt_ordenes_tiempo.setText(vista.tabla_ordenes.getValueAt(fila, 4).toString());
+            peso_total = Double.parseDouble(vista.tabla_ordenes.getValueAt(fila, 3).toString());
+            listarTodosLosElectros(id_orden);
+            vista.btn_ordenes_crear.setEnabled(false);
+            //Vamos a ver si la orden está pendiente, si es así, permitimos se le asigne un camino. Caso contrario, nope.
+            if (estado.equals("PENDIENTE")) {
+                vista.btn_ordenes_modificar.setEnabled(true);
+                vista.btn_ordenes_eliminar.setEnabled(true);
+                //Lógica para calcular los caminos posibles y ver sucursalde origen
+                //Recupear los Stock de sucursales
+                List<Stock> listaSucursales = stockDao.listaStockQuery("");
+                //Recuperar los items incluidos en el pedido actual
+                List<ProductoCantidad> listaProduc = produCantDao.listaProductoCantidadQuery("" + id_orden);
+                //Crep el grafo con todas las sucursales!!!!
+                grafoCamino = new GrafoCaminos(caminoDao.listaCaminosQuery(""), sucursalDao.listaSucursalesQuery(""));
+                grafo = grafoCamino.getGrafo();
+                // Obtener una lista con los IDs de los productos presentes en listaProduc
+                // Filtrar la lista de sucursales
+                List<Stock> sucursalesFiltradas = listaSucursales.stream()
+                        .filter(sucursal -> cumpleRequisitos(sucursal, listaProduc))
+                        .collect(Collectors.toList());
+                //recuperamos una lista de caminos, y se la pasamos al instanciar GrafoCaminos
+                List<Sucursales> listaTodasLasSuc = sucursalDao.listaSucursalesQuery("");
+                List<Sucursales> listaSuc = sucursalesFiltradas.stream()
+                        .flatMap(stock -> listaTodasLasSuc.stream()
+                        .filter(sucursal -> stock.getId_sucursal() == sucursal.getId()))
+                        .collect(Collectors.toList());
+                //Tengo una lista de sucursales que tienen el stock requerido por mi pedido. La itero y agrego los caminos posibles a una lista
+                if (listaSuc.isEmpty()) {  //No tengo ninguna sucursal con stock suficiente. Le aviso al usuario.
+                    JOptionPane.showMessageDialog(null, "No hay sucursales que puedan atender esta orden. No existen caminos posibles aun");
+                    limpiarTablas(modeloCaminos);
+                }
+                List<List<Vertex>> caminos = listaSuc.stream()
+                        .flatMap(unaSucursal -> grafo.findAllPaths(grafo.getVertex(unaSucursal.getId()), grafo.getVertex(id_suc)).stream())
+                        .collect(Collectors.toList());
+                //Tengo todos los caminos posibles, los voy a pasar una lista de listas de enteros para facilitar la exploración.
+                if (caminos.isEmpty()) {  //No tengo ningun camino disponible. Le aviso al usuario.
+                    JOptionPane.showMessageDialog(null, "No hay caminos que puedan conectar las sucursales.");
+                }
+                List<List<Integer>> caminosEnteros = grafo.obtenerCaminosComoListaDeEnteros(caminos);
+                //en tiempoTotal tengo una lista de igual cantidad de elementos que caminosEnteros, y tiene el tiempo total de cada viaje. 
+                List<Integer> tiempoTotal = calcularTiempoTransito(caminosEnteros);
+                //Ahora, a cargar los valores en la tabla, mostrarlos al usuario, pedirle confirmación, y si confirma, grabarlos en la tabla. 
+                vista.tabla_ordenes_caminos.setModel(tablaModeloCaminos(caminosEnteros, tiempoTotal));
+            } else {
+                //Método para recuperar el nombre de la sucursal Origen en el comboBox
+                this.getNombreComboBox("SucursalesOrigen");
+                int id_sucD = (int) vista.tabla_ordenes.getValueAt(fila, 1);
+                String nombreSucursalDestino = obtenerNombreSucursal(id_sucD);
+                for (int i = 0; i < vista.cmb_ordenes_sucursal_origen.getItemCount(); i++) {
+                    Object item = vista.cmb_ordenes_sucursal_origen.getItemAt(i);
+                    if (item instanceof DynamicComboBox) {
+                        DynamicComboBox comboBoxItem = (DynamicComboBox) item;
+                        if (comboBoxItem.getNombre().equals(nombreSucursalDestino)) {
+                            vista.cmb_ordenes_sucursal_origen.setSelectedIndex(i);
+                            break;
+                        }
+                    }
+                }
+                //Método para encontrar el camino asignado a la Orden Seleccionada
+                List<CaminoSeleccionado> caminosLista = caminoSelDao.listaCaminosSeleccionadosQuery("");
+                CaminoSeleccionado primerCamino = caminosLista.stream()
+                        .filter(camino -> camino.getOrden_provision_id() == id_orden)
+                        .findFirst()
+                        .orElse(null);
+
+                if (primerCamino != null) {
+                    // Lo asigno al Default Table model y después, lo asigno a la tabla.
+                    vista.tabla_ordenes_caminos.setModel(tablaModeloCaminoAsignado(primerCamino));
+                }
+                vista.cmb_ordenes_sucursal_destino.setEnabled(false);
+                vista.cmb_caminos_sucursal_destino.setEnabled(false);
+                vista.txt_ordenes_tiempo.setEnabled(false);
+                vista.btn_ordenes_producto_agregar.setEnabled(false);
+                vista.btn_ordenes_modificar.setEnabled(false);
+                vista.btn_ordenes_eliminar.setEnabled(true);
+            }
+        } else if (e.getSource() == vista.tabla_ordenes_productos) {
+            //Deshabilitar el botón de agregar
+            vista.btn_ordenes_producto_agregar.setEnabled(false);
+            //Recupero el producto en el comboBox, y la cantidad 
+            int fila = vista.tabla_ordenes_productos.rowAtPoint(e.getPoint());
+            //Método para recupear el nombre del  producot en el comboBox
+            int id_prod = (int) vista.tabla_ordenes_productos.getValueAt(fila, 0);
+            String nombreElectroSeleccionado = obtenerNombreElectro(id_prod);
+            for (int i = 0; i < vista.cmb_ordenes_producto.getItemCount(); i++) {
+                Object item = vista.cmb_ordenes_producto.getItemAt(i);
+                if (item instanceof DynamicComboBox) {
+                    DynamicComboBox comboBoxItem = (DynamicComboBox) item;
+                    if (comboBoxItem.getNombre().equals(nombreElectroSeleccionado)) {
+                        vista.cmb_ordenes_producto.setSelectedIndex(i);
+                        break;
+                    }
+                }
+            }
+            vista.txt_ordenes_cantidad_producto.setText(String.valueOf(vista.tabla_ordenes_productos.getValueAt(fila, 2)));
+            //Si la orden está en estado pendiente, voy a permtir que el usuario elimine productos.
+            if (estado.equals("PENDIENTE")) {
+                vista.btn_ordenes_producto_eliminar.setEnabled(true);
+            }
+        } else if (e.getSource() == vista.tabla_ordenes_caminos) {
+            //Voy a verificar si la orden se encuentra PENDIENTE. SI ESTÁ PENDIENTE, HABILITO LA LOGICA. SI NO, 
+            int fila = vista.tabla_ordenes_caminos.rowAtPoint(e.getPoint());
+            caminoSel.setSucursal_origen_id(Integer.parseInt(vista.tabla_ordenes_caminos.getValueAt(fila, 0).toString().trim()));
+            caminoSel.setSucursal_destino_id(Integer.parseInt(vista.tabla_ordenes_caminos.getValueAt(fila, 2).toString().trim()));
+            caminoSel.setCamino(vista.tabla_ordenes_caminos.getValueAt(fila, 1).toString().trim());
+            caminoSel.setTiempo(Integer.parseInt(vista.tabla_ordenes_caminos.getValueAt(fila, 3).toString().trim()));
+            caminoSel.setOrden_provision_id(id_orden);
+            if (estado.equals("PENDIENTE")) {
+                int confirmacion = JOptionPane.showOptionDialog(null, "¿Seguro de asignar esta ruta a la Orden de Provisión?", "Confirmar elección",
+                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+                if (confirmacion == 0 && caminoSelDao.registrarCaminoQuery(caminoSel)) {
+                    orden.setCaminoId(caminoSelDao.recuperarIdUltimoCamino());
+                    //Necesito recuperar las órdenes para poder cambiarle el estado luego.
+                    List<Ordenes> listaOrdenes = ordenDao.listaOrdenesQuery(String.valueOf(id_orden));
+                    orden = listaOrdenes.isEmpty() ? null : listaOrdenes.get(0);
+                    orden.setSucursalOrigenId(Integer.parseInt(vista.tabla_ordenes_caminos.getValueAt(fila, 0).toString().trim()));
+                    orden.setEstado("EN PROCESO");
+                    if (ordenDao.modificarOrdenQuery(orden)) {
+                        JOptionPane.showMessageDialog(null, "Camino asignado exitósamente. La orden ahora se encuentra EN PROCESO");
+                        limpiarCampos();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "El Camino no ha sido asignado.");
+                    }
+                    limpiarTablas(modeloCaminos);
+                    limpiarTablas(modeloOrdenes);
+                    limpiarTablas(modeloProductos);
+                    refrescar();
+                    listarTodasLasOrdenes();
+                }
+            }
         }
     }
 
@@ -458,8 +624,8 @@ public class OrdenesControlador implements ActionListener, MouseListener {
     private String obtenerNombreElectro(int id) {
         List<Electrodomesticos> lista = electroDao.listaElectrodomesticosQuery("");
         return lista.stream()
-                .filter(unaSucursal -> unaSucursal.getId() == id)
-                .map(unaSucursal -> unaSucursal.getNombre().trim())
+                .filter(item -> item.getId() == id)
+                .map(item -> item.getNombre().trim())
                 .findFirst()
                 .orElse("");
     }
@@ -504,154 +670,16 @@ public class OrdenesControlador implements ActionListener, MouseListener {
         return modeloCaminos;
     }
 
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        if (e.getSource() == vista.jLabelOrdenes) {
-            vista.jTabbedPane1.setSelectedIndex(4);
-        } else if (e.getSource() == vista.tabla_ordenes) {
-            // necesito una variable para la sucursal de destino
-            limpiarTablas(modeloCaminos);
-            int id_suc;
-            //Recupero en el comboBox la Sucursal de Destino, la fecha, el tiempo y la lista de productos.
-            int fila = vista.tabla_ordenes.rowAtPoint(e.getPoint());
-            //Método para recupear el nombre de la sucursal en el comboBox
-            id_suc = (int) vista.tabla_ordenes.getValueAt(fila, 2);
-            String nombreSucursalSeleccionada = obtenerNombreSucursal(id_suc);
-            for (int i = 0; i < vista.cmb_ordenes_sucursal_destino.getItemCount(); i++) {
-                Object item = vista.cmb_ordenes_sucursal_destino.getItemAt(i);
-                if (item instanceof DynamicComboBox) {
-                    DynamicComboBox comboBoxItem = (DynamicComboBox) item;
-                    if (comboBoxItem.getNombre().equals(nombreSucursalSeleccionada)) {
-                        vista.cmb_ordenes_sucursal_destino.setSelectedIndex(i);
-                        break;
-                    }
-                }
-            }
-            vista.txt_ordenes_id.setText(vista.tabla_ordenes.getValueAt(fila, 0).toString());
-            id_orden = (int) vista.tabla_ordenes.getValueAt(fila, 0);
-            vista.txt_ordenes_fecha.setText(obtenerFechaOrden(id_orden));
-            vista.txt_ordenes_tiempo.setText(vista.tabla_ordenes.getValueAt(fila, 4).toString());
-            peso_total = Double.parseDouble(vista.tabla_ordenes.getValueAt(fila, 3).toString());
-            listarTodosLosElectros(id_orden);
-            vista.btn_ordenes_crear.setEnabled(false);
-            vista.btn_ordenes_modificar.setEnabled(true);
-            vista.btn_ordenes_eliminar.setEnabled(true);
-            //Vamos a ver si la orden está pendiente, si es así, permitimos se le asigne un camino. Caso contrario, nope.
-            if (vista.tabla_ordenes.getValueAt(fila, 5).equals("PENDIENTE")) {
-                //Lógica para calcular los caminos posibles y ver sucursalde origen
-                //Recupear los Stock de sucursales
-                List<Stock> listaSucursales = stockDao.listaStockQuery("");
-                //Recuperar los items incluidos en el pedido actual
-                List<ProductoCantidad> listaProduc = produCantDao.listaProductoCantidadQuery("" + id_orden);
-                //Crep el grafo con todas las sucursales!!!!
-                grafoCamino = new GrafoCaminos(caminoDao.listaCaminosQuery(""), sucursalDao.listaSucursalesQuery(""));
-                grafo = grafoCamino.getGrafo();
-                // Obtener una lista con los IDs de los productos presentes en listaProduc
-                // Filtrar la lista de sucursales
-                List<Stock> sucursalesFiltradas = listaSucursales.stream()
-                        .filter(sucursal -> cumpleRequisitos(sucursal, listaProduc))
-                        .collect(Collectors.toList());
-                //recuperamos una lista de caminos, y se la pasamos al instanciar GrafoCaminos
-                List<Sucursales> listaTodasLasSuc = sucursalDao.listaSucursalesQuery("");
-                List<Sucursales> listaSuc = sucursalesFiltradas.stream()
-                        .flatMap(stock -> listaTodasLasSuc.stream()
-                        .filter(sucursal -> stock.getId_sucursal() == sucursal.getId()))
-                        .collect(Collectors.toList());
-                //Tengo una lista de sucursales que tienen el stock requerido por mi pedido. La itero y agrego los caminos posibles a una lista
-                if (listaSuc.isEmpty()) {  //No tengo ninguna sucursal con stock suficiente. Le aviso al usuario.
-                    JOptionPane.showMessageDialog(null, "No hay sucursales que puedan atender esta orden. No existen caminos posibles aun");
-                    limpiarTablas(modeloCaminos);
-                }
-                List<List<Vertex>> caminos = listaSuc.stream()
-                        .flatMap(unaSucursal -> grafo.findAllPaths(grafo.getVertex(unaSucursal.getId()), grafo.getVertex(id_suc)).stream())
-                        .collect(Collectors.toList());
-                //Tengo todos los caminos posibles, los voy a pasar una lista de listas de enteros para facilitar la exploración.
-                if (caminos.isEmpty()) {  //No tengo ningun camino disponible. Le aviso al usuario.
-                    JOptionPane.showMessageDialog(null, "No hay caminos que puedan conectar las sucursales.");
-                }
-                List<List<Integer>> caminosEnteros = grafo.obtenerCaminosComoListaDeEnteros(caminos);
-                //en tiempoTotal tengo una lista de igual cantidad de elementos que caminosEnteros, y tiene el tiempo total de cada viaje. 
-                List<Integer> tiempoTotal = calcularTiempoTransito(caminosEnteros);
-                //Ahora, a cargar los valores en la tabla, mostrarlos al usuario, pedirle confirmación, y si confirma, grabarlos en la tabla. 
-                vista.tabla_ordenes_caminos.setModel(tablaModeloCaminos(caminosEnteros, tiempoTotal));
-                vista.tabla_ordenes_caminos.setEnabled(true);
-            } else {
-                //ORDEN EN PROCESO: Aquí hay que insertar un método que recupere los caminos asignados a la orden. 
-                //Método para recupear el nombre de la sucursal Destino en el comboBox
-                this.getNombreComboBox("SucursalesOrigen");
-                int id_sucD = (int) vista.tabla_ordenes.getValueAt(fila, 1);
-                String nombreSucursalDestino = obtenerNombreSucursal(id_sucD);
-                for (int i = 0; i < vista.cmb_ordenes_sucursal_origen.getItemCount(); i++) {
-                    Object item = vista.cmb_ordenes_sucursal_origen.getItemAt(i);
-                    if (item instanceof DynamicComboBox) {
-                        DynamicComboBox comboBoxItem = (DynamicComboBox) item;
-                        if (comboBoxItem.getNombre().equals(nombreSucursalDestino)) {
-                            vista.cmb_ordenes_sucursal_origen.setSelectedIndex(i);
-                            break;
-                        }
-                    }
-                }
+    private DefaultTableModel tablaModeloCaminoAsignado(CaminoSeleccionado camino) {
+        modeloCaminos = (DefaultTableModel) vista.tabla_ordenes_caminos.getModel();
+        Object[] col = new Object[4];
+        col[0] = camino.getSucursal_destino_id();
+        col[1] = camino.getCamino();
+        col[2] = camino.getSucursal_destino_id();
+        col[3] = camino.getTiempo();
+        modeloCaminos.addRow(col);
 
-                vista.cmb_ordenes_sucursal_destino.setEnabled(false);
-                vista.cmb_caminos_sucursal_destino.setEnabled(false);
-                vista.txt_ordenes_tiempo.setEnabled(false);
-                vista.btn_ordenes_producto_agregar.setEnabled(false);
-                vista.btn_ordenes_producto_eliminar.setEnabled(false);
-                vista.btn_ordenes_crear.setEnabled(false);
-                vista.btn_ordenes_modificar.setEnabled(false);
-                limpiarTablas(modeloCaminos);
-            }
-        } else if (e.getSource() == vista.tabla_ordenes_productos) {
-            //Deshabilitar el botón de agregar
-            vista.btn_ordenes_producto_agregar.setEnabled(false);
-            //Recupero el producto en el comboBox, y la cantidad 
-            int fila = vista.tabla_ordenes_productos.rowAtPoint(e.getPoint());
-            //Método para recupear el nombre del  producot en el comboBox
-            int id_prod = (int) vista.tabla_ordenes_productos.getValueAt(fila, 0);
-            String nombreElectroSeleccionado = obtenerNombreElectro(id_prod);
-            for (int i = 0; i < vista.cmb_ordenes_producto.getItemCount(); i++) {
-                Object item = vista.cmb_ordenes_producto.getItemAt(i);
-                if (item instanceof DynamicComboBox) {
-                    DynamicComboBox comboBoxItem = (DynamicComboBox) item;
-                    if (comboBoxItem.getNombre().equals(nombreElectroSeleccionado)) {
-                        vista.cmb_ordenes_producto.setSelectedIndex(i);
-                        break;
-                    }
-                }
-            }
-            vista.txt_ordenes_cantidad_producto.setText(String.valueOf(vista.tabla_ordenes_productos.getValueAt(fila, 2)));
-            vista.btn_ordenes_producto_eliminar.setEnabled(true);
-        } else if (e.getSource() == vista.tabla_ordenes_caminos) {
-            int fila = vista.tabla_ordenes_caminos.rowAtPoint(e.getPoint());
-            //Instanciamos el modelo de caminos  y su clase Dao
-            CaminoSeleccionado caminoSel = new CaminoSeleccionado();
-            CaminoSeleccionadoDao caminoSelDao = new CaminoSeleccionadoDao();
-            caminoSel.setSucursal_origen_id(Integer.parseInt(vista.tabla_ordenes_caminos.getValueAt(fila, 0).toString().trim()));
-            caminoSel.setSucursal_destino_id(Integer.parseInt(vista.tabla_ordenes_caminos.getValueAt(fila, 2).toString().trim()));
-            caminoSel.setTiempo(Integer.parseInt(vista.tabla_ordenes_caminos.getValueAt(fila, 3).toString().trim()));
-            caminoSel.setOrden_provision_id(id_orden);
-            int confirmacion = JOptionPane.showOptionDialog(null, "¿Seguro de asignar esta ruta a la Orden de Provisión?", "Confirmar elección",
-                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
-            if (confirmacion == 0 && caminoSelDao.registrarCaminoQuery(caminoSel)) {
-                orden.setCaminoId(caminoSelDao.recuperarIdUltimoCamino());
-                //Necesito recuperar las órdenes para poder cambiarle el estado luego.
-                List<Ordenes> listaOrdenes = ordenDao.listaOrdenesQuery(String.valueOf(id_orden));
-                orden = listaOrdenes.isEmpty() ? null : listaOrdenes.get(0);
-                orden.setSucursalOrigenId(Integer.parseInt(vista.tabla_ordenes_caminos.getValueAt(fila, 0).toString().trim()));
-                orden.setEstado("EN PROCESO");
-                if (ordenDao.modificarOrdenQuery(orden)) {
-                    JOptionPane.showMessageDialog(null, "Camino asignado exitósamente. La orden ahora se encuentra EN PROCESO");
-                    limpiarCampos();
-                } else {
-                    JOptionPane.showMessageDialog(null, "El Camino no ha sido asignado.");
-                }
-                limpiarTablas(modeloCaminos);
-                limpiarTablas(modeloOrdenes);
-                limpiarTablas(modeloProductos);
-                refrescar();
-                listarTodasLasOrdenes();
-            }
-        }
+        return modeloCaminos;
     }
 
     private static boolean cumpleRequisitos(Stock sucursal, List<ProductoCantidad> cantidadesRequeridas) {

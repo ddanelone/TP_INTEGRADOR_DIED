@@ -45,7 +45,7 @@ public class CaminosDao {
         }         
     }
     
-    //Método para listar sucursal
+    //Método para listar caminos
     public List listaCaminosQuery(String valor) {
         List<Caminos> lista_caminos = new ArrayList();
         String query = "SELECT * FROM caminos ORDER BY id ASC";

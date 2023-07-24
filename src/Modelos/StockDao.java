@@ -41,7 +41,11 @@ public class StockDao {
     //Método para listar existencia de productos en sucursal
     public List listaStockQuery(String valor) {
         List<Stock> lista_stock = new ArrayList();
-        String query = "SELECT * FROM stock ORDER BY id_sucursal ASC";
+        String query = "SELECT * "
+            + "FROM Stock "
+            + "GROUP BY id_sucursal, id_producto "
+            + "ORDER BY id_sucursal ASC";
+
         String query_search_sucursal = "SELECT * FROM stock WHERE id_sucursal LIKE '%" + valor + "%'";
         
         try{
