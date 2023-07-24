@@ -92,8 +92,7 @@ public class StockControlador implements ActionListener, MouseListener, KeyListe
                     // Obtener el nombre de la sucursal seleccionada
                     String nombreSucursal = (String) vista.cmb_stock_sucursal.getSelectedItem();
                     int idSucursal = obtenerIdSucursalPorNombre(nombreSucursal);
-                    //JOptionPane.showMessageDialog(null, "El nombre sucursal es " + nombreSucursal + " y el id " + idSucursal);
-                    // Asignar el ID al objeto correspondiente
+                   // Asignar el ID al objeto correspondiente
                     stock.setId_sucursal(idSucursal);
                     stock.setId_producto(Integer.parseInt(vista.txt_stock_id_producto.getText().trim()));
                     stock.setStock(Integer.parseInt(vista.txt_stock_stock.getText().trim()));
