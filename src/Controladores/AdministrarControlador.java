@@ -5,17 +5,14 @@ import Modelos.CaminosDao;
 import Modelos.Sucursales;
 import Modelos.SucursalesDao;
 import Vistas.SystemView;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
-public class AdministrarControlador implements ActionListener, MouseListener {
+
+public class AdministrarControlador implements MouseListener {
     
     private SystemView vista;
     //Instanciamos el modelo de Camnos y Sucursales.
@@ -23,136 +20,114 @@ public class AdministrarControlador implements ActionListener, MouseListener {
     CaminosDao caminoDao = new CaminosDao();
     Sucursales sucursal = new Sucursales();
     SucursalesDao sucursalDao = new SucursalesDao();
-    
+    DefaultTableModel modeloSucursal = new DefaultTableModel();
+    DefaultTableModel modeloCamino = new DefaultTableModel();
+    private Object[] options = {"Sí", "No"};
     
 
     public AdministrarControlador(SystemView vista) {
-        this.vista = vista;
-        // Botones habilitar/deshabilitar Sucursal
-        this.vista.btn_admnistracion_habilitar_suc.addActionListener(this);
-        this.vista.btn_admnistracion_deshabilitar_suc.addActionListener(this);
-        // Botones habilitar/deshabilitar Camino
-        this.vista.btn_admnistracion_habilitar_cam.addActionListener(this);
-        this.vista.btn_admnistracion_deshabilitar_cam.addActionListener(this);
-        // JLabel en escucha
-        this.vista.jLabelAdministracion.addMouseListener(this);
-        
+        this.vista = vista;          
         // Recuperar las sucursales para mostrar en el comboBox
         List<Sucursales> listaSucursales = sucursalDao.listaSucursalesQuery("");
-        Map<Integer, String> nombresSucursalesMap = new HashMap<>();
-        for (Sucursales unaSucursal : listaSucursales) {
-            nombresSucursalesMap.put(unaSucursal.getId(), unaSucursal.getNombre());
-        }
-        DefaultComboBoxModel<String> modeloCombo = new DefaultComboBoxModel<>(nombresSucursalesMap.values().toArray(new String[0]));
-        vista.cmb_administracion_sucursal.setModel(modeloCombo);
-
         // Recuperar los caminos para mostrar en el comboBox
         List<Caminos> listaCaminos = caminoDao.listaCaminosQuery("");
-        Map<Integer, String> observacionesCaminosMap = new HashMap<>();
-        for (Caminos unCamino : listaCaminos) {
-            observacionesCaminosMap.put(unCamino.getId(), unCamino.getObservaciones());
-        }
-        DefaultComboBoxModel<String> modeloCombo2 = new DefaultComboBoxModel<>(observacionesCaminosMap.values().toArray(new String[0]));
-        vista.cmb_administracion_camino.setModel(modeloCombo2);
-
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == vista.btn_admnistracion_habilitar_suc) {
-            if (vista.cmb_administracion_sucursal.getSelectedItem().equals("")) {
-                JOptionPane.showMessageDialog(null, "Debe seleccionar una sucursal...");
-            } else {
-                String nombreSucursal = (String) vista.cmb_administracion_sucursal.getSelectedItem();
-                int idSucursal = obtenerIdSucursalPorNombre(nombreSucursal);
-
-                // Asignar el ID al objeto correspondiente
-                sucursal.setId(idSucursal);
-                sucursal.setOperativa(true);
-
-                if (sucursalDao.modificarSucursalEstadoQuery(sucursal)) {
-                    JOptionPane.showMessageDialog(null, "Estado de Sucursal puesto en Operativo exitosamente");
-                } else {
-                    JOptionPane.showMessageDialog(null, "Se ha producido un error, no se ha podido cambiar el estado");
-                }
-            }
-        } else if (e.getSource() == vista.btn_admnistracion_deshabilitar_suc) {
-            if (vista.cmb_administracion_sucursal.getSelectedItem().equals("")) {
-                JOptionPane.showMessageDialog(null, "Debe seleccionar una sucursal...");
-            } else {
-                String nombreSucursal = (String) vista.cmb_administracion_sucursal.getSelectedItem();
-                int idSucursal = obtenerIdSucursalPorNombre(nombreSucursal);
-                // Asignar el ID al objeto correspondiente
-                sucursal.setId(idSucursal);
-                sucursal.setOperativa(false);
-
-                if (sucursalDao.modificarSucursalEstadoQuery(sucursal)) {
-                    JOptionPane.showMessageDialog(null, "Estado de Sucursal puesto en No Operativo exitosamente");
-                } else {
-                    JOptionPane.showMessageDialog(null, "Se ha producido un error, no se ha podido cambiar el estado");
-                }
-            }
-        } else if (e.getSource() == vista.btn_admnistracion_habilitar_cam) {
-            if (vista.cmb_administracion_camino.getSelectedItem().equals("")) {
-                JOptionPane.showMessageDialog(null, "Debe seleccionar un camino...");
-            } else {
-                String nombreCamino = (String) vista.cmb_administracion_camino.getSelectedItem();
-                int idCamino = obtenerIdCaminoPorDescripcion(nombreCamino);
-                // Asignar el ID al objeto correspondiente
-                camino.setId(idCamino);
-                camino.setOperativo(true);
-
-                if (caminoDao.modificarCaminoEstadoEstadoQuery(camino)) {
-                    JOptionPane.showMessageDialog(null, "Estado del Camino puesto en Operativo exitosamente");
-                } else {
-                    JOptionPane.showMessageDialog(null, "Se ha producido un error, no se ha podido cambiar el estado");
-                }
-            }
-        } else if (e.getSource() == vista.btn_admnistracion_deshabilitar_cam) {
-            if (vista.cmb_administracion_sucursal.getSelectedItem().equals("")) {
-                JOptionPane.showMessageDialog(null, "Debe seleccionar un camino...");
-            } else {
-                String nombreCamino = (String) vista.cmb_administracion_camino.getSelectedItem();
-                int idCamino = obtenerIdCaminoPorDescripcion(nombreCamino);
-                // Asignar el ID al objeto correspondiente
-                camino.setId(idCamino);
-                camino.setOperativo(false);
-
-                if (caminoDao.modificarCaminoEstadoEstadoQuery(camino)) {
-                    JOptionPane.showMessageDialog(null, "Estado del Camino puesto en No Operativo exitosamente");
-                } else {
-                    JOptionPane.showMessageDialog(null, "Se ha producido un error, no se ha podido cambiar el estado");
-                }
-            }
-        } 
+        
+        this.vista.tabla_administracion_caminos.addMouseListener(this);
+        this.vista.tabla_administracion_sucursales.addMouseListener(this);
+        this.vista.jLabelAdministracion.addMouseListener(this);
+        
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        if (e.getSource() == vista.jLabelAdministracion) {
+       if (e.getSource() == vista.jLabelAdministracion) {
             vista.jTabbedPane1.setSelectedIndex(5);
-        } 
+        } else if (e.getSource() == vista.tabla_administracion_sucursales) {
+            int fila = vista.tabla_administracion_sucursales.rowAtPoint(e.getPoint());
+            sucursal.setId(Integer.parseInt(vista.tabla_administracion_sucursales.getValueAt(fila, 0).toString()));
+            sucursal.setCodigo(Integer.parseInt(vista.tabla_administracion_sucursales.getValueAt(fila, 1).toString()));
+            sucursal.setNombre(vista.tabla_administracion_sucursales.getValueAt(fila,2).toString());
+            boolean estado = vista.tabla_administracion_sucursales.getValueAt(fila, 3).toString().equals("Operativa") ? true : false;
+            sucursal.setOperativa(!estado);
+            sucursal.setHorarioApertura(vista.tabla_administracion_sucursales.getValueAt(fila, 4).toString());
+            sucursal.setHorarioCierre(vista.tabla_administracion_sucursales.getValueAt(fila,5).toString());
+            int confirmacion = JOptionPane.showOptionDialog(null, "¿Seguro de cambiar el ESTADO OPERATIVO de esta Sucursal?", "Confirmar modificación",
+                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+                if (confirmacion == 0 && sucursalDao.modificarSucursalQuery(sucursal)) {
+                    limpiarTabla(modeloSucursal);
+                    listarTodasLasSucursales();
+                    JOptionPane.showMessageDialog(null, "Estado de Sucursal modificado exitosamente");
+                }
+            
+        } else if (e.getSource() == vista.tabla_administracion_caminos) {
+            int fila = vista.tabla_administracion_caminos.rowAtPoint(e.getPoint());
+            camino.setId(Integer.parseInt(vista.tabla_administracion_caminos.getValueAt(fila, 0).toString()));
+            camino.setOrigenId(obtenerIdSucursalPorNombre(vista.tabla_administracion_caminos.getValueAt(fila,1).toString()));
+            camino.setDestinoId(obtenerIdSucursalPorNombre(vista.tabla_administracion_caminos.getValueAt(fila,2).toString()));
+            camino.setTiempo(Integer.parseInt(vista.tabla_administracion_caminos.getValueAt(fila, 3).toString()));
+            camino.setCapacidad(Integer.parseInt(vista.tabla_administracion_caminos.getValueAt(fila, 4).toString()));
+            boolean estado = vista.tabla_administracion_caminos.getValueAt(fila, 5).toString().equals("Operativo") ? true : false;
+            camino.setOperativo(!estado);
+            camino.setObservaciones(vista.tabla_administracion_caminos.getValueAt(fila, 6).toString());
+            int confirmacion = JOptionPane.showOptionDialog(null, "¿Seguro de cambiar el ESTADO OPERATIVO de este Camino?", "Confirmar modificación",
+                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+                if (confirmacion == 0 && caminoDao.modificarCaminoQuery(camino)) {
+                    limpiarTabla(modeloCamino);
+                    listarTodosLosCaminos();
+                    JOptionPane.showMessageDialog(null, "Camino Actualizado exitosamente");
+                }
+        }
     }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
+    
+    //Listar todas las sucursales
+    public void listarTodasLasSucursales() {
+        List<Sucursales> lista = sucursalDao.listaSucursalesQuery("");
+        modeloSucursal = (DefaultTableModel) vista.tabla_administracion_sucursales.getModel();
+        Object[] col = new Object[6];
+        for (int i = 0; i < lista.size(); i++) {
+            col[0] = lista.get(i).getId();
+            col[1] = lista.get(i).getCodigo();
+            col[2] = lista.get(i).getNombre();
+            //Lógica para que ponga "Operativa / No Operativa en la tabla
+            col[3] = lista.get(i).isOperativa() ? "Operativa" : "No Operativa";
+            col[4] = lista.get(i).getHorarioApertura();
+            col[5] = lista.get(i).getHorarioCierre();
+            modeloSucursal.addRow(col);
+        }
     }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-        
+    
+    //Listar todos las Caminos
+    public void listarTodosLosCaminos() {
+        List<Caminos> lista = caminoDao.listaCaminosQuery("");
+        modeloCamino = (DefaultTableModel) vista.tabla_administracion_caminos.getModel();
+        Object[] col = new Object[7];
+        for (int i = 0; i < lista.size(); i++) {
+            col[0] = lista.get(i).getId();
+            //Acomodar para que aparezca nombres de las sucursales, no los Id ************************
+            int origenId = lista.get(i).getOrigenId();
+            String nombreOrigen = obtenerNombreSucursalPorId(origenId);
+            col[1] = nombreOrigen;
+            int destinoId = lista.get(i).getDestinoId();
+            String nombreDestino = obtenerNombreSucursalPorId(destinoId);
+            col[2] = nombreDestino;
+            col[3] = lista.get(i).getTiempo();
+            col[4] = lista.get(i).getCapacidad();
+            col[5] = lista.get(i).isOperativo() ? "Operativo" : "No Operativo";
+            col[6] = lista.get(i).getObservaciones();
+            modeloCamino.addRow(col);
+        }
     }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
+    
+    //Método para limpiar la tabla
+    public void limpiarTabla(DefaultTableModel modelo) {
+        for (int i = 0; i < modelo.getRowCount(); i++) {
+            modelo.removeRow(i);
+            i--;
+        }
     }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-    }
-          
-
+    
     private int obtenerIdSucursalPorNombre(String nombreSucursal) {
+        //SucursalesDao sucursalDao = new SucursalesDao();
         List<Sucursales> listaSucursales = sucursalDao.listaSucursalesQuery("");
 
         for (Sucursales sucursal : listaSucursales) {
@@ -162,15 +137,28 @@ public class AdministrarControlador implements ActionListener, MouseListener {
         }
         return -1; // Retorna un valor por defecto si no se encuentra la sucursal
     }
-   
-    private int obtenerIdCaminoPorDescripcion(String nombreCamino) {
-        List<Caminos> listaCaminos = caminoDao.listaCaminosQuery("");
 
-        for (Caminos unCamino : listaCaminos) {
-            if (unCamino.getObservaciones().trim().equals(nombreCamino.trim())) {
-                return unCamino.getId();
-            }
-        }
-        return -1; // Retorna un valor por defecto si no se encuentra el camino
+    private String obtenerNombreSucursalPorId(int idSucursal) {
+        List<Sucursales> listaSucursales = sucursalDao.listaSucursalesQuery("" + idSucursal);
+        return listaSucursales.isEmpty() ? "" : listaSucursales.get(0).getNombre();
     }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+       }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+       }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+       }
+
+
 }

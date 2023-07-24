@@ -72,6 +72,8 @@ public class SystemView extends javax.swing.JFrame {
         ordenes_cuenta.listarTodasLasOrdenes();
         //Controlador de Administracion
         AdministrarControlador administrar_cuenta = new AdministrarControlador(this);     
+        administrar_cuenta.listarTodasLasSucursales();
+        administrar_cuenta.listarTodosLosCaminos();
         //Controlador de informes
         InformesControlador informe_cuenta = new InformesControlador(this);
     }
@@ -231,15 +233,11 @@ public class SystemView extends javax.swing.JFrame {
         jPanel8 = new javax.swing.JPanel();
         jPanel16 = new javax.swing.JPanel();
         jPanel17 = new javax.swing.JPanel();
-        jLabel41 = new javax.swing.JLabel();
-        cmb_administracion_sucursal = new javax.swing.JComboBox<>();
-        btn_admnistracion_habilitar_suc = new javax.swing.JButton();
-        btn_admnistracion_deshabilitar_suc = new javax.swing.JButton();
+        jScrollPane11 = new javax.swing.JScrollPane();
+        tabla_administracion_sucursales = new javax.swing.JTable();
         jPanel18 = new javax.swing.JPanel();
-        jLabel42 = new javax.swing.JLabel();
-        cmb_administracion_camino = new javax.swing.JComboBox<>();
-        btn_admnistracion_habilitar_cam = new javax.swing.JButton();
-        btn_admnistracion_deshabilitar_cam = new javax.swing.JButton();
+        jScrollPane10 = new javax.swing.JScrollPane();
+        tabla_administracion_caminos = new javax.swing.JTable();
         jPanel19 = new javax.swing.JPanel();
         jPanel20 = new javax.swing.JPanel();
         btn_informes_flujo_maximo = new javax.swing.JButton();
@@ -1481,102 +1479,93 @@ public class SystemView extends javax.swing.JFrame {
 
         jPanel17.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Sucursales", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
 
-        jLabel41.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel41.setText("Sucursal:");
+        tabla_administracion_sucursales.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
 
-        cmb_administracion_sucursal.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        cmb_administracion_sucursal.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmb_administracion_sucursalActionPerformed(evt);
+            },
+            new String [] {
+                "Id", "Codigo", "Nombre", "Estado", "Abre", "Cierra"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
         });
-
-        btn_admnistracion_habilitar_suc.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btn_admnistracion_habilitar_suc.setText("Habilitar");
-        btn_admnistracion_habilitar_suc.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_admnistracion_habilitar_sucActionPerformed(evt);
-            }
-        });
-
-        btn_admnistracion_deshabilitar_suc.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btn_admnistracion_deshabilitar_suc.setText("Deshabilitar");
+        tabla_administracion_sucursales.getTableHeader().setReorderingAllowed(false);
+        jScrollPane11.setViewportView(tabla_administracion_sucursales);
+        if (tabla_administracion_sucursales.getColumnModel().getColumnCount() > 0) {
+            tabla_administracion_sucursales.getColumnModel().getColumn(0).setResizable(false);
+            tabla_administracion_sucursales.getColumnModel().getColumn(1).setResizable(false);
+            tabla_administracion_sucursales.getColumnModel().getColumn(2).setResizable(false);
+            tabla_administracion_sucursales.getColumnModel().getColumn(3).setResizable(false);
+            tabla_administracion_sucursales.getColumnModel().getColumn(4).setResizable(false);
+            tabla_administracion_sucursales.getColumnModel().getColumn(5).setResizable(false);
+        }
 
         javax.swing.GroupLayout jPanel17Layout = new javax.swing.GroupLayout(jPanel17);
         jPanel17.setLayout(jPanel17Layout);
         jPanel17Layout.setHorizontalGroup(
             jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel17Layout.createSequentialGroup()
+            .addGroup(jPanel17Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel41)
-                .addGap(53, 53, 53)
-                .addComponent(cmb_administracion_sucursal, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btn_admnistracion_deshabilitar_suc, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btn_admnistracion_habilitar_suc, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(138, 138, 138))
+                .addComponent(jScrollPane11, javax.swing.GroupLayout.PREFERRED_SIZE, 835, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel17Layout.setVerticalGroup(
             jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel17Layout.createSequentialGroup()
-                .addContainerGap(20, Short.MAX_VALUE)
-                .addComponent(btn_admnistracion_habilitar_suc, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel17Layout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addComponent(btn_admnistracion_deshabilitar_suc, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel17Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel41)
-                            .addComponent(cmb_administracion_sucursal, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(47, 47, 47))))
+                .addComponent(jScrollPane11, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 17, Short.MAX_VALUE))
         );
 
         jPanel18.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Caminos", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
 
-        jLabel42.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel42.setText("Camino:");
+        tabla_administracion_caminos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
 
-        cmb_administracion_camino.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+            },
+            new String [] {
+                "Id", "Suc. Origen", "Suc. Destino", "Tiempo hs.", "Capacidad Kg", "Estado", "Observaciones"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false
+            };
 
-        btn_admnistracion_habilitar_cam.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btn_admnistracion_habilitar_cam.setText("Habilitar");
-
-        btn_admnistracion_deshabilitar_cam.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btn_admnistracion_deshabilitar_cam.setText("Deshabilitar");
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tabla_administracion_caminos.getTableHeader().setReorderingAllowed(false);
+        jScrollPane10.setViewportView(tabla_administracion_caminos);
+        if (tabla_administracion_caminos.getColumnModel().getColumnCount() > 0) {
+            tabla_administracion_caminos.getColumnModel().getColumn(0).setResizable(false);
+            tabla_administracion_caminos.getColumnModel().getColumn(1).setResizable(false);
+            tabla_administracion_caminos.getColumnModel().getColumn(2).setResizable(false);
+            tabla_administracion_caminos.getColumnModel().getColumn(3).setResizable(false);
+            tabla_administracion_caminos.getColumnModel().getColumn(4).setResizable(false);
+            tabla_administracion_caminos.getColumnModel().getColumn(5).setResizable(false);
+            tabla_administracion_caminos.getColumnModel().getColumn(6).setResizable(false);
+        }
 
         javax.swing.GroupLayout jPanel18Layout = new javax.swing.GroupLayout(jPanel18);
         jPanel18.setLayout(jPanel18Layout);
         jPanel18Layout.setHorizontalGroup(
             jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel18Layout.createSequentialGroup()
+            .addGroup(jPanel18Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel42)
-                .addGap(69, 69, 69)
-                .addComponent(cmb_administracion_camino, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 66, Short.MAX_VALUE)
-                .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btn_admnistracion_habilitar_cam, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btn_admnistracion_deshabilitar_cam, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(143, 143, 143))
+                .addComponent(jScrollPane10, javax.swing.GroupLayout.PREFERRED_SIZE, 840, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(24, Short.MAX_VALUE))
         );
         jPanel18Layout.setVerticalGroup(
             jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel18Layout.createSequentialGroup()
-                .addComponent(btn_admnistracion_habilitar_cam, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel18Layout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addComponent(btn_admnistracion_deshabilitar_cam, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel18Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel42)
-                            .addComponent(cmb_administracion_camino, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(0, 42, Short.MAX_VALUE))
+                .addComponent(jScrollPane10, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 23, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel16Layout = new javax.swing.GroupLayout(jPanel16);
@@ -1597,7 +1586,7 @@ public class SystemView extends javax.swing.JFrame {
                 .addComponent(jPanel17, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jPanel18, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(55, Short.MAX_VALUE))
+                .addContainerGap(47, Short.MAX_VALUE))
         );
 
         jPanel8.add(jPanel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(25, 20, 930, 410));
@@ -1759,10 +1748,6 @@ public class SystemView extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_cmb_ordenes_productoActionPerformed
 
-    private void btn_admnistracion_habilitar_sucActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_admnistracion_habilitar_sucActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btn_admnistracion_habilitar_sucActionPerformed
-
     private void btn_salirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_salirActionPerformed
         if(evt.getSource()== btn_salir) {
             dispose();
@@ -1772,10 +1757,6 @@ public class SystemView extends javax.swing.JFrame {
     private void cmb_estado_sucursalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmb_estado_sucursalActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cmb_estado_sucursalActionPerformed
-
-    private void cmb_administracion_sucursalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmb_administracion_sucursalActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cmb_administracion_sucursalActionPerformed
 
     private void btn_ordenes_eliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ordenes_eliminarActionPerformed
         // TODO add your handling code here:
@@ -1837,10 +1818,6 @@ public class SystemView extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    public javax.swing.JButton btn_admnistracion_deshabilitar_cam;
-    public javax.swing.JButton btn_admnistracion_deshabilitar_suc;
-    public javax.swing.JButton btn_admnistracion_habilitar_cam;
-    public javax.swing.JButton btn_admnistracion_habilitar_suc;
     public javax.swing.JButton btn_caminos_cancelar;
     public javax.swing.JButton btn_caminos_crear;
     public javax.swing.JButton btn_caminos_eliminar;
@@ -1868,8 +1845,6 @@ public class SystemView extends javax.swing.JFrame {
     public javax.swing.JButton btn_sucursales_eliminar;
     public javax.swing.JButton btn_sucursales_modificar;
     public javax.swing.JTextField caminos_search;
-    public javax.swing.JComboBox<String> cmb_administracion_camino;
-    public javax.swing.JComboBox<String> cmb_administracion_sucursal;
     public javax.swing.JComboBox<String> cmb_caminos_estado;
     public javax.swing.JComboBox<String> cmb_caminos_sucursal_destino;
     public javax.swing.JComboBox<String> cmb_caminos_sucursal_origen;
@@ -1914,8 +1889,6 @@ public class SystemView extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel39;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel40;
-    private javax.swing.JLabel jLabel41;
-    private javax.swing.JLabel jLabel42;
     private javax.swing.JLabel jLabel43;
     private javax.swing.JLabel jLabel44;
     private javax.swing.JLabel jLabel46;
@@ -1959,6 +1932,8 @@ public class SystemView extends javax.swing.JFrame {
     public javax.swing.JPanel jPanelStock;
     public javax.swing.JPanel jPanelSucursales;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane10;
+    private javax.swing.JScrollPane jScrollPane11;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
@@ -1971,6 +1946,8 @@ public class SystemView extends javax.swing.JFrame {
     private javax.swing.JTable jTable1;
     public javax.swing.JTextField stock_search;
     public javax.swing.JTextField sucursales_search;
+    public javax.swing.JTable tabla_administracion_caminos;
+    public javax.swing.JTable tabla_administracion_sucursales;
     public javax.swing.JTable tabla_caminos;
     public javax.swing.JTable tabla_electrodomesticos;
     public javax.swing.JTable tabla_ordenes;
