@@ -3,6 +3,7 @@ package Modelos;
 import java.util.Objects;
 
 public class Vertex {
+
     private int value;
     private double page_rank;
 
@@ -22,13 +23,18 @@ public class Vertex {
         return value;
     }
 
-     @Override
+    @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
-        Vertex other = (Vertex) obj;
-        return value == other.value;
+    if (this == obj) {
+        return true;
     }
+    if (obj == null || getClass() != obj.getClass()) {
+        return false;
+    }
+    Vertex other = (Vertex) obj;
+    return value == other.value;
+}
+
 
     @Override
     public int hashCode() {
@@ -37,6 +43,7 @@ public class Vertex {
         result = prime * result + value;
         return result;
     }
+
     @Override
     public String toString() {
         return String.valueOf(value);

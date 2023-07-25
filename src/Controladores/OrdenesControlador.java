@@ -290,11 +290,14 @@ public class OrdenesControlador implements ActionListener, MouseListener {
                         .collect(Collectors.toList());
                 //recuperamos una lista de caminos, y se la pasamos al instanciar GrafoCaminos
                 List<Sucursales> listaTodasLasSuc = sucursalDao.listaSucursalesQuery("");
-                List<Sucursales> listaSuc = sucursalesFiltradas.stream()
+                List<Sucursales> listaSucur = sucursalesFiltradas.stream()
                         .flatMap(stock -> listaTodasLasSuc.stream()
                         .filter(sucursal -> stock.getId_sucursal() == sucursal.getId()))
                         .collect(Collectors.toList());
                 //Tengo una lista de sucursales que tienen el stock requerido por mi pedido. La itero y agrego los caminos posibles a una lista
+                List<Sucursales> listaSuc = listaSucur.stream()
+                        .filter(sucursal -> sucursal.isOperativa())
+                        .collect(Collectors.toList());
                 if (listaSuc.isEmpty()) {  //No tengo ninguna sucursal con stock suficiente. Le aviso al usuario.
                     JOptionPane.showMessageDialog(null, "No hay sucursales que puedan atender esta orden. No existen caminos posibles aun");
                     limpiarTablas(modeloCaminos);

@@ -1344,8 +1344,11 @@ public class SystemView extends javax.swing.JFrame {
         tabla_ordenes_caminos.getTableHeader().setReorderingAllowed(false);
         jScrollPane9.setViewportView(tabla_ordenes_caminos);
         if (tabla_ordenes_caminos.getColumnModel().getColumnCount() > 0) {
-            tabla_ordenes_caminos.getColumnModel().getColumn(1).setMinWidth(500);
-            tabla_ordenes_caminos.getColumnModel().getColumn(1).setMaxWidth(500);
+            tabla_ordenes_caminos.getColumnModel().getColumn(0).setResizable(false);
+            tabla_ordenes_caminos.getColumnModel().getColumn(1).setResizable(false);
+            tabla_ordenes_caminos.getColumnModel().getColumn(1).setPreferredWidth(500);
+            tabla_ordenes_caminos.getColumnModel().getColumn(2).setResizable(false);
+            tabla_ordenes_caminos.getColumnModel().getColumn(3).setResizable(false);
         }
 
         jLabel40.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -1479,6 +1482,7 @@ public class SystemView extends javax.swing.JFrame {
 
         jPanel17.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Sucursales", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
 
+        tabla_administracion_sucursales.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         tabla_administracion_sucursales.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -1524,6 +1528,7 @@ public class SystemView extends javax.swing.JFrame {
 
         jPanel18.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Caminos", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
 
+        tabla_administracion_caminos.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         tabla_administracion_caminos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
