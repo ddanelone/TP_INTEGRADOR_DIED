@@ -19,6 +19,7 @@ import Modelos.Sucursales;
 import Modelos.SucursalesDao;
 import Modelos.Vertex;
 import Vistas.SystemView;
+import Vistas.VerGrafo;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -102,6 +103,8 @@ public class OrdenesControlador implements ActionListener, MouseListener {
         this.vista.btn_ordenes_producto_eliminar.addActionListener(this);
         //Pongo a escuchar la tabla de caminos
         this.vista.tabla_ordenes_caminos.addMouseListener(this);
+        //Botón de ver Grafo
+        this.vista.btn_ordenes_ver_grafo.addActionListener(this);
     }
 
     @Override
@@ -236,6 +239,9 @@ public class OrdenesControlador implements ActionListener, MouseListener {
             limpiarTablas(modeloProductos);
             limpiarTablas(modeloCaminos);
             limpiarCampos();
+        } else if (e.getSource()==vista.btn_ordenes_ver_grafo) {
+            VerGrafo verGrafo = new VerGrafo();
+            verGrafo.setVisible(true);
         }
     }
     
