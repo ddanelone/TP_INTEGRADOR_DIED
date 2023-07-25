@@ -20,6 +20,7 @@ import Modelos.SucursalesDao;
 import Modelos.Vertex;
 import Vistas.SystemView;
 import Vistas.VerGrafo;
+import Vistas.VerGrafoDinamico;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -242,21 +243,8 @@ public class OrdenesControlador implements ActionListener, MouseListener {
             limpiarTablas(modeloCaminos);
             limpiarCampos();
         } else if (e.getSource() == vista.btn_ordenes_ver_grafo) {
-            //VerGrafo verGrafo = new VerGrafo();
-            //verGrafo.setVisible(true);
-            // Supongamos que tienes un botón llamado "btnMostrarGrafo" en tu vista
-
-            grafoCamino = new GrafoCaminos(caminoDao.listaCaminosQuery(""), sucursalDao.listaSucursalesQuery(""));
-            grafo = grafoCamino.getGrafo();
-
-            SwingUtilities.invokeLater(() -> {
-                JFrame frame = new JFrame("Grafo");
-                frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Cerrar solo la ventana actual
-                GraphPanel graphPanel = new GraphPanel(grafo);
-                frame.add(graphPanel);
-                frame.pack();
-                frame.setVisible(true);
-            });
+            VerGrafoDinamico verGrafoDinamico = new VerGrafoDinamico();
+            verGrafoDinamico.setVisible(true);
         }
     }
 
