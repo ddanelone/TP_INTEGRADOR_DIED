@@ -278,6 +278,7 @@ public class OrdenesControlador implements ActionListener, MouseListener {
             //Vamos a ver si la orden está pendiente, si es así, permitimos se le asigne un camino. Caso contrario, nope.
             if (estado.equals("PENDIENTE") && sucursalHabilitada(id_suc)) {
                 vista.cmb_ordenes_sucursal_origen.removeAllItems();
+                vista.btn_ordenes_producto_agregar.setEnabled(true);
                 vista.btn_ordenes_modificar.setEnabled(true);
                 vista.btn_ordenes_eliminar.setEnabled(true);
                 vista.txt_ordenes_tiempo.setEnabled(true);
@@ -345,7 +346,6 @@ public class OrdenesControlador implements ActionListener, MouseListener {
                     vista.tabla_ordenes_caminos.setModel(tablaModeloCaminoAsignado(primerCamino));
                 }
                 vista.cmb_ordenes_sucursal_destino.setEnabled(false);
-                vista.cmb_caminos_sucursal_destino.setEnabled(false);
                 vista.txt_ordenes_tiempo.setEnabled(false);
                 vista.btn_ordenes_producto_agregar.setEnabled(false);
                 vista.btn_ordenes_modificar.setEnabled(false);

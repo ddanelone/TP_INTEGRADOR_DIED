@@ -1837,7 +1837,7 @@
                   </Properties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="360" y="102" width="-1" height="-1"/>
+                      <AbsoluteConstraints x="360" y="110" width="-1" height="-1"/>
                     </Constraint>
                   </Constraints>
                 </Component>
@@ -3237,7 +3237,7 @@
                           <Font name="Tahoma" size="12" style="1"/>
                         </Property>
                         <Property name="rows" type="int" value="5"/>
-                        <Property name="text" type="java.lang.String" value="Seleccione un algoritmo para mostrar su resultado en pantala.&#xa;&#xa;Los valores indicados en &apos;Factor Amortiguaci&#xf3;n&apos; y &apos;Cantidad iteraciones&apos; ser&#xe1;n utilizados para el c&#xe1;lculo del PageRank (R).&#xa;&#xa;Puede modificar el estado Operativo/No Operativo de Sucursales y el estado Habilitado/No Habilitado de Caminos en el &#xa;                 &#xa;men&#xfa; de Administraci&#xf3;n R&#xe1;pido o en el ABM de cada entidad.&#xa;"/>
+                        <Property name="text" type="java.lang.String" value="Seleccione un algoritmo para mostrar su resultado en pantalla.&#xa;&#xa;Los valores indicados en &apos;Factor Amortiguaci&#xf3;n&apos; y &apos;Cantidad iteraciones&apos; ser&#xe1;n utilizados para el c&#xe1;lculo del PageRank (R).&#xa;&#xa;Puede modificar el estado Operativo/No Operativo de Sucursales y el estado Habilitado/No Habilitado de Caminos en el &#xa;                 &#xa;men&#xfa; de Administraci&#xf3;n R&#xe1;pido o en el ABM de cada entidad.&#xa;"/>
                       </Properties>
                       <AuxValues>
                         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>

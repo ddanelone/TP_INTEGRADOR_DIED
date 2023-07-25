@@ -1050,7 +1050,7 @@ public class SystemView extends javax.swing.JFrame {
 
         jLabel25.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel25.setText("Destino:");
-        jPanel11.add(jLabel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 102, -1, -1));
+        jPanel11.add(jLabel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 110, -1, -1));
 
         txt_caminos_id.setEditable(false);
         txt_caminos_id.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -1620,7 +1620,7 @@ public class SystemView extends javax.swing.JFrame {
         txt_areat_informes.setColumns(20);
         txt_areat_informes.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txt_areat_informes.setRows(5);
-        txt_areat_informes.setText("Seleccione un algoritmo para mostrar su resultado en pantala.\n\nLos valores indicados en 'Factor Amortiguación' y 'Cantidad iteraciones' serán utilizados para el cálculo del PageRank (R).\n\nPuede modificar el estado Operativo/No Operativo de Sucursales y el estado Habilitado/No Habilitado de Caminos en el \n                 \nmenú de Administración Rápido o en el ABM de cada entidad.\n");
+        txt_areat_informes.setText("Seleccione un algoritmo para mostrar su resultado en pantalla.\n\nLos valores indicados en 'Factor Amortiguación' y 'Cantidad iteraciones' serán utilizados para el cálculo del PageRank (R).\n\nPuede modificar el estado Operativo/No Operativo de Sucursales y el estado Habilitado/No Habilitado de Caminos en el \n                 \nmenú de Administración Rápido o en el ABM de cada entidad.\n");
         jScrollPane8.setViewportView(txt_areat_informes);
 
         btn_informes_page_limpiar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N

@@ -60,7 +60,7 @@ public class InformesControlador implements ActionListener, MouseListener {
             int iteraciones = Integer.parseInt(vista.txt_informes_cantI.getText().trim());
             vista.txt_areat_informes.setText(formatPageRank(grafo.calculatePageRank(damping, iteraciones)));
         } else if (e.getSource() == vista.btn_informes_page_limpiar) {
-            vista.txt_areat_informes.setText("Seleccione un algoritmo para mostrar su resultado en pantala.\n\n Los valores indicados en 'Factor de Amortiguación' y "
+            vista.txt_areat_informes.setText("Seleccione un algoritmo para mostrar su resultado en pantalla.\n\n Los valores indicados en 'Factor de Amortiguación' y "
                     + "'Cantidad iteraciones' serán utilizados para el cálculo del PageRank (R). \n\n"
                     + "Puede modificar el estado Operativo/No Operativo de Sucursales y el estado Habilitado/No Habilitado de Caminos en el\n\n" 
                     + "menú de Administración Rápido o en el ABM de cada entidad.");
