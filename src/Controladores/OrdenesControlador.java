@@ -29,7 +29,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
 public class OrdenesControlador implements ActionListener, MouseListener {
@@ -239,12 +241,25 @@ public class OrdenesControlador implements ActionListener, MouseListener {
             limpiarTablas(modeloProductos);
             limpiarTablas(modeloCaminos);
             limpiarCampos();
-        } else if (e.getSource()==vista.btn_ordenes_ver_grafo) {
-            VerGrafo verGrafo = new VerGrafo();
-            verGrafo.setVisible(true);
+        } else if (e.getSource() == vista.btn_ordenes_ver_grafo) {
+            //VerGrafo verGrafo = new VerGrafo();
+            //verGrafo.setVisible(true);
+            // Supongamos que tienes un botón llamado "btnMostrarGrafo" en tu vista
+
+            grafoCamino = new GrafoCaminos(caminoDao.listaCaminosQuery(""), sucursalDao.listaSucursalesQuery(""));
+            grafo = grafoCamino.getGrafo();
+
+            SwingUtilities.invokeLater(() -> {
+                JFrame frame = new JFrame("Grafo");
+                frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Cerrar solo la ventana actual
+                GraphPanel graphPanel = new GraphPanel(grafo);
+                frame.add(graphPanel);
+                frame.pack();
+                frame.setVisible(true);
+            });
         }
     }
-    
+
     @Override
     public void mouseClicked(MouseEvent e) {
         if (e.getSource() == vista.jLabelOrdenes) {

@@ -168,6 +168,10 @@ public class Graph {
     public List<Edge> getEdges() {
         return edges;
     }
+    
+    public List<Vertex> getVertex() {
+        return vertices;
+    }
 
     public int getVertexCount() {
         return vertices.size();

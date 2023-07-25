@@ -1,5 +1,6 @@
 package Vistas;
 
+
 import javax.swing.WindowConstants;
 
 public class VerGrafo extends javax.swing.JFrame {
