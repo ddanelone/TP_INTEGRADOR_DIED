@@ -34,7 +34,7 @@ public class VerGrafoDinamico extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
         setResizable(false);
-        setTitle("Grafo de Sucursales y rutas creado dinámicamente");
+        setTitle("Grafo de Sucursales y rutas creado dinámicamente - Ordenado por Page Rank (R)");
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         // Crear el grafo y el GrafoPanel

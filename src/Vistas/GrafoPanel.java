@@ -121,9 +121,6 @@ public class GrafoPanel extends JPanel {
             g2d.fillOval(x - 5, y - 5, 25, 25);
             g2d.drawString(nombreSucursal(vertex.getValue()), x - 10, y - 15);
         }
-
-
-
     }
 
     private void drawArrow(Graphics g, int x1, int y1, int x2, int y2) {
