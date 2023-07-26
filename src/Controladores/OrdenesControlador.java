@@ -19,7 +19,6 @@ import Modelos.Sucursales;
 import Modelos.SucursalesDao;
 import Modelos.Vertex;
 import Vistas.SystemView;
-import Vistas.VerGrafo;
 import Vistas.VerGrafoDinamico;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -30,9 +29,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
 public class OrdenesControlador implements ActionListener, MouseListener {

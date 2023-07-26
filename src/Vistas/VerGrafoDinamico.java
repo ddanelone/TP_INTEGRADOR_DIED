@@ -12,9 +12,15 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 public class VerGrafoDinamico extends javax.swing.JFrame {
-    
-     // Variable booleana para indicar si la ventana del grafo está abierta
+
+    // Variable booleana para indicar si la ventana del grafo está abierta
     private static boolean ventanaAbierta = false;
+
+    //Instanciar modelo de sucursales y caminos
+    Sucursales sucursal = new Sucursales();
+    SucursalesDao sucursalDao = new SucursalesDao();
+    Caminos camino = new Caminos();
+    CaminosDao caminoDao = new CaminosDao();
 
     public VerGrafoDinamico() {
         initComponents();
@@ -24,7 +30,7 @@ public class VerGrafoDinamico extends javax.swing.JFrame {
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         // Crear el grafo y el GrafoPanel
-        Graph graph = createGraph(); // Reemplaza createGraph() con el código para crear el grafo
+        Graph graph = createGraph();
         GrafoPanel grafoPanel = new GrafoPanel(graph);
 
         // Establecer el tamaño del panel y agregar el GrafoPanel al centro del mismo
@@ -32,20 +38,20 @@ public class VerGrafoDinamico extends javax.swing.JFrame {
         jPanel1.add(grafoPanel, BorderLayout.CENTER);
 
         // Crear el panel para el botón "Cerrar" y establecer el diseño con FlowLayout centrado
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
         // Configurar el botón "Cerrar" y agregarlo al panel del botón
         btn_grafo_vista.setFont(new java.awt.Font("Tahoma", Font.BOLD, 14));
         btn_grafo_vista.setPreferredSize(new Dimension(120, 30));
         btn_grafo_vista.addActionListener(e -> dispose());
-        
+
         buttonPanel.add(btn_grafo_vista);
 
         // Agregar el panel del botón en la parte inferior del JPanel
         jPanel1.add(buttonPanel, BorderLayout.PAGE_END);
 
         // Establecer el tamaño de la ventana y centrarla horizontal y verticalmente
-        setSize(700, 600);
+        setSize(1200, 600);
         SwingUtilities.invokeLater(() -> setLocationRelativeTo(null));
     }
 
@@ -59,12 +65,6 @@ public class VerGrafoDinamico extends javax.swing.JFrame {
 
     // Método para crear el grafo, reemplaza este método con el código para crear el grafo
     private Graph createGraph() {
-        Sucursales sucursal = new Sucursales();
-        SucursalesDao sucursalDao = new SucursalesDao();
-        //Instanciar el modelo ProductoCantidad
-        //Instanciamos el modelo de Caminos;
-        Caminos camino = new Caminos();
-        CaminosDao caminoDao = new CaminosDao();
         GrafoCaminos grafoCamino = new GrafoCaminos(caminoDao.listaCaminosQuery(""), sucursalDao.listaSucursalesQuery(""));
         Graph graph = grafoCamino.getGrafo();
         return graph;
