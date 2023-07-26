@@ -80,7 +80,7 @@ public class GrafoPanel extends JPanel {
             y = yValues[i%3];
             // Agregar la posición actual del vértice al mapa de vertexPositions
             if ((i % 3) == 0) {
-                 vertexPositions.put(vertex, new Point(x+25, y));
+                 vertexPositions.put(vertex, new Point(x+75, y));
             } else {
                 vertexPositions.put(vertex, new Point(x, y));
             } 
@@ -94,6 +94,23 @@ public class GrafoPanel extends JPanel {
 
     protected void dibujarGrafo(Graphics2D g2d) {
 
+                // Dibujar las aristas con flechas
+        for (Edge edge : graph.getEdges()) {
+            Vertex origin = edge.getOrigin();
+            Vertex end = edge.getEnd();
+
+            Point originPosition = vertexPositions.get(origin);
+            int x1 = (int) originPosition.getX() +10;
+            int y1 = (int) originPosition.getY() - 3;
+
+            Point endPosition = vertexPositions.get(end);
+            int x2 = (int) endPosition.getX()- 2;
+            int y2 = (int) endPosition.getY() - 4;
+
+            g2d.setColor(Color.RED);
+            drawArrow(g2d, x1, y1, x2, y2);
+            g2d.drawString(String.valueOf(edge.getValue()), (x1 + x2) / 2, (y1 + y2) / 2);
+        }
         // Dibujar los vértices
         for (Vertex vertex : graph.getVertex()) {
             Point position = vertexPositions.get(vertex);
@@ -105,23 +122,7 @@ public class GrafoPanel extends JPanel {
             g2d.drawString(nombreSucursal(vertex.getValue()), x - 10, y - 15);
         }
 
-        // Dibujar las aristas con flechas
-        for (Edge edge : graph.getEdges()) {
-            Vertex origin = edge.getOrigin();
-            Vertex end = edge.getEnd();
 
-            Point originPosition = vertexPositions.get(origin);
-            int x1 = (int) originPosition.getX();
-            int y1 = (int) originPosition.getY();
-
-            Point endPosition = vertexPositions.get(end);
-            int x2 = (int) endPosition.getX();
-            int y2 = (int) endPosition.getY();
-
-            g2d.setColor(Color.RED);
-            drawArrow(g2d, x1, y1, x2, y2);
-            g2d.drawString(String.valueOf(edge.getValue()), (x1 + x2) / 2, (y1 + y2) / 2);
-        }
 
     }
 

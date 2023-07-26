@@ -288,5 +288,23 @@ public class Graph {
 
         return caminosEnteros;
     }
+    
+    // Método para actualizar los vértices del grafo con la lista ordenada por PageRank
+    public void updateVertices(List<Vertex> sortedVertices) {
+        // Crear un mapa para obtener el vértice correspondiente según su valor
+        Map<Integer, Vertex> vertexMap = new HashMap<>();
+        for (Vertex vertex : vertices) {
+            vertexMap.put(vertex.getValue(), vertex);
+        }
+
+        // Limpiar la lista actual de vértices
+        vertices.clear();
+
+        // Agregar los vértices en el orden de la lista ordenada por PageRank
+        for (Vertex vertex : sortedVertices) {
+            vertices.add(vertexMap.get(vertex.getValue()));
+        }
+    }
+
 
 }

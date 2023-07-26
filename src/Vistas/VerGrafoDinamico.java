@@ -10,9 +10,11 @@ import Modelos.SucursalesDao;
 import Modelos.Vertex;
 import javax.swing.WindowConstants;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.stream.Collectors;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -36,7 +38,8 @@ public class VerGrafoDinamico extends javax.swing.JFrame {
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         // Crear el grafo y el GrafoPanel
-        Graph graph = createGraph();
+        //Graph graph = createGraph();
+        Graph graph = createGraphWithPageRank();
         GrafoPanel grafoPanel = new GrafoPanel(graph);
 
         // Establecer el tamaño del panel y agregar el GrafoPanel al centro del mismo
@@ -98,7 +101,85 @@ public class VerGrafoDinamico extends javax.swing.JFrame {
                 filteredGraph.addEdge(origin, end, edge.getValue());
             }
         }
+        //Y si lo ordenamos por page rank????
         return filteredGraph;
+    }
+    
+      private Graph createGraphWithPageRank() {
+        GrafoCaminos grafoCamino = new GrafoCaminos(caminoDao.listaCaminosQuery(""), sucursalDao.listaSucursalesQuery(""));
+        Graph graph = grafoCamino.getGrafo();
+
+        // Paso 1: Crear un conjunto para almacenar los vértices únicos
+        Set<Vertex> uniqueVertices = new HashSet<>();
+
+        // Paso 2: Recorrer todas las aristas y agregar los vértices al conjunto
+        for (Edge edge : graph.getEdges()) {
+            uniqueVertices.add(edge.getOrigin());
+            uniqueVertices.add(edge.getEnd());
+        }
+
+        // Paso 3: Crear un nuevo grafo y agregar los vértices únicos
+        Graph filteredGraph = new Graph();
+        for (Vertex vertex : uniqueVertices) {
+            filteredGraph.addVertex(vertex);
+        }
+        
+        // Paso 4: Recorrer nuevamente todas las aristas y agregar solo aquellas que conecten vértices presentes en el nuevo grafo
+        for (Edge edge : graph.getEdges()) {
+            Vertex origin = edge.getOrigin();
+            Vertex end = edge.getEnd();
+
+            if (filteredGraph.getVertex().contains(origin) && filteredGraph.getVertex().contains(end)) {
+                filteredGraph.addEdge(origin, end, edge.getValue());
+            }
+        }
+
+        // Obtener la lista de vértices ordenados por PageRank
+        List<Vertex> sortedVertices = calculatePageRank(0.85, 100, filteredGraph);
+
+        // Actualizar el grafo con la nueva lista ordenada de vértices
+        filteredGraph.updateVertices(sortedVertices);
+
+        return filteredGraph;
+    }
+
+    private List<Vertex> calculatePageRank(double dampingFactor, int iterations, Graph graph) {
+        // Asignar valor inicial de 1.0 a cada vértice
+        for (Vertex vertex : graph.getVertex()) {
+            vertex.setPageRank(1.0);
+        }
+
+        // Realizar las iteraciones para calcular el PageRank
+        for (int i = 0; i < iterations; i++) {
+            // Copiar los valores de PageRank actuales para cada vértice
+            Map<Vertex, Double> currentPageRanks = new HashMap<>();
+            for (Vertex vertex : graph.getVertex()) {
+                currentPageRanks.put(vertex, vertex.getPageRank());
+            }
+
+            // Calcular los nuevos PageRank en esta iteración
+            for (Vertex vertex : graph.getVertex()) {
+                double sum = 0.0;
+                List<Vertex> neighbours = graph.getNeighbours(vertex);
+                for (Vertex neighbour : neighbours) {
+                    int outDegree = graph.gradoSalida(neighbour);
+                    if (outDegree > 0) {
+                        sum += currentPageRanks.get(neighbour) / outDegree;
+                    }
+                }
+                double newPageRank = (1 - dampingFactor) + dampingFactor * sum;
+                vertex.setPageRank(newPageRank);
+            }
+        }
+
+        // Usar un conjunto HashSet para evitar duplicados y mantener el orden según el PageRank
+        Set<Vertex> uniqueVertices = new HashSet<>(graph.getVertex());
+
+        // Convertir el conjunto en una lista y ordenarla según el PageRank descendente
+        List<Vertex> sortedVertices = new ArrayList<>(uniqueVertices);
+        sortedVertices.sort((v1, v2) -> Double.compare(v2.getPageRank(), v1.getPageRank()));
+
+        return sortedVertices;
     }
 
     @SuppressWarnings("unchecked")
