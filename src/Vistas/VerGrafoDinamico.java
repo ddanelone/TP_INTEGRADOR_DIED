@@ -2,12 +2,18 @@ package Vistas;
 
 import Modelos.Caminos;
 import Modelos.CaminosDao;
+import Modelos.Edge;
 import Modelos.GrafoCaminos;
 import Modelos.Graph;
 import Modelos.Sucursales;
 import Modelos.SucursalesDao;
+import Modelos.Vertex;
 import javax.swing.WindowConstants;
 import java.awt.*;
+import java.util.HashSet;
+import java.util.stream.Collectors;
+import java.util.List;
+import java.util.Set;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
@@ -67,7 +73,32 @@ public class VerGrafoDinamico extends javax.swing.JFrame {
     private Graph createGraph() {
         GrafoCaminos grafoCamino = new GrafoCaminos(caminoDao.listaCaminosQuery(""), sucursalDao.listaSucursalesQuery(""));
         Graph graph = grafoCamino.getGrafo();
-        return graph;
+
+        // Paso 1: Crear un conjunto para almacenar los vértices únicos
+        Set<Vertex> uniqueVertices = new HashSet<>();
+
+        // Paso 2: Recorrer todas las aristas y agregar los vértices al conjunto
+        for (Edge edge : graph.getEdges()) {
+            uniqueVertices.add(edge.getOrigin());
+            uniqueVertices.add(edge.getEnd());
+        }
+
+        // Paso 3: Crear un nuevo grafo y agregar los vértices únicos
+        Graph filteredGraph = new Graph();
+        for (Vertex vertex : uniqueVertices) {
+            filteredGraph.addVertex(vertex);
+        }
+        
+        // Paso 4: Recorrer nuevamente todas las aristas y agregar solo aquellas que conecten vértices presentes en el nuevo grafo
+        for (Edge edge : graph.getEdges()) {
+            Vertex origin = edge.getOrigin();
+            Vertex end = edge.getEnd();
+
+            if (filteredGraph.getVertex().contains(origin) && filteredGraph.getVertex().contains(end)) {
+                filteredGraph.addEdge(origin, end, edge.getValue());
+            }
+        }
+        return filteredGraph;
     }
 
     @SuppressWarnings("unchecked")

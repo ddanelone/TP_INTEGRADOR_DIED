@@ -27,7 +27,6 @@ public class GrafoPanel extends JPanel {
     public GrafoPanel(Graph graph) {
         this.graph = graph;
         vertexPositions = new HashMap<>();
-        //generateRandomCoordinates();
         generateCoordinates();
 
     }
@@ -69,25 +68,24 @@ public class GrafoPanel extends JPanel {
     private void generateCoordinates() {
         vertexPositions = new HashMap<>();
 
-        int x = 20;
-        int y = 50;
-
+        int x = 50;
+        int y = 200;
+        int[] yValues = {250, 50, 400};
+        int [] xValues = {150, 0, 0};
+        
         int i = 0;
         for (Vertex vertex : graph.getVertex()) {
-            // Agregar la posición actual del vértice al mapa de vertexPositions
-            vertexPositions.put(vertex, new Point(x, y));
+            
             // Verificar si el valor de y debe alterna 
-            if (i % 3 == 0) {
-                y = 400;
-            } else if (i % 2 == 0) {
-                y = 50;
-            } else {
-                y = 200;
-            }
-            // Desplazar x 50 unidades hacia la derecha para la siguiente iteración
+            y = yValues[i%3];
+            // Agregar la posición actual del vértice al mapa de vertexPositions
             if ((i % 3) == 0) {
-                x += 70;
-            }
+                 vertexPositions.put(vertex, new Point(x+25, y));
+            } else {
+                vertexPositions.put(vertex, new Point(x, y));
+            } 
+           x +=xValues[i%3];
+            
             i++;
             // Imprimir las coordenadas actuales (opcional, para verificar)
             // System.out.println("X= " + x + " *** Y= " + y);
