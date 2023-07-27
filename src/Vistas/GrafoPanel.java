@@ -70,14 +70,14 @@ public class GrafoPanel extends JPanel {
 
         int x = 50;
         int y = 200;
-        int[] yValues = {250, 50, 400};
+        int[] yValues = {250, 50, 400,250,70,380};
         int [] xValues = {150, 0, 0};
         
         int i = 0;
         for (Vertex vertex : graph.getVertex()) {
             
             // Verificar si el valor de y debe alterna 
-            y = yValues[i%3];
+            y = yValues[i%6];
             // Agregar la posición actual del vértice al mapa de vertexPositions
             if ((i % 3) == 0) {
                  vertexPositions.put(vertex, new Point(x+75, y));
