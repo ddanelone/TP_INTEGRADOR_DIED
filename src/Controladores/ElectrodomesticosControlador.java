@@ -13,12 +13,13 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-public class ElectrodomesticosControlador implements ActionListener, MouseListener, KeyListener{
+public class ElectrodomesticosControlador implements ActionListener, MouseListener, KeyListener {
+
     private Electrodomesticos electro;
     private ElectrodomesticosDao electroDao;
     private SystemView vista;
     DefaultTableModel modelo = new DefaultTableModel();
-    private Object [] options = {"Sí", "No"};
+    private Object[] options = {"Sí", "No"};
 
     public ElectrodomesticosControlador(Electrodomesticos electro, ElectrodomesticosDao electroDao, SystemView vista) {
         this.electro = electro;
@@ -37,6 +38,10 @@ public class ElectrodomesticosControlador implements ActionListener, MouseListen
         this.vista.btn_electrodomesticos_cancelar.addActionListener(this);
         //Ponemos en escucha el Label
         this.vista.jLabelElectrodomesticos.addMouseListener(this);
+        //Validaciones
+        this.vista.txt_electrodomesticos_codigo.addKeyListener(this);
+        this.vista.txt_electrodomesticos_peso.addKeyListener(this);
+        this.vista.txt_electrodomesticos_precio.addKeyListener(this);
     }
 
     @Override
@@ -60,7 +65,7 @@ public class ElectrodomesticosControlador implements ActionListener, MouseListen
                 String precioUni = vista.txt_electrodomesticos_precio.getText().trim();
                 double precio = Double.parseDouble(precioUni);
                 electro.setPrecioUnitario(precio);
-                
+
                 if (electroDao.registrarElectrodomesticoQuery(electro)) {
                     limpiarTabla();
                     limpiarCampos();
@@ -101,17 +106,17 @@ public class ElectrodomesticosControlador implements ActionListener, MouseListen
                     }
                 }
             }
-        } else if (e.getSource() == vista.btn_electrodomesticos_eliminar) { 
+        } else if (e.getSource() == vista.btn_electrodomesticos_eliminar) {
             int fila = vista.tabla_electrodomesticos.getSelectedRow();
-            
+
             //Si el usuario no seleccionó nada, el método devuelve -1
-            if(fila == -1) {
+            if (fila == -1) {
                 JOptionPane.showMessageDialog(null, "Debes seleccionar un item para eliminar");
             } else {
                 int id = Integer.parseInt(vista.tabla_electrodomesticos.getValueAt(fila, 0).toString());
                 int confirmacion = JOptionPane.showOptionDialog(null, "¿Seguro de eliminar este electrodoméstico?", "Confirmar eliminación",
-                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
-                if (confirmacion == 0 && electroDao.borrarElectrodomesticoQuery(id)!= false) {
+                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+                if (confirmacion == 0 && electroDao.borrarElectrodomesticoQuery(id) != false) {
                     limpiarCampos();
                     limpiarTabla();
                     vista.btn_electrodomesticos_crear.setEnabled(true);
@@ -119,7 +124,7 @@ public class ElectrodomesticosControlador implements ActionListener, MouseListen
                     JOptionPane.showMessageDialog(null, "Electrodoméstico eliminado exitosamente");
                 }
             }
-        } else if(e.getSource()== vista.btn_electrodomesticos_cancelar) {
+        } else if (e.getSource() == vista.btn_electrodomesticos_cancelar) {
             limpiarCampos();
             vista.btn_electrodomesticos_crear.setEnabled(true);
         }
@@ -151,14 +156,14 @@ public class ElectrodomesticosControlador implements ActionListener, MouseListen
             vista.txt_electrodomesticos_id.setText(vista.tabla_electrodomesticos.getValueAt(fila, 0).toString());
             vista.txt_electrodomesticos_codigo.setText(vista.tabla_electrodomesticos.getValueAt(fila, 1).toString());
             vista.txt_electrodomesticos_nombre.setText(vista.tabla_electrodomesticos.getValueAt(fila, 2).toString());
-            vista.txt_electrodomesticos_descripcion.setText(vista.tabla_electrodomesticos.getValueAt(fila,3).toString());
+            vista.txt_electrodomesticos_descripcion.setText(vista.tabla_electrodomesticos.getValueAt(fila, 3).toString());
             vista.txt_electrodomesticos_precio.setText(vista.tabla_electrodomesticos.getValueAt(fila, 4).toString());
             vista.txt_electrodomesticos_peso.setText(vista.tabla_electrodomesticos.getValueAt(fila, 5).toString());
 
             //Desahbilitar
             vista.txt_electrodomesticos_id.setEditable(false);
             vista.btn_electrodomesticos_crear.setEnabled(false);
-        } else if(e.getSource()== vista.jLabelElectrodomesticos) {
+        } else if (e.getSource() == vista.jLabelElectrodomesticos) {
             vista.jTabbedPane1.setSelectedIndex(1);
         }
     }
@@ -181,6 +186,43 @@ public class ElectrodomesticosControlador implements ActionListener, MouseListen
 
     @Override
     public void keyTyped(KeyEvent e) {
+        if (e.getSource() == vista.txt_electrodomesticos_codigo) {
+            // Este método se llama cada vez que el usuario ingresa una tecla en el JTextField
+            // Obtener la tecla ingresada por el usuario
+            char c = e.getKeyChar();
+            // Definir la expresión regular para solo permitir números enteros
+            String regex = "\\d";
+            // Verificar si la tecla ingresada coincide con la expresión regular
+            if (!Character.toString(c).matches(regex)) {
+                // Si la tecla no coincide, se consume el evento, evitando que se agregue al JTextField
+                e.consume();
+            }
+        } else if (e.getSource() == vista.txt_electrodomesticos_peso) {
+            // Este método se llama cada vez que el usuario ingresa una tecla en el JTextField
+            // Obtener la tecla ingresada por el usuario
+            char c = e.getKeyChar();
+            // Definir la expresión regular para permitir números con punto flotante (separador decimal '.')
+            String regex = "^[0-9]*\\.?[0-9]*$";
+            // Verificar si la tecla ingresada coincide con la expresión regular
+            if (!Character.toString(c).matches(regex)) {
+                // Si la tecla no coincide, se consume el evento, evitando que se agregue al JTextField
+                e.consume();
+            }
+        } else if (e.getSource() == vista.txt_electrodomesticos_precio) {
+            // Este método se llama cada vez que el usuario ingresa una tecla en el JTextField
+
+            // Obtener la tecla ingresada por el usuario
+            char c = e.getKeyChar();
+
+            // Definir la expresión regular para permitir números con punto flotante (separador decimal '.')
+            String regex = "^[0-9]*\\.?[0-9]*$";
+
+            // Verificar si la tecla ingresada coincide con la expresión regular
+            if (!Character.toString(c).matches(regex)) {
+                // Si la tecla no coincide, se consume el evento, evitando que se agregue al JTextField
+                e.consume();
+            }
+        }
     }
 
     @Override
@@ -194,7 +236,7 @@ public class ElectrodomesticosControlador implements ActionListener, MouseListen
             listarTodosLosElectrodomesticos();
         }
     }
-    
+
     //Método para limpiar los campos de la pantalla
     public void limpiarCampos() {
         vista.txt_electrodomesticos_id.setText("");
@@ -211,5 +253,5 @@ public class ElectrodomesticosControlador implements ActionListener, MouseListen
             modelo.removeRow(i);
             i--;
         }
-    }        
+    }
 }

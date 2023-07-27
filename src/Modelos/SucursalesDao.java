@@ -81,7 +81,7 @@ public class SucursalesDao {
     public boolean modificarSucursalQuery(Sucursales sucursal) {
         String query = "UPDATE sucursales SET codigo= ?, nombre = ?, horario_apertura= ?,horario_cierre= ?, operativa =? "
                 + "WHERE id = ?";
-        
+           
         try{
             conn = cn.getConnection();
             pst = conn.prepareStatement(query);

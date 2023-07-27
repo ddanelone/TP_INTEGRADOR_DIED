@@ -46,6 +46,9 @@ public class CaminosControlador implements ActionListener, MouseListener, KeyLis
         this.vista.btn_caminos_cancelar.addActionListener(this);
         //Ponemos en escucha el Label
         this.vista.jLabelCaminos.addMouseListener(this);
+        //validaciones
+        this.vista.txt_caminos_tiempo_transito.addKeyListener(this);
+        this.vista.txt_caminos_capacidad_max.addKeyListener(this);
         
         
         //Recuperar las sucursales para mostrar en el comboBox
@@ -234,6 +237,29 @@ public class CaminosControlador implements ActionListener, MouseListener, KeyLis
 
     @Override
     public void keyTyped(KeyEvent e) {
+        if (e.getSource() == vista.txt_caminos_tiempo_transito) {
+            // Este método se llama cada vez que el usuario ingresa una tecla en el JTextField
+            // Obtener la tecla ingresada por el usuario
+            char c = e.getKeyChar();
+            // Definir la expresión regular para solo permitir números enteros
+            String regex = "\\d";
+            // Verificar si la tecla ingresada coincide con la expresión regular
+            if (!Character.toString(c).matches(regex)) {
+                // Si la tecla no coincide, se consume el evento, evitando que se agregue al JTextField
+                e.consume();
+            }
+        } else if (e.getSource() == vista.txt_caminos_capacidad_max) {
+            // Este método se llama cada vez que el usuario ingresa una tecla en el JTextField
+            // Obtener la tecla ingresada por el usuario
+            char c = e.getKeyChar();
+            // Definir la expresión regular para solo permitir números enteros
+            String regex = "\\d";
+            // Verificar si la tecla ingresada coincide con la expresión regular
+            if (!Character.toString(c).matches(regex)) {
+                // Si la tecla no coincide, se consume el evento, evitando que se agregue al JTextField
+                e.consume();
+            }
+        }
     }
 
     @Override

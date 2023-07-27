@@ -22,6 +22,8 @@ import Vistas.SystemView;
 import Vistas.VerGrafoDinamico;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.time.LocalDate;
@@ -32,7 +34,7 @@ import java.util.stream.Collectors;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-public class OrdenesControlador implements ActionListener, MouseListener {
+public class OrdenesControlador implements ActionListener, MouseListener, KeyListener {
 
     private SystemView vista;
     private Ordenes orden;
@@ -105,6 +107,9 @@ public class OrdenesControlador implements ActionListener, MouseListener {
         this.vista.tabla_ordenes_caminos.addMouseListener(this);
         //Botón de ver Grafo
         this.vista.btn_ordenes_ver_grafo.addActionListener(this);
+        //Validaciones
+        this.vista.txt_ordenes_tiempo.addKeyListener(this);
+        this.vista.txt_ordenes_cantidad_producto.addKeyListener(this);
     }
 
     @Override
@@ -758,5 +763,43 @@ public class OrdenesControlador implements ActionListener, MouseListener {
 
     @Override
     public void mouseExited(MouseEvent e) {
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+        if (e.getSource() == vista.txt_ordenes_tiempo ) {
+            // Este método se llama cada vez que el usuario ingresa una tecla en el JTextField
+            // Obtener la tecla ingresada por el usuario
+            char c = e.getKeyChar();
+            // Definir la expresión regular para solo permitir números enteros
+            String regex = "\\d";
+            // Verificar si la tecla ingresada coincide con la expresión regular
+            if (!Character.toString(c).matches(regex)) {
+                // Si la tecla no coincide, se consume el evento, evitando que se agregue al JTextField
+                e.consume();
+            }
+        } else if (e.getSource() == vista.txt_ordenes_cantidad_producto) {
+            // Este método se llama cada vez que el usuario ingresa una tecla en el JTextField
+
+            // Obtener la tecla ingresada por el usuario
+            char c = e.getKeyChar();
+
+            // Definir la expresión regular para solo permitir números enteros
+            String regex = "\\d";
+
+            // Verificar si la tecla ingresada coincide con la expresión regular
+            if (!Character.toString(c).matches(regex)) {
+                // Si la tecla no coincide, se consume el evento, evitando que se agregue al JTextField
+                e.consume();
+            }
+        }
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
     }
 }

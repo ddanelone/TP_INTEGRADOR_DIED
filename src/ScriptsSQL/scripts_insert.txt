@@ -8,16 +8,16 @@ VALUES
 
 INSERT INTO sucursales (codigo, nombre, horario_apertura, horario_cierre, operativa)
 VALUES
-  (1, 'Puerto', '08:00:00', '18:00:00', true),
-  (2, 'Sucursal B', '09:00:00', '19:00:00', true),
-  (3, 'Sucursal C', '10:00:00', '20:00:00', true),
-  (4, 'Sucursal D', '09:30:00', '18:30:00', true),
-  (5, 'Sucursal E', '10:30:00', '19:30:00', true),
-  (6, 'Sucursal F', '10:00:00', '20:00:00', true),
-  (7, 'Sucursal G', '09:00:00', '19:00:00', true),
-  (8, 'Sucursal X', '08:00:00', '18:00:00', true),
-  (9, 'Sucursal Y', '09:30:00', '18:30:00', true),
-  (10, 'Sucursal Z', '10:30:00', '19:30:00', true),
+  (1, 'Puerto', '08:00', '18:00:00', true),
+  (2, 'Sucursal B', '09:00', '19:00', true),
+  (3, 'Sucursal C', '10:00', '20:00', true),
+  (4, 'Sucursal D', '09:30', '18:30', true),
+  (5, 'Sucursal E', '10:30', '19:30', true),
+  (6, 'Sucursal F', '10:00', '20:00', true),
+  (7, 'Sucursal G', '09:00', '19:00', true),
+  (8, 'Sucursal X', '08:00', '18:00', true),
+  (9, 'Sucursal Y', '09:30', '18:30', true),
+  (10, 'Sucursal Z', '10:30', '19:30', true),
   (11, 'Centro', '06:00:00', '22:00:00', true);
 
 

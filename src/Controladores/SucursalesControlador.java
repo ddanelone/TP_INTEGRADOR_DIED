@@ -10,6 +10,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.List;
+import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -38,6 +39,10 @@ public class SucursalesControlador implements ActionListener, MouseListener, Key
         this.vista.btn_sucursales_cancelar.addActionListener(this);
         //Ponemos en escucha el Label
         this.vista.jLabelSucursales.addMouseListener(this);
+        //Evento para controlar los valores de ingreso en Horarios
+        this.vista.txt_sucursales_apertura.addKeyListener(this);
+        this.vista.txt_sucursales_cierre.addKeyListener(this);
+        this.vista.txt_sucursales_codigo.addKeyListener(this);
     }
 
     @Override
@@ -97,9 +102,7 @@ public class SucursalesControlador implements ActionListener, MouseListener, Key
                     } else {
                         operativa = false;
                     }
-
                     sucursal.setOperativa(operativa);
-
                     if (sucursalDao.modificarSucursalQuery(sucursal)) {
                         limpiarTabla();
                         limpiarCampos();
@@ -111,17 +114,17 @@ public class SucursalesControlador implements ActionListener, MouseListener, Key
                     }
                 }
             }
-        } else if (e.getSource() == vista.btn_sucursales_eliminar) { 
+        } else if (e.getSource() == vista.btn_sucursales_eliminar) {
             int fila = vista.tabla_sucursales.getSelectedRow();
-            
+
             //Si el usuario no seleccionó nada, el método devuelve -1
-            if(fila == -1) {
+            if (fila == -1) {
                 JOptionPane.showMessageDialog(null, "Debes seleccionar una sucursal para eliminar");
             } else {
                 int id = Integer.parseInt(vista.tabla_sucursales.getValueAt(fila, 0).toString());
                 int confirmacion = JOptionPane.showOptionDialog(null, "¿Seguro de eliminar esta Sucursal?", "Confirmar eliminación",
-                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
-                if (confirmacion == 0 && sucursalDao.borrarSucursalQuery(id)!= false) {
+                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+                if (confirmacion == 0 && sucursalDao.borrarSucursalQuery(id) != false) {
                     limpiarCampos();
                     limpiarTabla();
                     vista.btn_sucursales_crear.setEnabled(true);
@@ -129,7 +132,7 @@ public class SucursalesControlador implements ActionListener, MouseListener, Key
                     JOptionPane.showMessageDialog(null, "Sucursal eliminada exitosamente");
                 }
             }
-        } else if(e.getSource()== vista.btn_sucursales_cancelar) {
+        } else if (e.getSource() == vista.btn_sucursales_cancelar) {
             limpiarCampos();
             vista.btn_sucursales_crear.setEnabled(true);
         }
@@ -161,14 +164,14 @@ public class SucursalesControlador implements ActionListener, MouseListener, Key
             vista.txt_sucursales_id.setText(vista.tabla_sucursales.getValueAt(fila, 0).toString());
             vista.txt_sucursales_codigo.setText(vista.tabla_sucursales.getValueAt(fila, 1).toString());
             vista.txt_sucursales_nombre.setText(vista.tabla_sucursales.getValueAt(fila, 2).toString());
-            vista.cmb_estado_sucursal.setSelectedItem(vista.tabla_sucursales.getValueAt(fila,3).toString());
+            vista.cmb_estado_sucursal.setSelectedItem(vista.tabla_sucursales.getValueAt(fila, 3).toString());
             vista.txt_sucursales_apertura.setText(vista.tabla_sucursales.getValueAt(fila, 4).toString());
             vista.txt_sucursales_cierre.setText(vista.tabla_sucursales.getValueAt(fila, 5).toString());
 
             //Desahbilitar
             //vista.txt_sucursales_id.setEditable(false);
             vista.btn_sucursales_crear.setEnabled(false);
-        } else if(e.getSource()== vista.jLabelSucursales) {
+        } else if (e.getSource() == vista.jLabelSucursales) {
             vista.jTabbedPane1.setSelectedIndex(0);
         }
     }
@@ -191,6 +194,54 @@ public class SucursalesControlador implements ActionListener, MouseListener, Key
 
     @Override
     public void keyTyped(KeyEvent e) {
+        // Este método se llama cada vez que el usuario ingresa una tecla en el JTextField
+        if (e.getSource() == vista.txt_sucursales_apertura) {
+            // Obtener el texto actual del JTextField
+            String input = vista.txt_sucursales_apertura.getText().trim();
+
+            // Definir la expresión regular para el formato de hora deseado (dos pares de números separados por ":")
+            String regex = "^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$";
+
+            // Verificar si el texto ingresado coincide con la expresión regular
+            boolean isValid = Pattern.matches(regex, input);
+
+            // Cambiar el color del JTextField dependiendo de si es válido o no
+            if (isValid) {
+                vista.txt_sucursales_apertura.setForeground(java.awt.Color.BLACK);
+            } else {
+                vista.txt_sucursales_apertura.setForeground(java.awt.Color.RED);
+            }
+        } else if (e.getSource() == vista.txt_sucursales_cierre) {
+            // Obtener el texto actual del JTextField
+            String input = vista.txt_sucursales_cierre.getText().trim();
+
+            // Definir la expresión regular para el formato de hora deseado (dos pares de números separados por ":")
+            String regex = "^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$";
+
+            // Verificar si el texto ingresado coincide con la expresión regular
+            boolean isValid = Pattern.matches(regex, input);
+
+            // Cambiar el color del JTextField dependiendo de si es válido o no
+            if (isValid) {
+                vista.txt_sucursales_cierre.setForeground(java.awt.Color.BLACK);
+            } else {
+                vista.txt_sucursales_cierre.setForeground(java.awt.Color.RED);
+            }
+        } else if (e.getSource() == vista.txt_sucursales_codigo) {
+            // Este método se llama cada vez que el usuario ingresa una tecla en el JTextField
+
+            // Obtener la tecla ingresada por el usuario
+            char c = e.getKeyChar();
+
+            // Definir la expresión regular para solo permitir números enteros
+            String regex = "\\d";
+
+            // Verificar si la tecla ingresada coincide con la expresión regular
+            if (!Character.toString(c).matches(regex)) {
+                // Si la tecla no coincide, se consume el evento, evitando que se agregue al JTextField
+                e.consume();
+            }
+        }
     }
 
     @Override
@@ -204,7 +255,7 @@ public class SucursalesControlador implements ActionListener, MouseListener, Key
             listarTodasLasSucursales();
         }
     }
-    
+
     //Método para limpiar los campos de la pantalla
     public void limpiarCampos() {
         vista.txt_sucursales_id.setText("");

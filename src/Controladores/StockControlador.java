@@ -57,6 +57,8 @@ public class StockControlador implements ActionListener, MouseListener, KeyListe
         this.vista.jLabelStock.addMouseListener(this);
         //Botón del campo id de producto. Le asigno el KeyListener para escuchar el enter
         this.vista.txt_stock_id_producto.addKeyListener(this);
+        //Validaciones
+        this.vista.txt_stock_stock.addKeyListener(this);
 
         //Recuperar las sucursales para mostrar en el comboBox
         //Paso 1: Obtener la lista de sucursales desde la base de datos
@@ -92,7 +94,7 @@ public class StockControlador implements ActionListener, MouseListener, KeyListe
                     // Obtener el nombre de la sucursal seleccionada
                     String nombreSucursal = (String) vista.cmb_stock_sucursal.getSelectedItem();
                     int idSucursal = obtenerIdSucursalPorNombre(nombreSucursal);
-                   // Asignar el ID al objeto correspondiente
+                    // Asignar el ID al objeto correspondiente
                     stock.setId_sucursal(idSucursal);
                     stock.setId_producto(Integer.parseInt(vista.txt_stock_id_producto.getText().trim()));
                     stock.setStock(Integer.parseInt(vista.txt_stock_stock.getText().trim()));
@@ -106,7 +108,7 @@ public class StockControlador implements ActionListener, MouseListener, KeyListe
                         vista.btn_stock_modificar.setEnabled(false);
                         vista.btn_stock_eliminar.setEnabled(false);
                         vista.txt_stock_id_producto.setEnabled(true);
-                        
+
                         JOptionPane.showMessageDialog(null, "Stock actualizado con éxito");
 
                     } else {
@@ -115,35 +117,35 @@ public class StockControlador implements ActionListener, MouseListener, KeyListe
                 }
             }
         } else if (e.getSource() == vista.btn_stock_asignar) {
-                //verificamos si los campos están vacíos
-                if (vista.cmb_stock_sucursal.getSelectedItem().equals("")) {
-                    JOptionPane.showMessageDialog(null, "Debe seleccionar una sucursal para ser actualizada");
+            //verificamos si los campos están vacíos
+            if (vista.cmb_stock_sucursal.getSelectedItem().equals("")) {
+                JOptionPane.showMessageDialog(null, "Debe seleccionar una sucursal para ser actualizada");
+            } else {
+                //Verificamos si los campos están vacíos
+                if (vista.txt_stock_id_producto.getText().equals("")
+                        || vista.txt_stock_stock.getText().equals("")
+                        || vista.cmb_stock_sucursal.getSelectedItem().equals("")) {
+                    JOptionPane.showMessageDialog(null, "Todos los campos son obligatorios");
                 } else {
-                    //Verificamos si los campos están vacíos
-                    if (vista.txt_stock_id_producto.getText().equals("")
-                            || vista.txt_stock_stock.getText().equals("")
-                            || vista.cmb_stock_sucursal.getSelectedItem().equals("")) {
-                        JOptionPane.showMessageDialog(null, "Todos los campos son obligatorios");
-                    } else {
-                        //Realizar la actualización
-                        // Obtener el nombre de la sucursal seleccionada
-                        String nombreSucursal = (String) vista.cmb_stock_sucursal.getSelectedItem();
-                        int idSucursal = obtenerIdSucursalPorNombre(nombreSucursal);
-                        // Asignar el ID al objeto correspondiente
-                        stock.setId_sucursal(idSucursal);
-                        stock.setId_producto(Integer.parseInt(vista.txt_stock_id_producto.getText().trim()));
-                        stock.setStock(Integer.parseInt(vista.txt_stock_stock.getText().trim()));
+                    //Realizar la actualización
+                    // Obtener el nombre de la sucursal seleccionada
+                    String nombreSucursal = (String) vista.cmb_stock_sucursal.getSelectedItem();
+                    int idSucursal = obtenerIdSucursalPorNombre(nombreSucursal);
+                    // Asignar el ID al objeto correspondiente
+                    stock.setId_sucursal(idSucursal);
+                    stock.setId_producto(Integer.parseInt(vista.txt_stock_id_producto.getText().trim()));
+                    stock.setStock(Integer.parseInt(vista.txt_stock_stock.getText().trim()));
 
-                        if (stockDao.registrarStockQuery(stock)) {
-                            limpiarTabla();
-                            limpiarCampos();
-                            listarTodosLosStock();
-                            JOptionPane.showMessageDialog(null, "Stock en Sucursal registrado con éxito");
-                        } else {
-                            JOptionPane.showMessageDialog(null, "Se ha producido un error, Stock no registrado en la Sucursal");
-                        }
+                    if (stockDao.registrarStockQuery(stock)) {
+                        limpiarTabla();
+                        limpiarCampos();
+                        listarTodosLosStock();
+                        JOptionPane.showMessageDialog(null, "Stock en Sucursal registrado con éxito");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Se ha producido un error, Stock no registrado en la Sucursal");
                     }
-                }            
+                }
+            }
         } else if (e.getSource() == vista.btn_stock_eliminar) {
             int fila = vista.tabla_stock.getSelectedRow();
             //Si el usuario no seleccionó nada, el método devuelve -1
@@ -153,7 +155,7 @@ public class StockControlador implements ActionListener, MouseListener, KeyListe
                 int id_suc = Integer.parseInt(vista.tabla_stock.getValueAt(fila, 0).toString());
                 int id_elec = Integer.parseInt(vista.tabla_stock.getValueAt(fila, 2).toString());
                 int confirmacion = JOptionPane.showOptionDialog(null, "¿Seguro de eliminar el stock de este producto en esta sucursal?", "Confirmar eliminación",
-                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
                 if (confirmacion == 0 && stockDao.borrarStockQuery(id_suc, id_elec) != false) {
                     limpiarCampos();
                     limpiarTabla();
@@ -161,10 +163,10 @@ public class StockControlador implements ActionListener, MouseListener, KeyListe
                     JOptionPane.showMessageDialog(null, "Stock del producto en Sucursal eliminado exitosamente");
                 }
                 vista.btn_stock_asignar.setEnabled(true);
-                    vista.btn_stock_eliminar.setEnabled(false);
-                    vista.btn_stock_modificar.setEnabled(false);
-                    vista.cmb_stock_sucursal.setEnabled(true);
-                    vista.txt_stock_id_producto.setEnabled(true); 
+                vista.btn_stock_eliminar.setEnabled(false);
+                vista.btn_stock_modificar.setEnabled(false);
+                vista.cmb_stock_sucursal.setEnabled(true);
+                vista.txt_stock_id_producto.setEnabled(true);
             }
         } else if (e.getSource() == vista.btn_stock_cancelar) {
             vista.btn_stock_asignar.setEnabled(true);
@@ -176,7 +178,7 @@ public class StockControlador implements ActionListener, MouseListener, KeyListe
         }
     }
 
-        //Listar todos las productos
+    //Listar todos las productos
     public void listarTodosLosStock() {
         List<Stock> lista = stockDao.listaStockQuery(vista.stock_search.getText());
         modelo = (DefaultTableModel) vista.tabla_stock.getModel();
@@ -226,7 +228,7 @@ public class StockControlador implements ActionListener, MouseListener, KeyListe
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        
+
     }
 
     @Override
@@ -239,6 +241,35 @@ public class StockControlador implements ActionListener, MouseListener, KeyListe
 
     @Override
     public void keyTyped(KeyEvent e) {
+        if (e.getSource() == vista.txt_stock_id_producto) {
+            // Este método se llama cada vez que el usuario ingresa una tecla en el JTextField
+
+            // Obtener la tecla ingresada por el usuario
+            char c = e.getKeyChar();
+
+            // Definir la expresión regular para solo permitir números enteros
+            String regex = "\\d";
+
+            // Verificar si la tecla ingresada coincide con la expresión regular
+            if (!Character.toString(c).matches(regex)) {
+                // Si la tecla no coincide, se consume el evento, evitando que se agregue al JTextField
+                e.consume();
+            }
+        } else if (e.getSource() == vista.txt_stock_stock) {
+            // Este método se llama cada vez que el usuario ingresa una tecla en el JTextField
+
+            // Obtener la tecla ingresada por el usuario
+            char c = e.getKeyChar();
+
+            // Definir la expresión regular para solo permitir números enteros
+            String regex = "\\d";
+
+            // Verificar si la tecla ingresada coincide con la expresión regular
+            if (!Character.toString(c).matches(regex)) {
+                // Si la tecla no coincide, se consume el evento, evitando que se agregue al JTextField
+                e.consume();
+            }
+        }
     }
 
     @Override
@@ -250,10 +281,9 @@ public class StockControlador implements ActionListener, MouseListener, KeyListe
                 } else {
                     int id = Integer.parseInt(vista.txt_stock_id_producto.getText());
                     if (!nombresElectro.get(Integer.valueOf(id)).equals("")) {
-                    vista.txt_stock_nombre_producto.setText(nombresElectro.get(Integer.valueOf(id)));
-                    vista.txt_stock_stock.requestFocus();
-                    }
-                    else {
+                        vista.txt_stock_nombre_producto.setText(nombresElectro.get(Integer.valueOf(id)));
+                        vista.txt_stock_stock.requestFocus();
+                    } else {
                         JOptionPane.showMessageDialog(null, "Electrodomésticos inexistente. Revisa");
                         vista.txt_stock_id_producto.requestFocus();
                     }
