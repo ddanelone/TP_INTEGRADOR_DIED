@@ -1,47 +1,9 @@
 package Vistas;
 
-import Controladores.AdministrarControlador;
-import Controladores.CaminosControlador;
-import Controladores.ElectrodomesticosControlador;
-import Controladores.InformesControlador;
-import Controladores.OrdenesControlador;
+import Controladores.ControladorInicio;
 import Controladores.SettingsController;
-import Controladores.StockControlador;
-import Controladores.SucursalesControlador;
-import Modelos.Caminos;
-import Modelos.CaminosDao;
-import Modelos.Electrodomesticos;
-import Modelos.ElectrodomesticosDao;
-import Modelos.Ordenes;
-import Modelos.OrdenesDao;
-import Modelos.Stock;
-import Modelos.StockDao;
-import Modelos.Sucursales;
-import Modelos.SucursalesDao;
 
 public class SystemView extends javax.swing.JFrame {
-
-    //Sucursales
-    Sucursales sucursal = new Sucursales();
-    SucursalesDao sucursalDao = new SucursalesDao();
-    
-    //Electrodomesticos
-    Electrodomesticos electro = new Electrodomesticos();
-    ElectrodomesticosDao electroDao = new ElectrodomesticosDao();
-    
-    //Caminos
-    Caminos camino = new Caminos();
-    CaminosDao caminoDao = new CaminosDao();
-    
-    //Stock
-    Stock stock = new Stock();
-    StockDao stockDao = new StockDao();
-    
-    //Ordenes
-    Ordenes orden = new Ordenes();
-    OrdenesDao ordenDao = new OrdenesDao();
-    
-   
     
     public SystemView() {
         initComponents();
@@ -54,28 +16,10 @@ public class SystemView extends javax.swing.JFrame {
         SettingsController setting = new SettingsController(this);
         
         this.repaint();
+   
+    
+    ControladorInicio inicio = new ControladorInicio(this);
         
-        //Controlador de Sucursales
-        SucursalesControlador sucursal_cuenta = new SucursalesControlador(sucursal, sucursalDao, this);
-        sucursal_cuenta.listarTodasLasSucursales();
-        //Controlador de electrodomesticos
-        ElectrodomesticosControlador electrodomestico_cuenta = new ElectrodomesticosControlador(electro, electroDao, this);
-        electrodomestico_cuenta.listarTodosLosElectrodomesticos();
-        //Controlador de Caminos
-        CaminosControlador camino_cuenta = new CaminosControlador(camino, caminoDao, this);
-        camino_cuenta.listarTodosLosCaminos();
-        //Controlador de Stock
-        StockControlador stock_cuenta = new StockControlador(stock, stockDao, this);
-        stock_cuenta.listarTodosLosStock();
-        //Controlador de órdenes
-        OrdenesControlador ordenes_cuenta = new OrdenesControlador(orden, ordenDao, this);
-        ordenes_cuenta.listarTodasLasOrdenes();
-        //Controlador de Administracion
-        AdministrarControlador administrar_cuenta = new AdministrarControlador(this);     
-        administrar_cuenta.listarTodasLasSucursales();
-        administrar_cuenta.listarTodosLosCaminos();
-        //Controlador de informes
-        InformesControlador informe_cuenta = new InformesControlador(this);
     }
 
     /**
